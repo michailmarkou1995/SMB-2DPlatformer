@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class rightMovementButton : MonoBehaviour
 {
 
+    public Player playerClass;
+    public Button rightButton;
 
     // Start is called before the first frame update
     void Start()
@@ -16,9 +19,16 @@ public class rightMovementButton : MonoBehaviour
     void Update()
     {
         //patima kai kratima koumpiou?
-        if (Input.GetButtonDown("this"))
+        if (Input.GetButtonDown("rightButton"))
         {
-            //Player.PlayerMovement(1.0f);
+            playerClass.PlayerMovement(1);
         }
+        
+
+
+    }
+    private void Test()
+    {
+        playerClass.PlayerMovement(1);
     }
 }

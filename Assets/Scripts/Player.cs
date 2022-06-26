@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     //orizmos taxititas kai simeas
     public float playerSpeed = 5.0f;
-    private float Flag = 0;
+    private float Flag = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -15,9 +15,9 @@ public class Player : MonoBehaviour
     }
 
     //dimiourgia function 
-    public void PlayerMovement(float buttonFlag)
+    public void PlayerMovement(float flag)
     {
-        Flag = buttonFlag;
+        Flag = flag;
     }
 
     // Update is called once per frame
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
         //elenxos simeas gia metakinisi embros kai piso
         if (Flag == 1)
         {
+            Debug.Log("test");
             transform.Translate(Vector2.right * playerSpeed * Time.deltaTime);
         }
 
