@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] 
-    private float time;
-    [SerializeField]
-    private Text timerText;
+    [SerializeField] private float time;
+
+    [SerializeField] private Text timerText;
+
     // Start is called before the first frame update
     void Start()
     {

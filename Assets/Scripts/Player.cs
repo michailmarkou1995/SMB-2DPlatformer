@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -11,7 +9,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     //dimiourgia function 
@@ -23,7 +20,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         //elenxos simeas gia metakinisi embros kai piso
         if (Flag == 1)
         {
@@ -32,7 +28,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if(Flag == -1)
+        if (Flag == -1)
         {
             transform.Translate(Vector2.left * playerSpeed * Time.deltaTime);
         }

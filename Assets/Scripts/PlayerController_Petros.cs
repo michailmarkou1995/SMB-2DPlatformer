@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController_Petros : MonoBehaviour
@@ -8,10 +6,10 @@ public class PlayerController_Petros : MonoBehaviour
     private BoxCollider2D bc;
 
     //Following Variables are responsible for movement
-    private float maxSpeed;
-    private float minSpeed = 14;
-    private float moveSpeed;
+    [SerializeField] private float moveSpeed = 18;
     private float moveHorizontal;
+
+    private bool isJumping = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,15 +23,28 @@ public class PlayerController_Petros : MonoBehaviour
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal") * moveSpeed;
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && !isJumping)
         {
-            rb.velocity = new Vector2(rb.velocity.x, moveSpeed);
+            rb.velocity = new Vector2(rb.velocity.x, moveSpeed / 2);
         }
     }
 
     private void FixedUpdate()
     {
+        //FixedUpdate is used in conjuction with Time.deltaTime to make movement independent of frame rate
         float movement = moveSpeed * Time.deltaTime;
-        rb.velocity = new Vector2(moveHorizontal* movement, rb.velocity.y);
+        rb.velocity = new Vector2(moveHorizontal * movement, rb.velocity.y);
+    }
+
+    //Checks to see if the player is colliding with something and deems the player as "grounded", allowing them to jump.
+    void OnCollisionStay2D(Collision2D col)
+    {
+        isJumping = false;
+    }
+
+    //Checks to see if the player is jumping
+    void OnCollisionExit2D(Collision2D col)
+    {
+        isJumping = true;
     }
 }
