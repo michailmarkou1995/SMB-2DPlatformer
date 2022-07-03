@@ -83,3 +83,4 @@ crashlytics-build.properties
 /assets/streamingAssets/aa/*
 
 .DS_Store
+.vsconfig
