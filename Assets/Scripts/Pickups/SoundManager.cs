@@ -1,25 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class SoundManager : MonoBehaviour
-{
-    public static SoundManager Instance;
-    AudioSource audioSource;
-
-    [SerializeField] AudioClip coinSound, pickUpSound;
-
-    private void OnEnable()
+namespace Pickups {
+    public class SoundManager : MonoBehaviour
     {
-        Coin.OnCoinCollected += PlayCoinSound;
-    }
+        public static SoundManager Instance;
+        AudioSource audioSource;
 
-    private void PlayCoinSound()
-    {
-        //Fetch the coin sound
-        audioSource.clip = coinSound;
-        //Play sound
-        audioSource.Play();
+        [SerializeField] AudioClip coinSound, pickUpSound;
+
+        private void OnEnable()
+        {
+            Coin.OnCoinCollected += PlayCoinSound;
+        }
+
+        private void PlayCoinSound()
+        {
+            //Fetch the coin sound
+            audioSource.clip = coinSound;
+            //Play sound
+            audioSource.Play();
+        }
     }
 }

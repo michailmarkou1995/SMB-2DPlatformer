@@ -11,6 +11,7 @@ TagManager:
   - Enemy/Piranha
   - Mario Fireball
   - Enemy/Bowser
+  - Pipe
   layers:
   - Default
   - TransparentFX
@@ -18,6 +19,8 @@ TagManager:
   - 
   - Water
   - UI
+  - 
+  - 
   - Mario
   - Ground
   - Mario Stomp Box
@@ -42,45 +45,43 @@ TagManager:
   - Bodiless Enemy
   - 
   - 
-  - 
-  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Scenery
-    uniqueID: 2038268987
+    uniqueID: 258994393
     locked: 0
   - name: Before Background
-    uniqueID: 1711498901
+    uniqueID: 2417281657
     locked: 0
   - name: Background
-    uniqueID: 2834146267
+    uniqueID: 1619400777
     locked: 0
   - name: Static Collectible
-    uniqueID: 795975805
+    uniqueID: 3589449493
     locked: 0
   - name: Powerup
-    uniqueID: 57149875
+    uniqueID: 1783982861
     locked: 0
   - name: Behind Platform
-    uniqueID: 588242293
+    uniqueID: 1441321055
     locked: 0
   - name: Platform
-    uniqueID: 1492061107
+    uniqueID: 3542964121
     locked: 0
   - name: Behind Enemy
-    uniqueID: 3471489423
+    uniqueID: 1214751747
     locked: 0
   - name: Enemy
-    uniqueID: 2786607585
+    uniqueID: 1210975969
     locked: 0
   - name: Player
-    uniqueID: 1274655949
+    uniqueID: 3125332053
     locked: 0
   - name: Before Player
-    uniqueID: 1324063921
+    uniqueID: 1577250111
     locked: 0
   - name: Foreground Effect
-    uniqueID: 2750520159
+    uniqueID: 2664002045
     locked: 0

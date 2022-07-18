@@ -1,4 +1,6 @@
-public interface ICollectible
-{
-    public void Collect();
+namespace Pickups {
+    public interface ICollectible
+    {
+        public void Collect();
+    }
 }
