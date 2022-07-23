@@ -4,32 +4,29 @@ namespace UI
 {
     public class MainCameraAspectRatio : MonoBehaviour
     {
-        public Vector2 targetAspects = new Vector2(16f, 15f);
+        public Vector2 targetAspects = new(16f, 15f);
 
-        void Start()
+        private void Start()
         {
-            float targetaspect = targetAspects.x / targetAspects.y;
-            float windowaspect = (float)Screen.width / (float)Screen.height;
-            float scaleheight = windowaspect / targetaspect;
+            float targetAspect = targetAspects.x / targetAspects.y;
+            float windowAspect = (float)Screen.width / (float)Screen.height;
+            float scaleHeight = windowAspect / targetAspect;
 
             Camera camera = GetComponent<Camera>();
 
-            if (scaleheight < 1.0f)
-            {
+            if (scaleHeight < 1.0f) {
                 Rect rect = camera.rect;
                 rect.width = 1.0f;
-                rect.height = scaleheight;
+                rect.height = scaleHeight;
                 rect.x = 0;
-                rect.y = (1.0f - scaleheight) / 2.0f;
+                rect.y = (1.0f - scaleHeight) / 2.0f;
                 camera.rect = rect;
-            }
-            else
-            {
-                float scalewidth = 1.0f / scaleheight;
+            } else {
+                float scaleWidth = 1.0f / scaleHeight;
                 Rect rect = camera.rect;
-                rect.width = scalewidth;
+                rect.width = scaleWidth;
                 rect.height = 1.0f;
-                rect.x = (1.0f - scalewidth) / 2.0f;
+                rect.x = (1.0f - scaleWidth) / 2.0f;
                 rect.y = 0;
                 camera.rect = rect;
             }

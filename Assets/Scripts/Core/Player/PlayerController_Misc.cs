@@ -19,7 +19,7 @@ namespace Core.Player
         protected override void PerLevelInitialization()
         {
             // Drop Mario at spawn position
-            transform.position = FindObjectOfType<global::LevelManager>().FindSpawnPosition();
+            transform.position = FindObjectOfType<global::Core.Managers.LevelManager>().FindSpawnPosition();
 
             // Set correct size
             UpdateSize();
@@ -227,7 +227,7 @@ namespace Core.Player
         /// </summary>
         public override void UpdateSize()
         {
-            GetComponent<Animator>().SetInteger(PlayerSizeAnimator, FindObjectOfType<global::LevelManager>().marioSize);
+            GetComponent<Animator>().SetInteger(PlayerSizeAnimator, FindObjectOfType<global::Core.Managers.LevelManager>().marioSize);
         }
 
         /// <summary>

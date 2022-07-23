@@ -1893,7 +1893,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114256751761485294, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}
       propertyPath: playerSizeAnimator
-      value: marioSize
+      value: playerSize
       objectReference: {fileID: 0}
     - target: {fileID: 114256751761485294, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}
       propertyPath: groundLayers.m_Bits

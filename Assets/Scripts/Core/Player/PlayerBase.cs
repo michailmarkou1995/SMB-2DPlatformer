@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,46 +8,7 @@ namespace Core.Player
 
     public abstract class PlayerBase : MonoBehaviour
     {
-        #region ConstructorRegion
-
-        // /// <summary>
-        // /// Constructor for animation controller parameters name (Player) declaration.<br/>
-        // /// <b>Forced to use by Default</b><br/>
-        // /// </summary>
-        // /// <param name="PlayerSizeAnimator"></param>
-        // /// <param name="PoleAnimator"></param>
-        // /// <param name="RespawnAnimator"></param>
-        // /// <param name="IsJumpingAnimator"></param>
-        // /// <param name="IsFallingNotFromJumpAnimator"></param>
-        // /// <param name="IsCrouchingAnimator"></param>
-        // /// <param name="AbsSpeedAnimator"></param>
-        // /// <param name="IsFiringAnimator"></param>
-        // /// <param name="IsSkiddingAnimator"></param>
-        // protected PlayerBase(
-        //     int PlayerSizeAnimator,
-        //     int PoleAnimator,
-        //     int RespawnAnimator,
-        //     int IsJumpingAnimator,
-        //     int IsFallingNotFromJumpAnimator,
-        //     int IsCrouchingAnimator,
-        //     int AbsSpeedAnimator,
-        //     int IsFiringAnimator,
-        //     int IsSkiddingAnimator)
-        // {
-        //     this.PlayerSizeAnimator = PlayerSizeAnimator;
-        //     // this.PoleAnimator = PoleAnimator;
-        //     // this.RespawnAnimator = RespawnAnimator;
-        //     // this.IsJumpingAnimator = IsJumpingAnimator;
-        //     // this.IsFallingNotFromJumpAnimator = IsFallingNotFromJumpAnimator;
-        //     // this.IsCrouchingAnimator = IsCrouchingAnimator;
-        //     // this.AbsSpeedAnimator = AbsSpeedAnimator;
-        //     // this.IsFiringAnimator = IsFiringAnimator;
-        //     // this.IsSkiddingAnimator = IsSkiddingAnimator;
-        // }
-
-        #endregion
-
-        protected global::LevelManager LevelManager { get; private set; }
+        protected global::Core.Managers.LevelManager LevelManager { get; private set; }
         protected Transform MGroundCheck1 { get; private set; }
         protected Transform MGroundCheck2 { get; private set; }
         protected CapsuleCollider2D MCapsuleCollider2D { get; private set; }
@@ -113,21 +73,6 @@ namespace Core.Player
         protected int IsFiringAnimator => Animator.StringToHash(isFiringAnimator);
 
         protected int IsSkiddingAnimator => Animator.StringToHash(isSkiddingAnimator);
-
-
-        #region ConstructorRegion_1
-
-        // protected readonly int PlayerSizeAnimator;
-        // protected readonly int PoleAnimator;
-        // protected readonly int RespawnAnimator;
-        // protected readonly int IsJumpingAnimator;
-        // protected readonly int IsFallingNotFromJumpAnimator;
-        // protected readonly int IsCrouchingAnimator;
-        // protected readonly int AbsSpeedAnimator;
-        // protected readonly int IsFiringAnimator;
-        // protected readonly int IsSkiddingAnimator;
-
-        #endregion
 
 
         // Events
@@ -197,7 +142,7 @@ namespace Core.Player
         /// </summary>
         protected virtual void InitializationComponents()
         {
-            LevelManager = FindObjectOfType<global::LevelManager>();
+            LevelManager = FindObjectOfType<global::Core.Managers.LevelManager>();
             MGroundCheck1 = transform.Find("Ground Check 1");
             MGroundCheck2 = transform.Find("Ground Check 2");
             MStompBox = transform.Find("Stomp Box").gameObject;

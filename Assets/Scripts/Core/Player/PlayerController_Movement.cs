@@ -1,9 +1,12 @@
 ﻿using System.Collections;
+using Abilities.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Core.Player {
-    public partial class PlayerController {
+    public partial class PlayerController
+    {
+        public bool isAllowedToChangeDirectionOnAir;
         protected override void PlayerControlsSubscribe() {
             PlayerControls = new PlayerInputActions();
             PlayerControls.Player.Move.performed += ctx => FaceDirectionX = ctx.ReadValue<float>();
@@ -190,11 +193,18 @@ namespace Core.Player {
 
                 // If change direction, decelerate but keep facing move direction
                 // and change sprite direction on upon touching ground
-                if (IsChangingDirection) {
-                    IsChangedDirOnAirYes = true;
-                    FaceDirectionX = MoveDirectionX;
+                if (!isAllowedToChangeDirectionOnAir) {
+                    if (IsChangingDirection) {
+                        IsChangedDirOnAirYes = true;
+                        FaceDirectionX = MoveDirectionX;
+                        CurrentSpeedX = DecreaseWithinBound(CurrentSpeedX, MidairDecelerationX, 0);
+                    }
+                } else {
+                    IsChangedDirOnAirYes = false;
+                    FaceDirectionX = -MoveDirectionX;
                     CurrentSpeedX = DecreaseWithinBound(CurrentSpeedX, MidairDecelerationX, 0);
                 }
+
             }
 
             // Disable Stomp Box if not falling down

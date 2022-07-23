@@ -1,4 +1,4 @@
-using _common;
+using Core.NPC;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,21 +15,6 @@ namespace Core.Player
     /// </summary>
     public partial class PlayerController : PlayerBase
     {
-        #region DefaultConstructorRegionValues
-        
-        // private PlayerController() : base(
-        //     Animator.StringToHash("playerSize"),
-        //     Animator.StringToHash("climbFlagPole"),
-        //     Animator.StringToHash("respawn"),
-        //     Animator.StringToHash("isJumping"),
-        //     Animator.StringToHash("isFallingNotFromJump"),
-        //     Animator.StringToHash("isCrouching"),
-        //     Animator.StringToHash("absSpeed"),
-        //     Animator.StringToHash("isFiring"),
-        //     Animator.StringToHash("isSkidding")) { }
-
-        #endregion
-
         private void Awake()
         {
             PlayerControlsSubscribe();
@@ -53,7 +38,7 @@ namespace Core.Player
 
         private void Update()
         {
-            Debug.Log(CastleWalkSpeedX);
+            //Debug.Log(CastleWalkSpeedX);
             base.IsGrounded = IsGrounded();
             IsFalling = MRigidbody2D.velocity.y < 0 && !base.IsGrounded;
             IsChangingDirection = CurrentSpeedX > 0 && FaceDirectionX * MoveDirectionX < 0;
@@ -96,7 +81,7 @@ namespace Core.Player
                 // TODO: koopa shell static does no damage
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
-                if (!LevelManager.isInvincible()) {
+                if (!LevelManager.IsInvincible()) {
                     if (!other.gameObject.GetComponent<KoopaShell>() ||
                         other.gameObject.GetComponent<KoopaShell>()
                             .isRolling || // non-rolling shell should do no damage
@@ -121,7 +106,7 @@ namespace Core.Player
             // TODO: koopa shell static does no damage
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
 
-            if (!LevelManager.isInvincible()) {
+            if (!LevelManager.IsInvincible()) {
                 if (!collision.gameObject.GetComponent<KoopaShell>() ||
                     collision.gameObject.GetComponent<KoopaShell>()
                         .isRolling || // non-rolling shell should do no damage
@@ -133,8 +118,6 @@ namespace Core.Player
             }
         }
     }
-
-    internal class Test : MonoBehaviour { }
 }
 
 // using System;
