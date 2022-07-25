@@ -18,15 +18,15 @@ namespace Level
         void Start() {
             mario = FindObjectOfType<PlayerController>();
             stop = transform.parent.transform.Find("Platform Stop");
-            GameStateManager t_GameStateManager = FindObjectOfType<GameStateManager>();
+            GameStateManager _gameStateManager = FindObjectOfType<GameStateManager>();
             t_LevelManager = FindObjectOfType<LevelManager>();
 
             Debug.Log(this.name + " Start: " + transform.parent.gameObject.name
-                      + " spawnFromPoint=" + t_GameStateManager.spawnFromPoint.ToString()
-                      + " with idx=" + t_GameStateManager.spawnPipeIdx.ToString());
+                      + " spawnFromPoint=" + _gameStateManager.SpawnFromPoint.ToString()
+                      + " with idx=" + _gameStateManager.SpawnPipeIdx.ToString());
 
-            if (!t_GameStateManager.spawnFromPoint &&
-                t_GameStateManager.spawnPipeIdx == transform.parent.GetSiblingIndex()) {
+            if (!_gameStateManager.SpawnFromPoint &&
+                _gameStateManager.SpawnPipeIdx == transform.parent.GetSiblingIndex()) {
                 isTakingMarioUp = true;
                 mario.FreezeUserInput();
                 t_LevelManager.timerPaused = true;
@@ -43,10 +43,10 @@ namespace Level
                 if (transform.position.y < stop.position.y) {
                     transform.position = new Vector2(transform.position.x, transform.position.y + platformVelocityY);
                 } else if (t_LevelManager.timerPaused) {
-                    GameStateManager t_GameStateManager = FindObjectOfType<GameStateManager>();
-                    t_GameStateManager.spawnFromPoint = true;
+                    GameStateManager _gameStateManager = FindObjectOfType<GameStateManager>();
+                    _gameStateManager.SpawnFromPoint = true;
                     if (resetSpawnPoint) {
-                        t_GameStateManager.ResetSpawnPosition();
+                        _gameStateManager.ResetSpawnPosition();
                     }
 
                     mario.UnfreezeUserInput();

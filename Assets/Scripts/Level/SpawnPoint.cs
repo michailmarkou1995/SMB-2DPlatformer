@@ -17,7 +17,7 @@ namespace Level
 			// update spawn pos if Player passes checkpoint
 			if (playerController.gameObject.transform.position.x >= transform.position.x) {
 				GameStateManager t_GameStateManager = FindObjectOfType<GameStateManager> ();
-				t_GameStateManager.spawnPointIdx = Mathf.Max (t_GameStateManager.spawnPointIdx, gameObject.transform.GetSiblingIndex ());
+				t_GameStateManager.SpawnPointIdx = Mathf.Max (t_GameStateManager.SpawnPointIdx, gameObject.transform.GetSiblingIndex ());
 				gameObject.SetActive (false);
 			}
 

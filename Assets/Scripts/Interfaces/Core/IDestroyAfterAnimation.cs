@@ -1,4 +1,4 @@
-namespace UI.Interfaces
+namespace Interfaces.Core
 {
     public interface IDestroyAfterAnimation
     {

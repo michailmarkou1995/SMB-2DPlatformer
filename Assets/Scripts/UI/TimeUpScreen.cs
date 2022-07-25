@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace UI
 {
 	public class TimeUpScreen : MonoBehaviour {
-		private GameStateManager t_GameStateManager;
+		private GameStateManager _gameStateManager;
 
 		public Text WorldTextHUD;
 		public Text ScoreTextHUD;
@@ -21,12 +21,12 @@ namespace UI
 		void Start () {
 			Time.timeScale = 1;
 
-			t_GameStateManager = FindObjectOfType<GameStateManager> ();
-			string worldName = t_GameStateManager.sceneToLoad;
+			_gameStateManager = FindObjectOfType<GameStateManager> ();
+			string worldName = _gameStateManager.SceneToLoad;
 
 			WorldTextHUD.text = Regex.Split (worldName, "World ")[1];
-			ScoreTextHUD.text = t_GameStateManager.scores.ToString ("D6");
-			CoinTextHUD.text = "x" + t_GameStateManager.coins.ToString ("D2");
+			ScoreTextHUD.text = _gameStateManager.Scores.ToString ("D6");
+			CoinTextHUD.text = "x" + _gameStateManager.Coins.ToString ("D2");
 
 			StartCoroutine (LoadSceneDelayCo ("Level Start Screen", loadScreenDelay));
 			Debug.Log (this.name + " Start: current scene is " + SceneManager.GetActiveScene ().name);

@@ -1,25 +1,86 @@
-﻿using UI.Interfaces;
-using UnityEngine;
+﻿using Interfaces;
+using Interfaces.Core.Managers;
 
 namespace Core.Managers
 {
-    public class GameStateManager : MonoBehaviour, IGameStateManager
+    public class GameStateManager : GameStateManagerBase, IGameStateManager, IGameStateManagerEssentials
     {
-        public bool spawnFromPoint;
-        public int spawnPointIdx;
-        public int spawnPipeIdx;
+        #region GettersAndSettersFromBase
 
-        public int marioSize;
-        public int lives;
-        public int coins;
-        public int scores;
-        public float timeLeft;
-        public bool hurryUp;
+        public bool SpawnFromPoint
+        {
+            get => spawnFromPoint;
+            set => spawnFromPoint = value;
+        }
 
-        public string sceneToLoad; // what scene to load after level start screen finishes?
-        public bool timeUp;
+        public int SpawnPointIdx
+        {
+            get => spawnPointIdx;
+            set => spawnPointIdx = value;
+        }
+
+        public int SpawnPipeIdx
+        {
+            get => spawnPipeIdx;
+            set => spawnPipeIdx = value;
+        }
+
+        public int PlayerSize
+        {
+            get => playerSize;
+            set => playerSize = value;
+        }
+
+        public int Lives
+        {
+            get => lives;
+            set => lives = value;
+        }
+
+        public int Coins
+        {
+            get => coins;
+            set => coins = value;
+        }
+
+        public int Scores
+        {
+            get => scores;
+            set => scores = value;
+        }
+
+        public float TimeLeft
+        {
+            get => timeLeft;
+            set => timeLeft = value;
+        }
+
+        public bool HurryUp
+        {
+            get => hurryUp;
+            set => hurryUp = value;
+        }
+
+        public string SceneToLoad
+        {
+            get => sceneToLoad;
+            set => sceneToLoad = value;
+        }
+
+        public bool TimeUp
+        {
+            get => timeUp;
+            set => timeUp = value;
+        }
+
+        #endregion
 
         private void Awake()
+        {
+            RetainGameStateManagerPerLoad();
+        }
+
+        public void RetainGameStateManagerPerLoad()
         {
             if (FindObjectsOfType(GetType()).Length == 1) {
                 DontDestroyOnLoad(gameObject);
@@ -31,53 +92,53 @@ namespace Core.Managers
 
         public void ResetSpawnPosition()
         {
-            spawnFromPoint = true;
-            spawnPointIdx = 0;
-            spawnPipeIdx = 0;
+            SpawnFromPoint = true;
+            SpawnPointIdx = 0;
+            SpawnPipeIdx = 0;
         }
 
         public void SetSpawnPipe(int idx)
         {
-            spawnFromPoint = false;
-            spawnPipeIdx = idx;
+            SpawnFromPoint = false;
+            SpawnPipeIdx = idx;
         }
 
         public void ConfigNewGame()
         {
-            marioSize = 0;
-            lives = 3;
-            coins = 0;
-            scores = 0;
-            timeLeft = 400.5f;
-            hurryUp = false;
+            PlayerSize = 0;
+            Lives = 3;
+            Coins = 0;
+            Scores = 0;
+            TimeLeft = 400.5f;
+            HurryUp = false;
             ResetSpawnPosition();
-            sceneToLoad = null;
-            timeUp = false;
+            SceneToLoad = null;
+            TimeUp = false;
         }
 
         public void ConfigNewLevel()
         {
-            timeLeft = 400.5f;
-            hurryUp = false;
+            TimeLeft = 400.5f;
+            HurryUp = false;
             ResetSpawnPosition();
         }
 
         public void ConfigReplayedLevel()
         {
             // e.g. Mario respawns
-            timeLeft = 400.5f;
-            hurryUp = false;
+            TimeLeft = 400.5f;
+            HurryUp = false;
         }
 
         public void SaveGameState()
         {
             LevelManager levelManager = FindObjectOfType<LevelManager>();
-            marioSize = levelManager.marioSize;
-            lives = levelManager.lives;
-            coins = levelManager.coins;
-            scores = levelManager.scores;
-            timeLeft = levelManager.timeLeft;
-            hurryUp = levelManager.hurryUp;
+            PlayerSize = levelManager.marioSize;
+            Lives = levelManager.lives;
+            Coins = levelManager.coins;
+            Scores = levelManager.scores;
+            TimeLeft = levelManager.timeLeft;
+            HurryUp = levelManager.hurryUp;
         }
     }
 }

@@ -133,12 +133,12 @@ namespace Core.Managers
 
         private void RetrieveGameState()
         {
-            marioSize = _gameStateManager.marioSize;
-            lives = _gameStateManager.lives;
-            coins = _gameStateManager.coins;
-            scores = _gameStateManager.scores;
-            timeLeft = _gameStateManager.timeLeft;
-            hurryUp = _gameStateManager.hurryUp;
+            marioSize = _gameStateManager.PlayerSize;
+            lives = _gameStateManager.Lives;
+            coins = _gameStateManager.Coins;
+            scores = _gameStateManager.Scores;
+            timeLeft = _gameStateManager.TimeLeft;
+            hurryUp = _gameStateManager.HurryUp;
         }
 
 
@@ -439,7 +439,7 @@ namespace Core.Managers
         {
             _gameStateManager.SaveGameState();
             _gameStateManager.ConfigNewLevel();
-            _gameStateManager.sceneToLoad = sceneName;
+            _gameStateManager.SceneToLoad = sceneName;
             LoadSceneDelay("Level Start Screen", delay);
         }
 
@@ -457,15 +457,15 @@ namespace Core.Managers
             LoadSceneDelay(sceneName, delay);
             Debug.Log(this.name + " LoadSceneCurrentLevelSetSpawnPipe: supposed to load " + sceneName
                       + ", spawnPipeIdx=" + spawnPipeIdx.ToString() + "; actual GSM spawnFromPoint="
-                      + _gameStateManager.spawnFromPoint.ToString() + ", spawnPipeIdx="
-                      + _gameStateManager.spawnPipeIdx.ToString());
+                      + _gameStateManager.SpawnFromPoint.ToString() + ", spawnPipeIdx="
+                      + _gameStateManager.SpawnPipeIdx.ToString());
         }
 
         private void ReloadCurrentLevel(float delay = loadSceneDelay, bool timeup = false)
         {
             _gameStateManager.SaveGameState();
             _gameStateManager.ConfigReplayedLevel();
-            _gameStateManager.sceneToLoad = SceneManager.GetActiveScene().name;
+            _gameStateManager.SceneToLoad = SceneManager.GetActiveScene().name;
             LoadSceneDelay(timeup ? "Time Up Screen" : "Level Start Screen", delay);
         }
 
@@ -476,7 +476,7 @@ namespace Core.Managers
                 PlayerPrefs.SetInt("highScore", scores);
             }
 
-            _gameStateManager.timeUp = timeup;
+            _gameStateManager.TimeUp = timeup;
             LoadSceneDelay("Game Over Screen", delay);
         }
 
@@ -621,14 +621,14 @@ namespace Core.Managers
             Vector3 spawnPosition;
             GameStateManager gameStateManager = FindObjectOfType<GameStateManager>();
             Debug.Log(this.name + " FindSpawnPosition: GSM spawnFromPoint=" +
-                      gameStateManager.spawnFromPoint.ToString()
-                      + " spawnPipeIdx= " + gameStateManager.spawnPipeIdx.ToString()
-                      + " spawnPointIdx=" + gameStateManager.spawnPointIdx.ToString());
-            if (gameStateManager.spawnFromPoint) {
-                spawnPosition = GameObject.Find("Spawn Points").transform.GetChild(gameStateManager.spawnPointIdx)
+                      gameStateManager.SpawnFromPoint.ToString()
+                      + " spawnPipeIdx= " + gameStateManager.SpawnPipeIdx.ToString()
+                      + " spawnPointIdx=" + gameStateManager.SpawnPointIdx.ToString());
+            if (gameStateManager.SpawnFromPoint) {
+                spawnPosition = GameObject.Find("Spawn Points").transform.GetChild(gameStateManager.SpawnPointIdx)
                     .transform.position;
             } else {
-                spawnPosition = GameObject.Find("Spawn Pipes").transform.GetChild(gameStateManager.spawnPipeIdx)
+                spawnPosition = GameObject.Find("Spawn Pipes").transform.GetChild(gameStateManager.SpawnPipeIdx)
                     .transform.Find("Spawn Pos").transform.position;
             }
 

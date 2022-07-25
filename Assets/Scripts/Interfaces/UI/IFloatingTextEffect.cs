@@ -1,4 +1,4 @@
-﻿namespace UI.Interfaces
+﻿namespace Interfaces.UI
 {
     public interface IFloatingTextEffect
     {

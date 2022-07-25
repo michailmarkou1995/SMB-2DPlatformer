@@ -1,11 +1,11 @@
 ﻿using System.IO;
-using UI.Interfaces;
+using Interfaces.UI;
 using UnityEngine;
 
 namespace UI
 {
     /// <summary>
-    /// Sort Text Effect on Scene
+    ///     Sort Text Effect on Scene
     /// </summary>
     public class FloatingTextEffect : MonoBehaviour, IFloatingTextEffect
     {
