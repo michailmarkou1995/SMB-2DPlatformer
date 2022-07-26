@@ -9,20 +9,16 @@ namespace UI
 
         [SerializeField] private Text timerText;
 
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-            timerText.text = string.Format("{0:000}", time);
+            timerText.text = $"{time:000}";
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            if (time > 0)
-            {
-                time -= Time.deltaTime;
-                timerText.text = string.Format("{0:000}", time);
-            }
+            if (!(time > 0)) return;
+            time -= Time.deltaTime;
+            timerText.text = $"{time:000}";
         }
     }
 }

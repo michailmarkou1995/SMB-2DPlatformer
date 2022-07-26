@@ -87,7 +87,7 @@ namespace Core.NPC
 				}
 			} else if (m_Rigidbody2D.velocity.y < 0 && !isFalling) { // fall as bridge collapses
 				isFalling = true;
-				t_LevelManager.soundSource.PlayOneShot (t_LevelManager.bowserFallSound);
+				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BowserFallSound);
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace Core.NPC
 			yield return new WaitForSeconds (delay);
 			GameObject fire = Instantiate(BowserFire, FirePos.position, Quaternion.identity);
 			fire.GetComponent<BowserFire> ().directionX = transform.localScale.x;
-			t_LevelManager.soundSource.PlayOneShot (t_LevelManager.bowserFireSound);
+			t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BowserFireSound);
 		}
 
 		public override void TouchedByStarmanMario() {
@@ -113,7 +113,7 @@ namespace Core.NPC
 				GameObject impostor = Instantiate (BowserImpostor, transform.position, Quaternion.identity);
 				impostor.GetComponent<Rigidbody2D> ().velocity = 
 					new Vector2 (impostorInitialVelocity.x * directionX, impostorInitialVelocity.y);
-				t_LevelManager.soundSource.PlayOneShot (t_LevelManager.bowserFallSound);
+				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BowserFallSound);
 
 				t_LevelManager.AddScore (defeatBonus);
 				Destroy (gameObject);

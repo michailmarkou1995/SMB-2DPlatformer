@@ -34,7 +34,7 @@ namespace Core.Player {
             MAnimator.SetTrigger(IsFiringAnimator);
             GameObject fireball = Instantiate(this.fireball, firePos.position, Quaternion.identity);
             fireball.GetComponent<MarioFireball>().directionX = transform.localScale.x;
-            LevelManager.soundSource.PlayOneShot(LevelManager.fireballSound);
+            LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.GetSoundManager.FireballSound);
             FireTime1 = Time.time;
         }
 
@@ -81,9 +81,9 @@ namespace Core.Player {
                 IsJumping = true;
                 SpeedXBeforeJump = CurrentSpeedX;
                 WasDashingBeforeJump = IsDashing;
-                LevelManager.soundSource.PlayOneShot(LevelManager.marioSize == 0
-                    ? LevelManager.jumpSmallSound
-                    : LevelManager.jumpSuperSound);
+                LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.marioSize == 0
+                    ? LevelManager.GetSoundManager.JumpSmallSound
+                    : LevelManager.GetSoundManager.JumpSuperSound);
             }
 
             // else if reverse of !isJumping and not released then it is holding it ... long jump!

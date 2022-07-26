@@ -37,7 +37,7 @@ namespace Abilities.Pickups {
 		void OnTriggerEnter2D(Collider2D other) {
 			time2 = Time.time;
 			if (other.tag == "Player" && time2 - time1 >= WaitBetweenBounce) {
-				t_LevelManager.soundSource.PlayOneShot (t_LevelManager.bumpSound);
+				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BumpSound);
 
 				if (isActive) {
 					m_Animator.SetTrigger ("bounce");

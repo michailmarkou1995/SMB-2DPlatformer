@@ -1,27 +1,29 @@
 ﻿using UnityEngine;
 
-/* Activate sprite renderer/box collider if bumped by Player's head
- * Applicable to: Hidden collectible blocks
- */
+namespace UI
+{
+    /// <summary>
+    ///     Activate sprite renderer/box collider if bumped by Player's head<br />
+    ///     Applicable to: Hidden collectible blocks
+    /// </summary>
+    public class VisibleUponHit : MonoBehaviour
+    {
+        private BoxCollider2D _boxCollider2D;
+        private SpriteRenderer _spriteRenderer;
 
-namespace UI {
-	public class VisibleUponHit : MonoBehaviour {
-		private SpriteRenderer m_SpriteRenderer;
-		private BoxCollider2D m_BoxCollider2D;
+        private void Start()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer.enabled = false;
+            _boxCollider2D = GetComponent<BoxCollider2D>();
+            _boxCollider2D.enabled = false;
+        }
 
-		// Use this for initialization
-		void Start () {
-			m_SpriteRenderer = GetComponent<SpriteRenderer> ();
-			m_SpriteRenderer.enabled = false;
-			m_BoxCollider2D = GetComponent<BoxCollider2D> ();
-			m_BoxCollider2D.enabled = false;
-		}
-	
-		void OnTriggerEnter2D(Collider2D other) {
-			if (other.gameObject.tag == "Player") {
-				m_SpriteRenderer.enabled = true;
-				m_BoxCollider2D.enabled = true;
-			}
-		}
-	}
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.gameObject.CompareTag("Player")) return;
+            _spriteRenderer.enabled = true;
+            _boxCollider2D.enabled = true;
+        }
+    }
 }

@@ -51,7 +51,7 @@ namespace Level
 				Rigidbody2D rgbd = bridgePiece.gameObject.GetComponent<Rigidbody2D> ();
 				rgbd.bodyType = RigidbodyType2D.Dynamic;
 				rgbd.gravityScale = bridgePieceGravity;
-				t_LevelManager.soundSource.PlayOneShot (t_LevelManager.breakBlockSound);
+				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BreakBlockSound);
 				yield return new WaitForSeconds (waitBetweenCollapse);
 			}
 			t_LevelManager.MarioCompleteCastle ();

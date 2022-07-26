@@ -1,13 +1,17 @@
 ﻿using Core.Managers;
+using Interfaces.Core.Managers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class MainMenu : MonoBehaviour
+    public class MainMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+
     {
-        private GameStateManager _gameStateManager;
+        //TODO make World Map component style from here and start main menu all together
+        private IGameStateManager _gameStateManager;
         public Text topText;
 
         public GameObject volumePanel;
@@ -38,7 +42,7 @@ namespace UI
             Debug.Log(this.name + " Start: Volume Setting sound=" + PlayerPrefs.GetFloat("soundVolume")
                       + "; music=" + PlayerPrefs.GetFloat("musicVolume"));
         }
-
+#if ENABLE_LEGACY_INPUT_MANAGER
         public void OnMouseHover(Button button)
         {
             Debug.Log("Mouse Hover: " + button.name);
@@ -53,25 +57,47 @@ namespace UI
             GameObject cursor = button.transform.Find("Cursor").gameObject;
             cursor.SetActive(false);
         }
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            Debug.Log("Mouse Hover: " + eventData.hovered);
+            if (volumePanelActive) return;
+            GameObject cursor = eventData.pointerEnter.transform.Find("Cursor").gameObject;
+            cursor.SetActive(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!eventData.fullyExited) return;
+            Debug.Log("Mouse Hover: " + eventData.hovered);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            Debug.Log("Mouse Hover: " + eventData.hovered);
+        }
+#endif
 
         public void StartNewGame()
         {
             if (volumePanelActive) return;
-            _gameStateManager.sceneToLoad = "World 1-1";
+            _gameStateManager.SceneToLoad = "World 1-1";
             SceneManager.LoadScene("Level Start Screen");
         }
 
         public void StartWorld1_2()
         {
             if (volumePanelActive) return;
-            _gameStateManager.sceneToLoad = "World 1-2";
+            _gameStateManager.SceneToLoad = "World 1-2";
             SceneManager.LoadScene("Level Start Screen");
         }
 
         public void StartWorld1_3()
         {
             if (volumePanelActive) return;
-            _gameStateManager.sceneToLoad = "World 1-3";
+            _gameStateManager.SceneToLoad = "World 1-3";
             SceneManager.LoadScene("Level Start Screen");
         }
 
@@ -79,7 +105,7 @@ namespace UI
         public void StartWorld1_4()
         {
             if (volumePanelActive) return;
-            _gameStateManager.sceneToLoad = "World 1-4";
+            _gameStateManager.SceneToLoad = "World 1-4";
             SceneManager.LoadScene("Level Start Screen");
         }
 

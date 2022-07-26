@@ -4,18 +4,18 @@ namespace Interfaces.Core.Managers
 {
     public abstract class GameStateManagerBase : MonoBehaviour
     {
-        public bool spawnFromPoint;
-        public int spawnPointIdx;
-        public int spawnPipeIdx;
+        [SerializeField] protected bool spawnFromPoint;
+        [SerializeField] protected int spawnPointIdx;
+        [SerializeField] protected int spawnPipeIdx;
 
-        public int playerSize;
-        public int lives;
-        public int coins;
-        public int scores;
-        public float timeLeft;
-        public bool hurryUp;
+        [SerializeField] protected int playerSize;
+        [SerializeField] protected int lives;
+        [SerializeField] protected int coins;
+        [SerializeField] protected int scores;
+        [SerializeField] protected float timeLeft;
+        [SerializeField] protected bool hurryUp;
 
-        public string sceneToLoad; // what scene to load after level start screen finishes?
-        public bool timeUp;
+        [SerializeField] protected string sceneToLoad; // what scene to load after level start screen finishes?
+        [SerializeField] protected bool timeUp;
     }
 }

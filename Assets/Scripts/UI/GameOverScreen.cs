@@ -11,7 +11,7 @@ using UnityEngine.UI;
 namespace UI
 {
     [RequireComponent(typeof(ILoadLevel))]
-    public class GameOverScreen : MonoBehaviour, IGameOverScreen
+    public class GameOverScreen : MonoBehaviour, ILevelScreenSetup
     {
         [SerializeField] private Text worldTextHUD;
         [SerializeField] private Text scoreTextHUD;
@@ -29,7 +29,7 @@ namespace UI
 
         private void Start()
         {
-            SetUpGameOverScreenAndWaitTillLevelLoad();
+            SetUpLevelScreenAndWaitTillLevelLoad();
         }
 
         private void Update()
@@ -41,7 +41,7 @@ namespace UI
         ///     Set the world text, score text, coin text, and game over message text.<br />
         ///     Play the game over music.
         /// </summary>
-        public void SetUpGameOverScreenAndWaitTillLevelLoad()
+        public void SetUpLevelScreenAndWaitTillLevelLoad()
         {
             Time.timeScale = 1;
 

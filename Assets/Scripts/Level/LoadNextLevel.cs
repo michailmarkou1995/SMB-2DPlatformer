@@ -12,7 +12,7 @@ namespace Level
             StartCoroutine(LoadSceneDelayCo(loadLevelName, delay));
         }
 
-        private static IEnumerator LoadSceneDelayCo(string sceneName, float delay)
+        private static IEnumerator LoadSceneDelayCo(string sceneName, float delay = 0)
         {
             yield return new WaitForSecondsRealtime(delay);
             SceneManager.LoadScene(sceneName);

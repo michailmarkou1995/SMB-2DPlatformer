@@ -32,7 +32,7 @@ namespace Core.NPC
 			ThankYouMario.SetActive (true);
 			yield return new WaitForSecondsRealtime (.75f);
 			ButOurPrincess.SetActive (true);
-			yield return new WaitForSecondsRealtime (t_LevelManager.castleCompleteMusic.length);
+			yield return new WaitForSecondsRealtime (t_LevelManager.GetSoundManager.CastleCompleteMusic.length);
 			SceneManager.LoadScene ("Main Menu");
 		}
 	}

@@ -4,36 +4,38 @@ using UnityEngine;
 namespace Level
 {
 	public class Castle : MonoBehaviour {
-		private LevelManager t_LevelManager;
-		private Transform flag;
-		private Transform flagStop;
-		private bool moveFlag;
+		private LevelManager _levelManager;
+		private Transform _flag;
+		private Transform _flagStop;
+		private bool _moveFlag;
 
-		private float flagVelocityY = 0.025f;
+		private const float FlagVelocityY = 0.025f;
 		public string sceneName;
 
 		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			flag = transform.Find ("Flag");
-			flagStop = transform.Find ("Flag Stop");
+		private void Start () {
+			_levelManager = FindObjectOfType<LevelManager> ();
+			_flag = transform.Find ("Flag");
+			_flagStop = transform.Find ("Flag Stop");
 		}
 
-		void FixedUpdate() {
-			if (moveFlag) {
-				if (flag.position.y < flagStop.position.y) {
-					flag.position = new Vector2 (flag.position.x, flag.position.y + flagVelocityY);
-				} else {
-					t_LevelManager.LoadNewLevel (sceneName, t_LevelManager.levelCompleteMusic.length);
-				}
+		private void FixedUpdate()
+		{
+			if (!_moveFlag) return;
+			if (_flag.position.y < _flagStop.position.y) {
+				Vector3 position = _flag.position;
+				position = new Vector2 (position.x, position.y + FlagVelocityY);
+				_flag.position = position;
+			} else {
+				_levelManager.LoadNewLevel (sceneName, _levelManager.GetSoundManager.LevelCompleteMusic.length);
 			}
 		}
 
-		void OnCollisionEnter2D(Collision2D other) {
-			if (other.gameObject.tag == "Player") {
-				moveFlag = true;
-				t_LevelManager.MarioCompleteLevel ();
-			}
+		private void OnCollisionEnter2D(Collision2D other)
+		{
+			if (!other.gameObject.CompareTag("Player")) return;
+			_moveFlag = true;
+			_levelManager.MarioCompleteLevel ();
 		}
 	}
 }

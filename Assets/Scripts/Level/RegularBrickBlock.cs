@@ -45,11 +45,11 @@ namespace Level
 				// Bounce or break depending on Mario's size
 				if (t_LevelManager.marioSize == 0) {
 					m_Animator.SetTrigger ("bounce");
-					t_LevelManager.soundSource.PlayOneShot (t_LevelManager.bumpSound);
+					t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BumpSound);
 				} else {
 					BreakIntoPieces ();
 					t_LevelManager.AddScore(t_LevelManager.breakBlockBonus);
-					t_LevelManager.soundSource.PlayOneShot (t_LevelManager.breakBlockSound);
+					t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BreakBlockSound);
 				}
 				time1 = Time.time;
 			}

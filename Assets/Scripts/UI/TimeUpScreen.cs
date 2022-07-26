@@ -1,41 +1,52 @@
-﻿using System.Collections;
+﻿using System;
 using System.Text.RegularExpressions;
 using Core.Managers;
+using Interfaces.Core.Managers;
+using Interfaces.Level;
+using Interfaces.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
 {
-	public class TimeUpScreen : MonoBehaviour {
-		private GameStateManager _gameStateManager;
+    [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof(ILevelScreenSetup))]
+    public class TimeUpScreen : MonoBehaviour, ILevelScreenSetup
+    {
+        [SerializeField] private Text worldTextHUD;
+        [SerializeField] private Text scoreTextHUD;
+        [SerializeField] private Text coinTextHUD;
 
-		public Text WorldTextHUD;
-		public Text ScoreTextHUD;
-		public Text CoinTextHUD;
+        private const float LoadScreenDelay = 2;
 
-		private float loadScreenDelay = 2;
+        private IGameStateManagerEssentials _gameStateManager;
+        private ILoadLevel _levelToLoad;
 
+        private void Awake()
+        {
+            _levelToLoad = GetComponent<ILoadLevel>();
+        }
 
-		// Use this for initialization
-		void Start () {
-			Time.timeScale = 1;
+        private void Start()
+        {
+            SetUpLevelScreenAndWaitTillLevelLoad();
+        }
 
-			_gameStateManager = FindObjectOfType<GameStateManager> ();
-			string worldName = _gameStateManager.SceneToLoad;
+        public void SetUpLevelScreenAndWaitTillLevelLoad()
+        {
+            Time.timeScale = 1;
 
-			WorldTextHUD.text = Regex.Split (worldName, "World ")[1];
-			ScoreTextHUD.text = _gameStateManager.Scores.ToString ("D6");
-			CoinTextHUD.text = "x" + _gameStateManager.Coins.ToString ("D2");
+            _gameStateManager = FindObjectOfType<GameStateManager>();
+            string worldName = _gameStateManager.SceneToLoad;
 
-			StartCoroutine (LoadSceneDelayCo ("Level Start Screen", loadScreenDelay));
-			Debug.Log (this.name + " Start: current scene is " + SceneManager.GetActiveScene ().name);
-		}
+            worldTextHUD.text = Regex.Split(worldName, "World ")[1];
+            scoreTextHUD.text = _gameStateManager.Scores.ToString("D6");
+            coinTextHUD.text = "x" + _gameStateManager.Coins.ToString("D2");
 
-		IEnumerator LoadSceneDelayCo(string sceneName, float delay = 0) {
-			yield return new WaitForSecondsRealtime (delay);
-			SceneManager.LoadScene (sceneName);
-		}
+            _levelToLoad.LoadLevel("Level Start Screen", LoadScreenDelay);
 
-	}
+            Debug.Log(this.name + " Start: current scene is " + SceneManager.GetActiveScene().name);
+        }
+    }
 }

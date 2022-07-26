@@ -49,8 +49,8 @@ namespace Level
 			mario.AutomaticCrouch ();
 			isMoving = true;
 			marioEntered = true;
-			tLevelManager.musicSource.Stop ();
-			tLevelManager.soundSource.PlayOneShot (tLevelManager.pipePowerdownSound);
+			tLevelManager.GetSoundManager.MusicSource.Stop ();
+			tLevelManager.GetSoundManager.SoundSource.PlayOneShot (tLevelManager.GetSoundManager.PipePowerdownSound);
 		}
 	}
 }

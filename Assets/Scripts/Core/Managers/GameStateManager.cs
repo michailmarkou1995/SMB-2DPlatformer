@@ -1,9 +1,10 @@
-﻿using Interfaces;
-using Interfaces.Core.Managers;
+﻿using Interfaces.Core.Managers;
+using UnityEngine;
 
 namespace Core.Managers
 {
-    public class GameStateManager : GameStateManagerBase, IGameStateManager, IGameStateManagerEssentials
+    [RequireComponent(typeof(ISaveGameState))]
+    public class GameStateManager : GameStateManagerBase, IGameStateManager
     {
         #region GettersAndSettersFromBase
 
@@ -75,9 +76,12 @@ namespace Core.Managers
 
         #endregion
 
+        private ISaveGameState _saveGameStateOnMemory;
+
         private void Awake()
         {
             RetainGameStateManagerPerLoad();
+            _saveGameStateOnMemory = GetComponent<ISaveGameState>();
         }
 
         public void RetainGameStateManagerPerLoad()
@@ -130,15 +134,9 @@ namespace Core.Managers
             HurryUp = false;
         }
 
-        public void SaveGameState()
+        public void GetSaveGameState()
         {
-            LevelManager levelManager = FindObjectOfType<LevelManager>();
-            PlayerSize = levelManager.marioSize;
-            Lives = levelManager.lives;
-            Coins = levelManager.coins;
-            Scores = levelManager.scores;
-            TimeLeft = levelManager.timeLeft;
-            HurryUp = levelManager.hurryUp;
+            _saveGameStateOnMemory.SaveGameState(this);
         }
     }
 }

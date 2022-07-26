@@ -36,7 +36,7 @@ namespace Abilities.Player
         private void Explode() {
             mRigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
             mAnimator.SetTrigger(Exploded);
-            tLevelManager.soundSource.PlayOneShot(tLevelManager.bumpSound);
+            tLevelManager.GetSoundManager.SoundSource.PlayOneShot(tLevelManager.GetSoundManager.BumpSound);
             Destroy(gameObject, ExplosionDuration);
         }
 

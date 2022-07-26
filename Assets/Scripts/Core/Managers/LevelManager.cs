@@ -1,91 +1,25 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Abilities.Pickups;
 using Core.NPC;
 using Core.Player;
+using Interfaces.Core.Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Core.Managers
 {
-    public class LevelManager : MonoBehaviour
+    [RequireComponent(typeof(ISoundManagerExtras))]
+    public class LevelManager : LevelManagerBase, ILevelManager
     {
-        private const float loadSceneDelay = 1f;
-
-        public bool hurryUp; // within last 100 secs?
-        public int marioSize; // 0..2
-        public int lives;
-        public int coins;
-        public int scores;
-        public float timeLeft;
-        private int _timeLeftInt;
-
-        private bool _isRespawning;
-        private bool _isPoweringDown;
-
-        public bool isInvinciblePowerdown;
-        public bool isInvincibleStarman;
-        private const float MarioInvinciblePowerdownDuration = 2;
-        private const float MarioInvincibleStarmanDuration = 12;
-        private const float TransformDuration = 1;
-
-        private GameStateManager _gameStateManager;
-        private PlayerController _playerController;
-        private Animator _marioAnimator;
-        private Rigidbody2D _marioRigidbody2D;
-
-        public Text scoreText;
-        public Text coinText;
-        public Text timeText;
-        public GameObject floatingTextEffect;
-        private const float FloatingTextOffsetY = 2f;
-
-        public AudioSource musicSource;
-        public AudioSource soundSource;
-        public AudioSource pauseSoundSource;
-
-        public AudioClip levelMusic;
-        public AudioClip levelMusicHurry;
-        public AudioClip starmanMusic;
-        public AudioClip starmanMusicHurry;
-        public AudioClip levelCompleteMusic;
-        public AudioClip castleCompleteMusic;
-
-        public AudioClip oneUpSound;
-        public AudioClip bowserFallSound;
-        public AudioClip bowserFireSound;
-        public AudioClip breakBlockSound;
-        public AudioClip bumpSound;
-        public AudioClip coinSound;
-        public AudioClip deadSound;
-        public AudioClip fireballSound;
-        public AudioClip flagpoleSound;
-        public AudioClip jumpSmallSound;
-        public AudioClip jumpSuperSound;
-        public AudioClip kickSound;
-        public AudioClip pipePowerdownSound;
-        public AudioClip powerupSound;
-        public AudioClip powerupAppearSound;
-        public AudioClip stompSound;
-        public AudioClip warningSound;
-
-        public int coinBonus = 200;
-        public int powerupBonus = 1000;
-        public int starmanBonus = 1000;
-        public int oneupBonus = 0;
-        public int breakBlockBonus = 50;
-
-        public Vector2 stompBounceVelocity = new Vector2(0, 15);
-
-        public bool gamePaused;
-        public bool timerPaused;
-        public bool musicPaused;
-
+        private IGameStateManager _gameStateManager;
+        private ISoundManagerExtras _soundManager;
+        private PlayerController _playerController; //TODO IPlayerController
+        public ISoundManagerExtras GetSoundManager => _soundManager;
 
         private void Awake()
         {
+            _soundManager = GetComponent<ISoundManagerExtras>();
             Time.timeScale = 1;
         }
 
@@ -100,15 +34,15 @@ namespace Core.Managers
             _playerController.UpdateSize();
 
             // Sound volume
-            musicSource.volume = PlayerPrefs.GetFloat("musicVolume");
-            soundSource.volume = PlayerPrefs.GetFloat("soundVolume");
-            pauseSoundSource.volume = PlayerPrefs.GetFloat("soundVolume");
+            GetSoundManager.MusicSource.volume = PlayerPrefs.GetFloat("musicVolume");
+            GetSoundManager.SoundSource.volume = PlayerPrefs.GetFloat("soundVolume");
+            GetSoundManager.PauseSoundSource.volume = PlayerPrefs.GetFloat("soundVolume");
 
             // HUD
             SetHudCoin();
             SetHudScore();
             SetHudTime();
-            ChangeMusic(hurryUp ? levelMusicHurry : levelMusic);
+            ChangeMusic(hurryUp ? GetSoundManager.LevelMusicHurry : GetSoundManager.LevelMusic);
 
             Debug.Log(this.name + " Start: current scene is " + SceneManager.GetActiveScene().name);
         }
@@ -152,8 +86,9 @@ namespace Core.Managers
 
             if (_timeLeftInt < 100 && !hurryUp) {
                 hurryUp = true;
-                PauseMusicPlaySound(warningSound, true);
-                ChangeMusic(isInvincibleStarman ? starmanMusicHurry : levelMusicHurry, warningSound.length);
+                PauseMusicPlaySound(GetSoundManager.WarningSound, true);
+                ChangeMusic(isInvincibleStarman ? GetSoundManager.StarmanMusicHurry : GetSoundManager.LevelMusicHurry,
+                    GetSoundManager.WarningSound.length);
             }
 
             if (_timeLeftInt <= 0) {
@@ -166,13 +101,6 @@ namespace Core.Managers
 
 
         /****************** Game pause */
-        List<Animator> unscaledAnimators = new List<Animator>();
-        private float _pauseGamePrevTimeScale;
-        private bool _pausePrevMusicPaused;
-        private static readonly int IsInvincibleStarman = Animator.StringToHash("isInvincibleStarman");
-        private static readonly int IsInvinciblePowerdown = Animator.StringToHash("isInvinciblePowerdown");
-        private static readonly int IsPoweringUp = Animator.StringToHash("isPoweringUp");
-        private static readonly int IsPoweringDown = Animator.StringToHash("isPoweringDown");
 
         private IEnumerator PauseGameCo()
         {
@@ -181,41 +109,41 @@ namespace Core.Managers
 
             Time.timeScale = 0;
             _pausePrevMusicPaused = musicPaused;
-            musicSource.Pause();
+            GetSoundManager.MusicSource.Pause();
             musicPaused = true;
-            soundSource.Pause();
+            GetSoundManager.SoundSource.Pause();
 
             // Set any active animators that use unscaled time mode to normal
-            unscaledAnimators.Clear();
+            _unScaledAnimators.Clear();
             foreach (Animator animator in FindObjectsOfType<Animator>()) {
                 if (animator.updateMode != AnimatorUpdateMode.UnscaledTime) continue;
-                unscaledAnimators.Add(animator);
+                _unScaledAnimators.Add(animator);
                 animator.updateMode = AnimatorUpdateMode.Normal;
             }
 
-            pauseSoundSource.Play();
-            yield return new WaitForSecondsRealtime(pauseSoundSource.clip.length);
+            GetSoundManager.PauseSoundSource.Play();
+            yield return new WaitForSecondsRealtime(GetSoundManager.PauseSoundSource.clip.length);
             Debug.Log(this.name + " PauseGameCo stops: records prevTimeScale=" + _pauseGamePrevTimeScale.ToString());
         }
 
         private IEnumerator UnpauseGameCo()
         {
-            pauseSoundSource.Play();
-            yield return new WaitForSecondsRealtime(pauseSoundSource.clip.length);
+            GetSoundManager.PauseSoundSource.Play();
+            yield return new WaitForSecondsRealtime(GetSoundManager.PauseSoundSource.clip.length);
 
             musicPaused = _pausePrevMusicPaused;
             if (!musicPaused) {
-                musicSource.UnPause();
+                GetSoundManager.MusicSource.UnPause();
             }
 
-            soundSource.UnPause();
+            GetSoundManager.SoundSource.UnPause();
 
             // Reset animators
-            foreach (Animator animator in unscaledAnimators) {
+            foreach (Animator animator in _unScaledAnimators) {
                 animator.updateMode = AnimatorUpdateMode.UnscaledTime;
             }
 
-            unscaledAnimators.Clear();
+            _unScaledAnimators.Clear();
 
             Time.timeScale = _pauseGamePrevTimeScale;
             gamePaused = false;
@@ -240,13 +168,13 @@ namespace Core.Managers
             isInvincibleStarman = true;
             _marioAnimator.SetBool(IsInvincibleStarman, true);
             _playerController.gameObject.layer = LayerMask.NameToLayer("Mario After Starman");
-            ChangeMusic(hurryUp ? starmanMusicHurry : starmanMusic);
+            ChangeMusic(hurryUp ? GetSoundManager.StarmanMusicHurry : GetSoundManager.StarmanMusic);
 
             yield return new WaitForSeconds(MarioInvincibleStarmanDuration);
             isInvincibleStarman = false;
             _marioAnimator.SetBool(IsInvincibleStarman, false);
             _playerController.gameObject.layer = LayerMask.NameToLayer("Mario");
-            ChangeMusic(hurryUp ? levelMusicHurry : levelMusic);
+            ChangeMusic(hurryUp ? GetSoundManager.LevelMusicHurry : GetSoundManager.LevelMusic);
         }
 
         void MarioInvinciblePowerdown()
@@ -269,7 +197,8 @@ namespace Core.Managers
         /****************** Powerup / Powerdown / Die */
         private void MarioPowerUp()
         {
-            soundSource.PlayOneShot(powerupSound); // should play sound regardless of size
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager
+                .PowerupSound); // should play sound regardless of size
             if (marioSize < 2) {
                 StartCoroutine(MarioPowerUpCo());
             }
@@ -302,7 +231,7 @@ namespace Core.Managers
 
                 if (marioSize > 0) {
                     StartCoroutine(MarioPowerDownCo());
-                    soundSource.PlayOneShot(pipePowerdownSound);
+                    GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.PipePowerdownSound);
                 } else {
                     MarioRespawn();
                 }
@@ -317,13 +246,15 @@ namespace Core.Managers
         {
             _marioAnimator.SetBool(IsPoweringDown, true);
             Time.timeScale = 0f;
-            _marioAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            AnimatorUpdateMode updateMode = _marioAnimator.updateMode;
+            updateMode = AnimatorUpdateMode.UnscaledTime;
 
             yield return new WaitForSecondsRealtime(TransformDuration);
             yield return new WaitWhile(() => gamePaused);
 
             Time.timeScale = 1;
-            _marioAnimator.updateMode = AnimatorUpdateMode.Normal;
+            updateMode = AnimatorUpdateMode.Normal;
+            _marioAnimator.updateMode = updateMode;
             MarioInvinciblePowerdown();
 
             marioSize = 0;
@@ -340,10 +271,10 @@ namespace Core.Managers
             marioSize = 0;
             lives--;
 
-            soundSource.Stop();
-            musicSource.Stop();
+            GetSoundManager.SoundSource.Stop();
+            GetSoundManager.MusicSource.Stop();
             musicPaused = true;
-            soundSource.PlayOneShot(deadSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.DeadSound);
 
             Time.timeScale = 0f;
             _playerController.FreezeAndDie();
@@ -355,9 +286,9 @@ namespace Core.Managers
             Debug.Log(this.name + " MarioRespawn: lives left=" + lives.ToString());
 
             if (lives > 0) {
-                ReloadCurrentLevel(deadSound.length, timeUp);
+                ReloadCurrentLevel(GetSoundManager.DeadSound.length, timeUp);
             } else {
-                LoadGameOver(deadSound.length, timeUp);
+                LoadGameOver(GetSoundManager.DeadSound.length, timeUp);
                 Debug.Log(this.name + " MarioRespawn: all dead");
             }
         }
@@ -369,7 +300,7 @@ namespace Core.Managers
             _marioRigidbody2D.velocity =
                 new Vector2(_marioRigidbody2D.velocity.x + stompBounceVelocity.x, stompBounceVelocity.y);
             enemy.StompedByMario();
-            soundSource.PlayOneShot(stompSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.StompSound);
             AddScore(enemy.stompBonus, enemy.gameObject.transform.position);
             Debug.Log(this.name + " MarioStompEnemy called on " + enemy.gameObject.name);
         }
@@ -377,7 +308,7 @@ namespace Core.Managers
         public void MarioStarmanTouchEnemy(Enemy enemy)
         {
             enemy.TouchedByStarmanMario();
-            soundSource.PlayOneShot(kickSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.KickSound);
             AddScore(enemy.starmanBonus, enemy.gameObject.transform.position);
             Debug.Log(this.name + " MarioStarmanTouchEnemy called on " + enemy.gameObject.name);
         }
@@ -385,7 +316,7 @@ namespace Core.Managers
         public void RollingShellTouchEnemy(Enemy enemy)
         {
             enemy.TouchedByRollingShell();
-            soundSource.PlayOneShot(kickSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.KickSound);
             AddScore(enemy.rollingShellBonus, enemy.gameObject.transform.position);
             Debug.Log(this.name + " RollingShellTouchEnemy called on " + enemy.gameObject.name);
         }
@@ -400,13 +331,13 @@ namespace Core.Managers
         public void FireballTouchEnemy(Enemy enemy)
         {
             enemy.HitByMarioFireball();
-            soundSource.PlayOneShot(kickSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.KickSound);
             AddScore(enemy.fireballBonus, enemy.gameObject.transform.position);
             Debug.Log(this.name + " FireballTouchEnemy called on " + enemy.gameObject.name);
         }
 
         /****************** Scene loading */
-        private void LoadSceneDelay(string sceneName, float delay = loadSceneDelay)
+        private void LoadSceneDelay(string sceneName, float delay = LoadSceneDelayTime)
         {
             timerPaused = true;
             StartCoroutine(LoadSceneDelayCo(sceneName, delay));
@@ -435,24 +366,25 @@ namespace Core.Managers
             SceneManager.LoadScene(sceneName);
         }
 
-        public void LoadNewLevel(string sceneName, float delay = loadSceneDelay)
+        public void LoadNewLevel(string sceneName, float delay = LoadSceneDelayTime)
         {
-            _gameStateManager.SaveGameState();
+            _gameStateManager.GetSaveGameState();
             _gameStateManager.ConfigNewLevel();
             _gameStateManager.SceneToLoad = sceneName;
             LoadSceneDelay("Level Start Screen", delay);
         }
 
-        public void LoadSceneCurrentLevel(string sceneName, float delay = loadSceneDelay)
+        public void LoadSceneCurrentLevel(string sceneName, float delay = LoadSceneDelayTime)
         {
-            _gameStateManager.SaveGameState();
+            _gameStateManager.GetSaveGameState();
             _gameStateManager.ResetSpawnPosition(); // TODO
             LoadSceneDelay(sceneName, delay);
         }
 
-        public void LoadSceneCurrentLevelSetSpawnPipe(string sceneName, int spawnPipeIdx, float delay = loadSceneDelay)
+        public void LoadSceneCurrentLevelSetSpawnPipe(string sceneName, int spawnPipeIdx,
+            float delay = LoadSceneDelayTime)
         {
-            _gameStateManager.SaveGameState();
+            _gameStateManager.GetSaveGameState();
             _gameStateManager.SetSpawnPipe(spawnPipeIdx);
             LoadSceneDelay(sceneName, delay);
             Debug.Log(this.name + " LoadSceneCurrentLevelSetSpawnPipe: supposed to load " + sceneName
@@ -461,15 +393,15 @@ namespace Core.Managers
                       + _gameStateManager.SpawnPipeIdx.ToString());
         }
 
-        private void ReloadCurrentLevel(float delay = loadSceneDelay, bool timeup = false)
+        private void ReloadCurrentLevel(float delay = LoadSceneDelayTime, bool timeUp = false)
         {
-            _gameStateManager.SaveGameState();
+            _gameStateManager.GetSaveGameState();
             _gameStateManager.ConfigReplayedLevel();
             _gameStateManager.SceneToLoad = SceneManager.GetActiveScene().name;
-            LoadSceneDelay(timeup ? "Time Up Screen" : "Level Start Screen", delay);
+            LoadSceneDelay(timeUp ? "Time Up Screen" : "Level Start Screen", delay);
         }
 
-        private void LoadGameOver(float delay = loadSceneDelay, bool timeup = false)
+        private void LoadGameOver(float delay = LoadSceneDelayTime, bool timeup = false)
         {
             int currentHighScore = PlayerPrefs.GetInt("highScore", 0);
             if (scores > currentHighScore) {
@@ -513,12 +445,12 @@ namespace Core.Managers
         private IEnumerator ChangeMusicCo(AudioClip clip, float delay)
         {
             Debug.Log(this.name + " ChangeMusicCo: starts changing music to " + clip.name);
-            musicSource.clip = clip;
+            GetSoundManager.MusicSource.clip = clip;
             yield return new WaitWhile(() => gamePaused);
             yield return new WaitForSecondsRealtime(delay);
             yield return new WaitWhile(() => gamePaused || musicPaused);
             if (!_isRespawning) {
-                musicSource.Play();
+                GetSoundManager.MusicSource.Play();
             }
 
             Debug.Log(this.name + " ChangeMusicCo: done changing music to " + clip.name);
@@ -532,23 +464,23 @@ namespace Core.Managers
         private IEnumerator PauseMusicPlaySoundCo(AudioClip clip, bool resumeMusic)
         {
             string musicClipName = "";
-            if (musicSource.clip) {
-                musicClipName = musicSource.clip.name;
+            if (GetSoundManager.MusicSource.clip) {
+                musicClipName = GetSoundManager.MusicSource.clip.name;
             }
 
-            Debug.Log(this.name + " PausemusicPlaySoundCo: starts pausing music " + musicClipName + " to play sound " +
+            Debug.Log(this.name + " Pause musicPlaySoundCo: starts pausing music " + musicClipName + " to play sound " +
                       clip.name);
 
             musicPaused = true;
-            musicSource.Pause();
-            soundSource.PlayOneShot(clip);
+            GetSoundManager.MusicSource.Pause();
+            GetSoundManager.SoundSource.PlayOneShot(clip);
             yield return new WaitForSeconds(clip.length);
             if (resumeMusic) {
-                musicSource.UnPause();
+                GetSoundManager.MusicSource.UnPause();
 
                 musicClipName = "";
-                if (musicSource.clip) {
-                    musicClipName = musicSource.clip.name;
+                if (GetSoundManager.MusicSource.clip) {
+                    musicClipName = GetSoundManager.MusicSource.clip.name;
                 }
 
                 Debug.Log(this.name + " PausemusicPlaySoundCo: resume playing music " + musicClipName);
@@ -563,20 +495,20 @@ namespace Core.Managers
         public void AddLife()
         {
             lives++;
-            soundSource.PlayOneShot(oneUpSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.OneUpSound);
         }
 
         public void AddLife(Vector3 spawnPos)
         {
             lives++;
-            soundSource.PlayOneShot(oneUpSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.OneUpSound);
             CreateFloatingText("1UP", spawnPos);
         }
 
         public void AddCoin()
         {
             coins++;
-            soundSource.PlayOneShot(coinSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.CoinSound);
             if (coins == 100) {
                 AddLife();
                 coins = 0;
@@ -589,7 +521,7 @@ namespace Core.Managers
         public void AddCoin(Vector3 spawnPos)
         {
             coins++;
-            soundSource.PlayOneShot(coinSound);
+            GetSoundManager.SoundSource.PlayOneShot(GetSoundManager.CoinSound);
             if (coins == 100) {
                 AddLife();
                 coins = 0;
@@ -649,22 +581,22 @@ namespace Core.Managers
         public void MarioCompleteCastle()
         {
             timerPaused = true;
-            ChangeMusic(castleCompleteMusic);
-            musicSource.loop = false;
+            ChangeMusic(GetSoundManager.CastleCompleteMusic);
+            GetSoundManager.MusicSource.loop = false;
             _playerController.AutomaticWalk(_playerController.CastleWalkSpeedX);
         }
 
         public void MarioCompleteLevel()
         {
             timerPaused = true;
-            ChangeMusic(levelCompleteMusic);
-            musicSource.loop = false;
+            ChangeMusic(GetSoundManager.LevelCompleteMusic);
+            GetSoundManager.MusicSource.loop = false;
         }
 
         public void MarioReachFlagPole()
         {
             timerPaused = true;
-            PauseMusicPlaySound(flagpoleSound, false);
+            PauseMusicPlaySound(GetSoundManager.FlagpoleSound, false);
             _playerController.ClimbFlagPole();
         }
     }

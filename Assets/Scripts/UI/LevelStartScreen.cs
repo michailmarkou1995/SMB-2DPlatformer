@@ -1,9 +1,7 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Core.Managers;
 using Interfaces.Level;
 using Interfaces.UI;
-using Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -35,7 +33,7 @@ namespace UI
 
     [RequireComponent(typeof(Text))]
     [RequireComponent(typeof(ILoadLevel))]
-    public class LevelStartScreen : LevelStartScreenBase, ILevelStartScreenEssentials
+    public class LevelStartScreen : LevelStartScreenBase, ILevelScreenSetup, ILevelStartScreenEssentials
     {
         #region GettersAndSetters
 
@@ -82,10 +80,10 @@ namespace UI
 
         private void Start()
         {
-            SetUpLevelStartScreen();
+            SetUpLevelScreenAndWaitTillLevelLoad();
         }
 
-        private void SetUpLevelStartScreen()
+        public void SetUpLevelScreenAndWaitTillLevelLoad()
         {
             // Time mode slow down
             Time.timeScale = 1;
