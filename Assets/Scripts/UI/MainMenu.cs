@@ -1,8 +1,9 @@
 ﻿using Core.Managers;
 using Interfaces.Core.Managers;
+using Interfaces.Level;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -12,6 +13,7 @@ namespace UI
     {
         //TODO make World Map component style from here and start main menu all together
         private IGameStateManager _gameStateManager;
+        private ILoadLevel _loadLevel;
         public Text topText;
 
         public GameObject volumePanel;
@@ -20,9 +22,17 @@ namespace UI
 
         public bool volumePanelActive;
 
+        [CanBeNull] private IMasterVolume _masterVolumeManager;
+
+        private void Awake()
+        {
+            _loadLevel = GetComponent<ILoadLevel>();
+        }
+
         private void Start()
         {
             _gameStateManager = FindObjectOfType<GameStateManager>();
+            _masterVolumeManager = GameObject.FindWithTag("SoundManager").GetComponent<IMasterVolume>();
             _gameStateManager.ConfigNewGame();
 
             int currentHighScore = PlayerPrefs.GetInt("highScore", 0);
@@ -36,8 +46,7 @@ namespace UI
                 PlayerPrefs.SetFloat("musicVolume", 1);
             }
 
-            soundSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("soundVolume");
-            musicSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("musicVolume");
+            _masterVolumeManager?.GetSelectVolume(soundSlider, musicSlider);
 
             Debug.Log(this.name + " Start: Volume Setting sound=" + PlayerPrefs.GetFloat("soundVolume")
                       + "; music=" + PlayerPrefs.GetFloat("musicVolume"));
@@ -62,6 +71,7 @@ namespace UI
 #if ENABLE_INPUT_SYSTEM
         public void OnPointerEnter(PointerEventData eventData)
         {
+            // NOT WORKING
             Debug.Log("Mouse Hover: " + eventData.hovered);
             if (volumePanelActive) return;
             GameObject cursor = eventData.pointerEnter.transform.Find("Cursor").gameObject;
@@ -70,12 +80,14 @@ namespace UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            // NOT WORKING
             if (!eventData.fullyExited) return;
             Debug.Log("Mouse Hover: " + eventData.hovered);
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            // NOT WORKING
             Debug.Log("Mouse Hover: " + eventData.hovered);
         }
 #endif
@@ -84,21 +96,21 @@ namespace UI
         {
             if (volumePanelActive) return;
             _gameStateManager.SceneToLoad = "World 1-1";
-            SceneManager.LoadScene("Level Start Screen");
+            _loadLevel.LoadLevel("Level Start Screen");
         }
 
         public void StartWorld1_2()
         {
             if (volumePanelActive) return;
             _gameStateManager.SceneToLoad = "World 1-2";
-            SceneManager.LoadScene("Level Start Screen");
+            _loadLevel.LoadLevel("Level Start Screen");
         }
 
         public void StartWorld1_3()
         {
             if (volumePanelActive) return;
             _gameStateManager.SceneToLoad = "World 1-3";
-            SceneManager.LoadScene("Level Start Screen");
+            _loadLevel.LoadLevel("Level Start Screen");
         }
 
 
@@ -106,7 +118,7 @@ namespace UI
         {
             if (volumePanelActive) return;
             _gameStateManager.SceneToLoad = "World 1-4";
-            SceneManager.LoadScene("Level Start Screen");
+            _loadLevel.LoadLevel("Level Start Screen");
         }
 
         public void QuitGame()
@@ -118,22 +130,21 @@ namespace UI
 
         public void SelectVolume()
         {
+            if (_masterVolumeManager == null) return;
             volumePanel.SetActive(true);
             volumePanelActive = true;
         }
 
         public void SetVolume()
         {
-            PlayerPrefs.SetFloat("soundVolume", soundSlider.GetComponent<Slider>().value);
-            PlayerPrefs.SetFloat("musicVolume", musicSlider.GetComponent<Slider>().value);
+            _masterVolumeManager?.SetVolume(soundSlider, musicSlider);
             volumePanel.SetActive(false);
             volumePanelActive = false;
         }
 
         public void CancelSelectVolume()
         {
-            soundSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("soundVolume");
-            musicSlider.GetComponent<Slider>().value = PlayerPrefs.GetFloat("musicVolume");
+            _masterVolumeManager?.GetSelectVolume(soundSlider, musicSlider);
             volumePanel.SetActive(false);
             volumePanelActive = false;
         }

@@ -13,5 +13,6 @@ namespace Interfaces.Core.Managers
         public AudioClip FlagpoleSound { get; set; }
         public AudioClip PipePowerdownSound { get; set; }
         public AudioClip StompSound { get; set; }
+        public void GetSoundVolume();
     }
 }

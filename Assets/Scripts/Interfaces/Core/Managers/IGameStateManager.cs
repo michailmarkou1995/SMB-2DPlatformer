@@ -10,5 +10,6 @@
         public void ConfigNewLevel();
         public void ConfigReplayedLevel();
         public void GetSaveGameState();
+        public void PauseUnPauseState();
     }
 }

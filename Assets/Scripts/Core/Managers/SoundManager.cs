@@ -1,5 +1,5 @@
-using Abilities.Pickups;
 using Interfaces.Core.Managers;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Core.Managers
@@ -29,36 +29,24 @@ namespace Core.Managers
 
     #endregion
 
-    public class SoundManager : MonoBehaviour, ISoundManagerExtras
+    public class SoundManager : SoundManagerBase, ISoundManagerExtras
     {
-        public AudioSource musicSource;
-        public AudioSource soundSource;
-        public AudioSource pauseSoundSource;
+        // public static ISoundManager Instance { get; private set; }
 
-        public AudioClip levelMusic;
-        public AudioClip levelMusicHurry;
-        public AudioClip starmanMusic;
-        public AudioClip starmanMusicHurry;
-        public AudioClip levelCompleteMusic;
-        public AudioClip castleCompleteMusic;
+        [CanBeNull] private IMasterVolume _masterVolume;
 
-        public AudioClip oneUpSound;
-        public AudioClip bowserFallSound;
-        public AudioClip bowserFireSound;
-        public AudioClip breakBlockSound;
-        public AudioClip bumpSound;
-        public AudioClip coinSound;
-        public AudioClip deadSound;
-        public AudioClip fireballSound;
-        public AudioClip flagpoleSound;
-        public AudioClip jumpSmallSound;
-        public AudioClip jumpSuperSound;
-        public AudioClip kickSound;
-        public AudioClip pipePowerdownSound;
-        public AudioClip powerupSound;
-        public AudioClip powerupAppearSound;
-        public AudioClip stompSound;
-        public AudioClip warningSound;
+        // private void Awake()
+        // {
+        //     if (Instance == null)
+        //     {
+        //         Instance = this;
+        //         DontDestroyOnLoad(gameObject);
+        //     }
+        //     else
+        //     {
+        //         Destroy(gameObject);
+        //     }
+        // }
 
         public AudioSource MusicSource
         {
@@ -70,6 +58,12 @@ namespace Core.Managers
         {
             get => soundSource;
             set => soundSource = value;
+        }
+
+        public AudioSource EffectsSource
+        {
+            get => effectsSource;
+            set => effectsSource = value;
         }
 
         public AudioSource PauseSoundSource
@@ -214,6 +208,20 @@ namespace Core.Managers
         {
             get => warningSound;
             set => warningSound = value;
+        }
+        
+        public void GetSoundVolume()
+        {
+            MusicSource.volume = PlayerPrefs.GetFloat("musicVolume");
+            SoundSource.volume = PlayerPrefs.GetFloat("soundVolume");
+            PauseSoundSource.volume = PlayerPrefs.GetFloat("soundVolume");
+        }
+
+        public void PlaySound(AudioClip clip)
+        {
+            // SoundSource.clip = clip;
+            // SoundSource.Play();
+            effectsSource.PlayOneShot(clip);
         }
     }
 }

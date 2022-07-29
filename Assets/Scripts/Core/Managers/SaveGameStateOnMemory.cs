@@ -13,9 +13,9 @@ namespace Core.Managers
             LevelManager levelManager = Object.FindObjectOfType<LevelManager>();
             gameStateManager.PlayerSize = levelManager.marioSize;
             gameStateManager.Lives = levelManager.lives;
-            gameStateManager.Coins = levelManager.coins;
-            gameStateManager.Scores = levelManager.scores;
-            gameStateManager.TimeLeft = levelManager.timeLeft;
+            gameStateManager.Coins = levelManager.GetHUD.Coins;
+            gameStateManager.Scores = levelManager.GetHUD.Scores;
+            gameStateManager.TimeLeft = levelManager.GetHUD.TimeLeft;
             gameStateManager.HurryUp = levelManager.hurryUp;
         }
     }
