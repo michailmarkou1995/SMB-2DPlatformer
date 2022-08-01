@@ -6,12 +6,18 @@ namespace Interfaces.Core.Managers
 {
     public abstract class LevelManagerBase : MonoBehaviour
     {
+        protected const float LoadSceneDelayTime = 1f;
+
         public bool hurryUp; // within last 100 secs?
         public int marioSize; // 0..2
         public int lives;
+        public int coins;
+        public int scores;
+        public float timeLeft;
+        protected int TimeLeftInt;
 
-        [SerializeField] protected bool isRespawning;
-        protected bool isPoweringDown;
+        protected bool IsRespawning;
+        protected bool IsPoweringDown;
 
         public bool isInvinciblePowerdown;
         public bool isInvincibleStarman;
@@ -22,6 +28,12 @@ namespace Interfaces.Core.Managers
         protected Animator MarioAnimator;
         protected Rigidbody2D MarioRigidbody2D;
 
+        public Text scoreText;
+        public Text coinText;
+        public Text timeText;
+        public GameObject floatingTextEffect;
+        protected const float FloatingTextOffsetY = 2f;
+
         public int coinBonus = 200;
         public int powerupBonus = 1000;
         public int starmanBonus = 1000;
@@ -30,13 +42,13 @@ namespace Interfaces.Core.Managers
 
         public Vector2 stompBounceVelocity = new(0, 15);
 
-        // [SerializeField] protected bool gamePaused;
-        // [SerializeField] protected bool timerPaused;
-        // [SerializeField] protected bool musicPaused;
+        public bool gamePaused;
+        public bool timerPaused;
+        public bool musicPaused;
 
-        // protected readonly List<Animator> UnScaledAnimators = new List<Animator>();
-        // protected float PauseGamePrevTimeScale;
-        // protected bool PausePrevMusicPaused;
+        protected readonly List<Animator> UnScaledAnimators = new List<Animator>();
+        protected float PauseGamePrevTimeScale;
+        protected bool PausePrevMusicPaused;
         protected static readonly int IsInvincibleStarmanAnim = Animator.StringToHash("isInvincibleStarman");
         protected static readonly int IsInvinciblePowerdownAnim = Animator.StringToHash("isInvinciblePowerdown");
         protected static readonly int IsPoweringUpAnim = Animator.StringToHash("isPoweringUp");

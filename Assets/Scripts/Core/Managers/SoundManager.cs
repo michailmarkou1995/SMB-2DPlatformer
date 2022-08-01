@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Interfaces.Core.Managers;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -34,6 +36,7 @@ namespace Core.Managers
         // public static ISoundManager Instance { get; private set; }
 
         [CanBeNull] private IMasterVolume _masterVolume;
+        [CanBeNull] private ISoundHandle _soundHandle;
 
         // private void Awake()
         // {
@@ -222,6 +225,75 @@ namespace Core.Managers
             // SoundSource.clip = clip;
             // SoundSource.Play();
             effectsSource.PlayOneShot(clip);
+        }
+    }
+
+    internal interface ISoundHandle
+    {
+        public void ChangeMusic(AudioClip clip, float delay = 0);
+        public void PauseMusicPlaySound(AudioClip clip, bool resumeMusic);
+    }
+
+    public class LevelHandleMusic : MonoBehaviour, ISoundHandle
+    {
+        public bool gamePaused;
+        public bool timerPaused;
+        public bool musicPaused;
+        
+        private ISoundManagerExtras _soundManager;
+        
+        public void ChangeMusic(AudioClip clip, float delay = 0)
+        {
+            StartCoroutine(ChangeMusicCo(clip, delay));
+        }
+        
+        private IEnumerator ChangeMusicCo(AudioClip clip, float delay)
+        {
+            Debug.Log(this.name + " ChangeMusicCo: starts changing music to " + clip.name);
+            _soundManager.MusicSource.clip = clip;
+            yield return new WaitWhile(() => gamePaused);
+            yield return new WaitForSecondsRealtime(delay);
+            yield return new WaitWhile(() => gamePaused || musicPaused);
+            // if (!IsRespawning) {
+            //     _soundManager.MusicSource.Play();
+            // }
+
+            Debug.Log(this.name + " ChangeMusicCo: done changing music to " + clip.name);
+        }
+
+        public void PauseMusicPlaySound(AudioClip clip, bool resumeMusic)
+        {
+            StartCoroutine(PauseMusicPlaySoundCo(clip, resumeMusic));
+        }
+        
+        private IEnumerator PauseMusicPlaySoundCo(AudioClip clip, bool resumeMusic)
+        {
+            string musicClipName = "";
+            if (_soundManager.MusicSource.clip) {
+                musicClipName = _soundManager.MusicSource.clip.name;
+            }
+
+            Debug.Log(this.name + " Pause musicPlaySoundCo: starts pausing music " + musicClipName + " to play sound " +
+                      clip.name);
+
+            musicPaused = true;
+            _soundManager.MusicSource.Pause();
+            _soundManager.SoundSource.PlayOneShot(clip);
+            yield return new WaitForSeconds(clip.length);
+            if (resumeMusic) {
+                _soundManager.MusicSource.UnPause();
+
+                musicClipName = "";
+                if (_soundManager.MusicSource.clip) {
+                    musicClipName = _soundManager.MusicSource.clip.name;
+                }
+
+                Debug.Log(this.name + " PausemusicPlaySoundCo: resume playing music " + musicClipName);
+            }
+
+            musicPaused = false;
+
+            Debug.Log(this.name + " PausemusicPlaySoundCo: done pausing music to play sound " + clip.name);
         }
     }
 }

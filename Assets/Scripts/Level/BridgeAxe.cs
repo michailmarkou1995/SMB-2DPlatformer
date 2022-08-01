@@ -33,7 +33,7 @@ namespace Level
 			if (other.tag == "Player" && !gotAxe) {
 				gotAxe = true;
 				playerController.FreezeUserInput ();
-				t_LevelManager.GetGameStateManager.TimerPaused = true;
+				t_LevelManager.timerPaused = true;
 
 				if (bowser) {  // bowser not yet defeated
 					bowser.active = false; 

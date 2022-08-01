@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using Interfaces.Core.Managers;
-using JetBrains.Annotations;
+﻿using Interfaces.Core.Managers;
 using UnityEngine;
 
 namespace Core.Managers
@@ -59,12 +56,6 @@ namespace Core.Managers
             set => timeLeft = value;
         }
 
-        public int TimeLeftInt
-        {
-            get => timeLeftInt;
-            set => timeLeftInt = value;
-        }
-
         public bool HurryUp
         {
             get => hurryUp;
@@ -83,28 +74,9 @@ namespace Core.Managers
             set => timeUp = value;
         }
 
-        public bool GamePaused
-        {
-            get => gamePaused;
-            set => gamePaused = value;
-        }
-
-        public bool TimerPaused
-        {
-            get => timerPaused;
-            set => timerPaused = value;
-        }
-
-        public bool MusicPaused
-        {
-            get => musicPaused;
-            set => musicPaused = value;
-        }
-
         #endregion
 
         private ISaveGameState _saveGameStateOnMemory;
-        [CanBeNull] private ILevelManager _levelManager;
 
         private void Awake()
         {
@@ -168,69 +140,6 @@ namespace Core.Managers
         public void GetSaveGameState()
         {
             _saveGameStateOnMemory.SaveGameState(this);
-        }
-
-        public void PauseUnPauseState()
-        {
-            _levelManager = FindObjectOfType<LevelManager>();
-            StartCoroutine(!GamePaused ? PauseGameCo() : UnpauseGameCo());
-        }
-
-        private IEnumerator PauseGameCo()
-        {
-            if (_levelManager == null) {
-                yield break;
-            }
-
-            Debug.Log("PauseGameCo!!!!!!!!!!");
-            GamePaused = true;
-            PauseGamePrevTimeScale = Time.timeScale;
-
-            Time.timeScale = 0;
-            PausePrevMusicPaused = MusicPaused;
-            _levelManager.GetSoundManager.MusicSource.Pause();
-            MusicPaused = true;
-            _levelManager.GetSoundManager.SoundSource.Pause();
-
-            // Set any active animators that use unscaled time mode to normal
-            UnScaledAnimators.Clear();
-            foreach (Animator animator in FindObjectsOfType<Animator>()) {
-                if (animator.updateMode != AnimatorUpdateMode.UnscaledTime) continue;
-                UnScaledAnimators.Add(animator);
-                animator.updateMode = AnimatorUpdateMode.Normal;
-            }
-
-            _levelManager.GetSoundManager.PauseSoundSource.Play();
-            yield return new WaitForSecondsRealtime(_levelManager.GetSoundManager.PauseSoundSource.clip.length);
-            Debug.Log(this.name + " PauseGameCo stops: records prevTimeScale=" + PauseGamePrevTimeScale.ToString());
-        }
-
-        private IEnumerator UnpauseGameCo()
-        {
-            if (_levelManager == null) {
-                yield break;
-            }
-
-            _levelManager.GetSoundManager.PauseSoundSource.Play();
-            yield return new WaitForSecondsRealtime(_levelManager.GetSoundManager.PauseSoundSource.clip.length);
-
-            MusicPaused = PausePrevMusicPaused;
-            if (!MusicPaused) {
-                _levelManager.GetSoundManager.MusicSource.UnPause();
-            }
-
-            _levelManager.GetSoundManager.SoundSource.UnPause();
-
-            // Reset animators
-            foreach (Animator animator in UnScaledAnimators) {
-                animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-            }
-
-            UnScaledAnimators.Clear();
-
-            Time.timeScale = PauseGamePrevTimeScale;
-            GamePaused = false;
-            Debug.Log(this.name + " UnpauseGameCo stops: resume prevTimeScale=" + PauseGamePrevTimeScale.ToString());
         }
     }
 }
