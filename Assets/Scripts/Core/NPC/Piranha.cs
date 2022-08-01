@@ -6,23 +6,22 @@ using UnityEngine;
 namespace Core.NPC
 {
 	public class Piranha : Enemy {
-		private LevelManager t_LevelManager;
-		private GameObject mario;
-		private CircleCollider2D m_CircleCollider2D;
-		private PatrolVertical patrolScript;
+		private LevelManager _levelManager;
+		[SerializeField] private GameObject mario;
+		private CircleCollider2D _circleCollider2D;
+		private PatrolVertical _patrolScript;
 
-		private bool visible;
+		private bool _visible;
 		private float maxDistanceToMove = 2; // should not emerge if Mario is within this distance of pipe
 
-		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
+		private void Start () {
+			_levelManager = FindObjectOfType<LevelManager> ();
 			mario = FindObjectOfType<PlayerController> ().gameObject;
-			m_CircleCollider2D = GetComponent<CircleCollider2D> ();
-			patrolScript = GetComponent<PatrolVertical> ();
-			visible = false;
-			patrolScript.canMove = false;
-			m_CircleCollider2D.enabled = false;
+			_circleCollider2D = GetComponent<CircleCollider2D> ();
+			_patrolScript = GetComponent<PatrolVertical> ();
+			_visible = false;
+			_patrolScript.canMove = false;
+			_circleCollider2D.enabled = false;
 
 			starmanBonus = 100; // ???
 			rollingShellBonus = 500; // ???
@@ -31,23 +30,23 @@ namespace Core.NPC
 			stompBonus = 0;
 		}
 
-		void OnBecameVisible() {
-			visible = true;
+		private void OnBecameVisible() {
+			_visible = true;
 		}
 
-		void Update() {
-			if (visible) {
-				if (Mathf.Abs (mario.transform.position.x - transform.position.x) > maxDistanceToMove) {
-					m_CircleCollider2D.enabled = true;
-					patrolScript.canMove = true;
-				} else if (patrolScript.isAtDownStop) { // do not emerge
-					m_CircleCollider2D.enabled = false;
-					patrolScript.canMove = false;
-				}
+		private void Update()
+		{
+			if (!_visible) return;
+			if (Mathf.Abs (mario.transform.position.x - transform.position.x) > maxDistanceToMove) {
+				_circleCollider2D.enabled = true;
+				_patrolScript.canMove = true;
+			} else if (_patrolScript.isAtDownStop) { // do not emerge
+				_circleCollider2D.enabled = false;
+				_patrolScript.canMove = false;
 			}
 		}
 
-		void DestroyPiranhaStruct() {
+		private void DestroyPiranhaStruct() {
 			Destroy (gameObject.transform.parent.gameObject);
 		}
 
@@ -71,7 +70,7 @@ namespace Core.NPC
 
 		void OnTriggerEnter2D(Collider2D other) {
 			if (other.tag == "Player") {
-				t_LevelManager.MarioPowerDown ();
+				_levelManager.GetPlayerAbilities.MarioPowerDown ();
 			}
 		}
 	}

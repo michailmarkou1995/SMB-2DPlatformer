@@ -35,7 +35,7 @@ namespace UI
 
         public void InitializeCameraPosition(MainCamera mainCamera)
         {
-            Vector3 spawnPosition = FindObjectOfType<LevelManager>().FindSpawnPosition();
+            Vector3 spawnPosition = FindObjectOfType<LevelManager>().GetLevelServices.FindSpawnPosition();
             _targetPosition = new Vector3(spawnPosition.x, transform.position.y, transform.position.z);
 
             bool passedLeftEdge = _targetPosition.x < _leftEdge.position.x + _cameraWidth;

@@ -33,13 +33,13 @@ namespace Level
 			if (other.tag == "Player" && !gotAxe) {
 				gotAxe = true;
 				playerController.FreezeUserInput ();
-				t_LevelManager.timerPaused = true;
+				t_LevelManager.GetGameStateManager.TimerPaused = true;
 
 				if (bowser) {  // bowser not yet defeated
 					bowser.active = false; 
 					StartCoroutine (CollapseBridgeCo ());
 				} else {
-					t_LevelManager.MarioCompleteCastle ();
+					t_LevelManager.GetLevelServices.MarioCompleteCastle ();
 				}
 				gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 			}
@@ -54,7 +54,7 @@ namespace Level
 				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BreakBlockSound);
 				yield return new WaitForSeconds (waitBetweenCollapse);
 			}
-			t_LevelManager.MarioCompleteCastle ();
+			t_LevelManager.GetLevelServices.MarioCompleteCastle ();
 			Destroy (gameObject);
 		}
 	}

@@ -19,7 +19,8 @@ namespace Core.Player
         protected override void PerLevelInitialization()
         {
             // Drop Mario at spawn position
-            transform.position = FindObjectOfType<global::Core.Managers.LevelManager>().FindSpawnPosition();
+            transform.position = FindObjectOfType<global::Core.Managers.LevelManager>()
+                .GetLevelServices.FindSpawnPosition();
 
             // Set correct size
             UpdateSize();
@@ -114,7 +115,7 @@ namespace Core.Player
                 MidairDecelerationX = .21f;
             }
         }
-        
+
         [SerializeField] private bool _isDying;
         private float _deadUpTimer = .25f;
 
@@ -227,7 +228,9 @@ namespace Core.Player
         /// </summary>
         public override void UpdateSize()
         {
-            GetComponent<Animator>().SetInteger(PlayerSizeAnimator, FindObjectOfType<global::Core.Managers.LevelManager>().marioSize);
+            GetComponent<Animator>().SetInteger(PlayerSizeAnimator,
+                FindObjectOfType<global::Core.Managers.LevelManager>()
+                    .GetGameStateManager.PlayerSize);
         }
 
         /// <summary>

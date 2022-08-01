@@ -25,8 +25,8 @@ namespace Level
 		{
 			if (!_isMoving) return;
 			if (transform.position.y > _stop.position.y) {
-				if (!_levelManager.timerPaused) {
-					_levelManager.timerPaused = true;
+				if (!_levelManager.GetGameStateManager.TimerPaused) {
+					_levelManager.GetGameStateManager.TimerPaused = true;
 				}
 
 				Transform transformCached = transform;
@@ -35,9 +35,9 @@ namespace Level
 				transformCached.position = position;
 			} else {
 				if (leadToSameLevel) {
-					_levelManager.LoadSceneCurrentLevel (sceneName);
+					_levelManager.GetLoadLevelSceneHandler.LoadSceneCurrentLevel (sceneName);
 				} else {
-					_levelManager.LoadNewLevel (sceneName);
+					_levelManager.GetLoadLevelSceneHandler.LoadLevel(sceneName);
 				}
 			}
 		}

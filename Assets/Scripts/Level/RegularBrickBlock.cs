@@ -11,7 +11,7 @@ namespace Level
 		public GameObject BlockCoin;
 		private float WaitBetweenBounce = .25f;
 
-		private LevelManager t_LevelManager;
+		private LevelManager _levelManager;
 		private Animator m_Animator;
 		private RegularBrickBlockCoinDetector m_CoinDetector;
 
@@ -21,7 +21,7 @@ namespace Level
 
 		// Use this for initialization
 		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
+			_levelManager = FindObjectOfType<LevelManager> ();
 			m_Animator = GetComponent<Animator> ();
 			m_CoinDetector = transform.parent.Find ("Coin Detector").GetComponent<RegularBrickBlockCoinDetector> ();
 			time1 = 0;
@@ -33,7 +33,7 @@ namespace Level
 			if (other.tag == "Player" && time2-time1 >= WaitBetweenBounce) {
 				// Hit any enemy on top
 				foreach (GameObject enemyObj in enemiesOnTop) {
-					t_LevelManager.BlockHitEnemy (enemyObj.GetComponent<Enemy> ());
+					_levelManager.GetPlayerAbilities.BlockHitEnemy (enemyObj.GetComponent<Enemy> ());
 				}
 
 				// check and collect coins on top
@@ -43,13 +43,13 @@ namespace Level
 				}
 
 				// Bounce or break depending on Mario's size
-				if (t_LevelManager.marioSize == 0) {
+				if (_levelManager.GetGameStateManager.PlayerSize == 0) {
 					m_Animator.SetTrigger ("bounce");
-					t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BumpSound);
+					_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BumpSound);
 				} else {
 					BreakIntoPieces ();
-					t_LevelManager.AddScore(t_LevelManager.breakBlockBonus);
-					t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BreakBlockSound);
+					_levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateManager.BreakBlockBonus);
+					_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BreakBlockSound);
 				}
 				time1 = Time.time;
 			}

@@ -1,16 +1,17 @@
 ﻿using Core.Managers;
+using Interfaces.Core.Managers;
 using UnityEngine;
 
 namespace Abilities.Pickups
 {
     public class BlockCoin : MonoBehaviour
     {
-        private LevelManager _levelManager;
+        private ILevelManager _levelManager;
 
         private void Start()
         {
             _levelManager = FindObjectOfType<LevelManager>();
-            _levelManager.AddCoin(transform.position + Vector3.down);
+            _levelManager.GetPlayerPickUpAbilities.AddCoin(transform.position + Vector3.down);
         }
     }
 }

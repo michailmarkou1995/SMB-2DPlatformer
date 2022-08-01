@@ -1,31 +1,31 @@
 ﻿using Core.Managers;
 using Core.Player;
+using Interfaces.Core.Managers;
 using UnityEngine;
 
 namespace Core.NPC
 {
 	public class KoopaShell : Enemy {
-		private Animator m_Animator;
-		private Rigidbody2D m_Rigidbody2D;
-		private LevelManager t_LevelManager;
-		private PlayerController playerController;
+		private Animator _animator;
+		private Rigidbody2D _rigidbody2D;
+		private ILevelManager _levelManager;
+		private PlayerController _playerController;
 
 		public GameObject Koopa;
 		public float rollSpeedX = 7;
-		private float waitTillRevive = 5;
-		private float waitTillRespawn = 1.5f;
+		private float _waitTillRevive = 5;
+		private float _waitTillRespawn = 1.5f;
 
-		private float currentRollVelocityX;
-		private bool isReviving;
+		private float _currentRollVelocityX;
+		private bool _isReviving;
 		public bool isRolling;
 
-		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			playerController = FindObjectOfType<PlayerController> ();
-			m_Animator = GetComponent<Animator> ();
-			m_Rigidbody2D = GetComponent<Rigidbody2D> ();
-			isReviving = false;
+		private void Start () {
+			_levelManager = FindObjectOfType<LevelManager> ();
+			_playerController = FindObjectOfType<PlayerController> ();
+			_animator = GetComponent<Animator> ();
+			_rigidbody2D = GetComponent<Rigidbody2D> ();
+			_isReviving = false;
 			isRolling = false;
 
 			starmanBonus = 200; // ???
@@ -35,24 +35,24 @@ namespace Core.NPC
 			stompBonus = 500;
 		}
 
-		void Update() {
-			if (!isReviving && !isRolling) {
-				waitTillRevive -= Time.deltaTime;
-				if (waitTillRevive <= 0) {
-					m_Animator.SetTrigger ("revived");
-					isReviving = true;
+		private void Update() {
+			if (!_isReviving && !isRolling) {
+				_waitTillRevive -= Time.deltaTime;
+				if (_waitTillRevive <= 0) {
+					_animator.SetTrigger ("revived");
+					_isReviving = true;
 				}
-			} else if (isReviving && !isRolling) {
-				waitTillRespawn -= Time.deltaTime;
-				if (waitTillRespawn <= 0) {
+			} else if (_isReviving && !isRolling) {
+				_waitTillRespawn -= Time.deltaTime;
+				if (_waitTillRespawn <= 0) {
 					Instantiate (Koopa, transform.position, Quaternion.identity);
 					Destroy (gameObject);
 				}
 			} else if (isRolling) {
-				m_Rigidbody2D.velocity = new Vector2 (currentRollVelocityX, m_Rigidbody2D.velocity.y);
+				_rigidbody2D.velocity = new Vector2 (_currentRollVelocityX, _rigidbody2D.velocity.y);
 			}
 
-			if (hasBeenStomped) {
+			if (_hasBeenStomped) {
 				stompBonus = 0;
 			}
 		}
@@ -61,39 +61,41 @@ namespace Core.NPC
 			if (!isRolling) {
 				FlipAndDie ();
 			} else { // change direction if touched by another rolling shell
-				currentRollVelocityX = -currentRollVelocityX;
+				_currentRollVelocityX = -_currentRollVelocityX;
 				rollingShellBonus = 0; // ???
 			}
 		}
 
-		bool hasBeenStomped = false;
+		private bool _hasBeenStomped;
+		private static readonly int Rolled = Animator.StringToHash("rolled");
+
 		public override void StompedByMario() {
 			isBeingStomped = true;
 			if (!isRolling) {
 				// start rolling left/right depending on Mario's direction
-				if (playerController.transform.localScale.x == 1) {
-					currentRollVelocityX = rollSpeedX;
-				} else if (playerController.transform.localScale.x == -1) {
-					currentRollVelocityX = -rollSpeedX;
+				if (_playerController.transform.localScale.x == 1) {
+					_currentRollVelocityX = rollSpeedX;
+				} else if (_playerController.transform.localScale.x == -1) {
+					_currentRollVelocityX = -rollSpeedX;
 				}
 				isRolling = true;
-				m_Animator.SetTrigger ("rolled");
+				_animator.SetTrigger (Rolled);
 			} else {
 				isRolling = false;
 			}
-			hasBeenStomped = true;
+			_hasBeenStomped = true;
 			isBeingStomped = false;
 		}
-		
 
-		void OnCollisionEnter2D(Collision2D other) {
-			if (isRolling) {
-				if (other.gameObject.tag.Contains("Enemy")) { // kill off other enemies
-					Enemy enemy = other.gameObject.GetComponent<Enemy>();
-					t_LevelManager.RollingShellTouchEnemy (enemy);
-				} else {
-					currentRollVelocityX = -currentRollVelocityX;
-				}
+
+		private void OnCollisionEnter2D(Collision2D other)
+		{
+			if (!isRolling) return;
+			if (other.gameObject.tag.Contains("Enemy")) { // kill off other enemies
+				Enemy enemy = other.gameObject.GetComponent<Enemy>();
+				_levelManager.GetPlayerAbilities.RollingShellTouchEnemy (enemy);
+			} else {
+				_currentRollVelocityX = -_currentRollVelocityX;
 			}
 		}
 	}

@@ -4,53 +4,48 @@ using UnityEngine;
 
 namespace Level
 {
-	public class PipeWarpSide : MonoBehaviour {
-		private LevelManager t_LevelManager;
-		private PlayerController playerController;
-		private bool reachedPortal;
+    public class PipeWarpSide : MonoBehaviour
+    {
+        private LevelManager _levelManager;
+        private PlayerController _playerController;
+        private bool _reachedPortal;
 
-		public string sceneName;
-		public int spawnPipeIdx;
-		public bool leadToSameLevel = true;
+        public string sceneName;
+        public int spawnPipeIdx;
+        public bool leadToSameLevel = true;
 
+        private void Start()
+        {
+            _levelManager = FindObjectOfType<LevelManager>();
+            _playerController = FindObjectOfType<PlayerController>();
+        }
 
-		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			playerController = FindObjectOfType<PlayerController> ();
-		}
-	
-		// Update is called once per frame
-		void Update () {
-		
-		}
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.CompareTag("Player")) return;
+            _playerController.AutomaticWalk(_playerController.LevelEntryWalkSpeedX);
+            _reachedPortal = true;
+            _levelManager.GetGameStateManager.TimerPaused = true;
+            Debug.Log(this.name + " OnTriggerEnter2D: " + transform.parent.gameObject.name
+                      + " recognizes player, should automatic walk");
+        }
 
-		void OnTriggerEnter2D(Collider2D other) {
-			if (other.tag == "Player") {
-				playerController.AutomaticWalk (playerController.LevelEntryWalkSpeedX);
-				reachedPortal = true;
-				t_LevelManager.timerPaused = true;
-				Debug.Log (this.name + " OnTriggerEnter2D: " + transform.parent.gameObject.name 
-				           + " recognizes player, should automatic walk");
-			}
-		}
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            if (!other.gameObject.CompareTag("Player") || !_reachedPortal) return;
+            _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.PipePowerdownSound);
 
-		void OnCollisionEnter2D(Collision2D other) {
-			if (other.gameObject.tag == "Player" && reachedPortal) {
-				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.PipePowerdownSound);
-
-				if (leadToSameLevel) {
-					Debug.Log (this.name + " OnCollisionEnter2D: " + transform.parent.gameObject.name 
-					           + " teleports player to different scene same level " + sceneName
-					           + ", pipe idx " + spawnPipeIdx);
-					t_LevelManager.LoadSceneCurrentLevelSetSpawnPipe (sceneName, spawnPipeIdx);
-				} else {
-					Debug.Log (this.name + " OnCollisionEnter2D: " + transform.parent.gameObject.name
-					           + " teleports player to new level " + sceneName 
-					           + ", pipe idx " + spawnPipeIdx);
-					t_LevelManager.LoadNewLevel (sceneName);
-				}
-			}
-		}
-	}
+            if (leadToSameLevel) {
+                Debug.Log(this.name + " OnCollisionEnter2D: " + transform.parent.gameObject.name
+                          + " teleports player to different scene same level " + sceneName
+                          + ", pipe idx " + spawnPipeIdx);
+                _levelManager.GetLoadLevelSceneHandler.LoadSceneCurrentLevelSetSpawnPipe(sceneName, spawnPipeIdx);
+            } else {
+                Debug.Log(this.name + " OnCollisionEnter2D: " + transform.parent.gameObject.name
+                          + " teleports player to new level " + sceneName
+                          + ", pipe idx " + spawnPipeIdx);
+                _levelManager.GetLoadLevelSceneHandler.LoadLevel(sceneName);
+            }
+        }
+    }
 }

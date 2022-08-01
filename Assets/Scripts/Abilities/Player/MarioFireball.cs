@@ -8,42 +8,39 @@ namespace Abilities.Player
     public class MarioFireball : MonoBehaviour {
         public float directionX; // > 0 for right, < 0 for left
         private const float ExplosionDuration = .25f;
-        private readonly Vector2 absVelocity = new Vector2(20, 11);
+        private readonly Vector2 _absVelocity = new Vector2(20, 11);
 
-        private LevelManager tLevelManager;
-        private Rigidbody2D mRigidbody2D;
-        private Animator mAnimator;
+        private LevelManager _levelManager;
+        private Rigidbody2D _rigidbody2D;
+        private Animator _animator;
         private static readonly int Exploded = Animator.StringToHash("exploded");
 
-        // Use this for initialization
         private void Awake() {
-            // old Start()
-            tLevelManager = FindObjectOfType<LevelManager>();
-            mRigidbody2D = GetComponent<Rigidbody2D>();
-            mAnimator = GetComponent<Animator>();
+            _levelManager = FindObjectOfType<LevelManager>();
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
         }
 
         private void Start() {
             // initial velocity
-            mRigidbody2D.velocity = new Vector2(directionX * absVelocity.x, -absVelocity.y);
+            _rigidbody2D.velocity = new Vector2(directionX * _absVelocity.x, -_absVelocity.y);
         }
 
-        // Update is called once per frame
         private void Update() {
-            mRigidbody2D.velocity = new Vector2(directionX * absVelocity.x, mRigidbody2D.velocity.y);
+            _rigidbody2D.velocity = new Vector2(directionX * _absVelocity.x, _rigidbody2D.velocity.y);
         }
 
         private void Explode() {
-            mRigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-            mAnimator.SetTrigger(Exploded);
-            tLevelManager.GetSoundManager.SoundSource.PlayOneShot(tLevelManager.GetSoundManager.BumpSound);
+            _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+            _animator.SetTrigger(Exploded);
+            _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.BumpSound);
             Destroy(gameObject, ExplosionDuration);
         }
 
         private void OnCollisionEnter2D(Collision2D other) {
             if (other.gameObject.tag.Contains("Enemy")) {
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
-                tLevelManager.FireballTouchEnemy(enemy);
+                _levelManager.GetPlayerAbilities.FireballTouchEnemy(enemy);
                 Explode();
             } else {
                 // bounce off grounds
@@ -58,9 +55,9 @@ namespace Abilities.Player
                     Explode();
                 } else if (normal == bottomSide) {
                     // bounce off
-                    mRigidbody2D.velocity = new Vector2(mRigidbody2D.velocity.x, absVelocity.y);
+                    _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _absVelocity.y);
                 } else {
-                    mRigidbody2D.velocity = new Vector2(mRigidbody2D.velocity.x, -absVelocity.y);
+                    _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, -_absVelocity.y);
                 }
             }
         }
@@ -73,7 +70,7 @@ namespace Abilities.Player
         private void OnTriggerEnter2D(Collider2D other) {
             if (!other.tag.Contains("Enemy")) return;
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
-            tLevelManager.FireballTouchEnemy(enemy);
+            _levelManager.GetPlayerAbilities.FireballTouchEnemy(enemy);
             Explode();
         }
     }

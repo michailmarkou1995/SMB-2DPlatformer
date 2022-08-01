@@ -27,7 +27,7 @@ namespace Core.Player {
         }
 
         private void Shooting(InputAction.CallbackContext obj) {
-            if (!IsShooting || LevelManager.marioSize != 2) return;
+            if (!IsShooting || LevelManager.GetGameStateManager.PlayerSize != 2) return;
             FireTime2 = Time.time;
 
             if (!(FireTime2 - FireTime1 >= WaitBetweenFire)) return;
@@ -81,7 +81,7 @@ namespace Core.Player {
                 IsJumping = true;
                 SpeedXBeforeJump = CurrentSpeedX;
                 WasDashingBeforeJump = IsDashing;
-                LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.marioSize == 0
+                LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.GetGameStateManager.PlayerSize == 0
                     ? LevelManager.GetSoundManager.JumpSmallSound
                     : LevelManager.GetSoundManager.JumpSuperSound);
             }

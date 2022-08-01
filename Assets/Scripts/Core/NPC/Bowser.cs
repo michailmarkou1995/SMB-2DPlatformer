@@ -7,40 +7,40 @@ using UnityEngine;
 namespace Core.NPC
 {
 	public class Bowser : Enemy {
-		private LevelManager t_LevelManager;
-		private GameObject mario;
-		private Rigidbody2D m_Rigidbody2D;
+		private LevelManager _levelManager;
+		private GameObject _mario;
+		private Rigidbody2D _rigidbody2D;
 
-		public Transform FirePos;
-		public GameObject BowserImpostor;
-		public GameObject BowserFire;
+		public Transform firePos;
+		public GameObject bowserImpostor;
+		public GameObject bowserFire;
 		public bool canMove;
 		public bool active;
 
 		private Vector2 impostorInitialVelocity = new Vector2 (3, 3);
 		private float minDistanceToMove = 55; // start moving if mario is within this distance
 
-		private int fireResistance = 5;
+		private int _fireResistance = 5;
 		private float waitBetweenJump = 3;
 		private float shootFireDelay = .1f; // how long after jump should Bowser release fireball
 
 		private float absSpeedX = 1.5f;
-		private float directionX = 1;
+		private float _directionX = 1;
 		private float minJumpSpeedY = 3;
 		private float maxJumpSpeedY = 7;
 
-		private float timer;
-		private float jumpSpeedY;
+		private float _timer;
+		private float _jumpSpeedY;
 
-		private int defeatBonus;
-		private bool isFalling;
+		private int _defeatBonus;
+		private bool _isFalling;
 
 		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			mario = FindObjectOfType<PlayerController> ().gameObject;
-			m_Rigidbody2D = GetComponent<Rigidbody2D> ();
-			timer = 0;
+		private void Start () {
+			_levelManager = FindObjectOfType<LevelManager> ();
+			_mario = FindObjectOfType<PlayerController> ().gameObject;
+			_rigidbody2D = GetComponent<Rigidbody2D> ();
+			_timer = 0;
 			canMove = false;
 			active = true;
 
@@ -49,53 +49,53 @@ namespace Core.NPC
 			hitByBlockBonus = 0;
 			fireballBonus = 0;
 			stompBonus = 0;
-			defeatBonus = 5000;
+			_defeatBonus = 5000;
 		}
 	
 		// Update is called once per frame
-		void Update () {
+		private void Update () {
 			if (active) {
-				if (!canMove && Mathf.Abs (mario.gameObject.transform.position.x - transform.position.x) <= minDistanceToMove) {
+				if (!canMove && Mathf.Abs (_mario.gameObject.transform.position.x - transform.position.x) <= minDistanceToMove) {
 					canMove = true;
 				}
 
 				if (canMove) {
-					m_Rigidbody2D.velocity = new Vector2 (directionX * absSpeedX, m_Rigidbody2D.velocity.y);
-					timer -= Time.deltaTime;
+					_rigidbody2D.velocity = new Vector2 (_directionX * absSpeedX, _rigidbody2D.velocity.y);
+					_timer -= Time.deltaTime;
 
-					if (timer <= 0) {
+					if (_timer <= 0) {
 						// Turn to face Mario
-						if (mario.transform.position.x < transform.position.x) { // mario to the left
+						if (_mario.transform.position.x < transform.position.x) { // mario to the left
 							transform.localScale = new Vector3 (-1, 1, 1);
-						} else if (mario.transform.position.x > transform.position.x) {
+						} else if (_mario.transform.position.x > transform.position.x) {
 							transform.localScale = new Vector3 (1, 1, 1);
 						}
 
 						// Switch walk direction
-						directionX = -directionX;
+						_directionX = -_directionX;
 
 						// Jump a random height
-						jumpSpeedY = Random.Range (minJumpSpeedY, maxJumpSpeedY);
-						m_Rigidbody2D.velocity = new Vector2 (m_Rigidbody2D.velocity.x, jumpSpeedY);
+						_jumpSpeedY = Random.Range (minJumpSpeedY, maxJumpSpeedY);
+						_rigidbody2D.velocity = new Vector2 (_rigidbody2D.velocity.x, _jumpSpeedY);
 
 						// Shoot fireball after some delay
 						StartCoroutine (ShootFireCo (shootFireDelay));
 
-						timer = waitBetweenJump;
+						_timer = waitBetweenJump;
 					}
 
 				}
-			} else if (m_Rigidbody2D.velocity.y < 0 && !isFalling) { // fall as bridge collapses
-				isFalling = true;
-				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BowserFallSound);
+			} else if (_rigidbody2D.velocity.y < 0 && !_isFalling) { // fall as bridge collapses
+				_isFalling = true;
+				_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BowserFallSound);
 			}
 		}
 
-		IEnumerator ShootFireCo(float delay) {
+		private IEnumerator ShootFireCo(float delay) {
 			yield return new WaitForSeconds (delay);
-			GameObject fire = Instantiate(BowserFire, FirePos.position, Quaternion.identity);
+			GameObject fire = Instantiate(bowserFire, firePos.position, Quaternion.identity);
 			fire.GetComponent<BowserFire> ().directionX = transform.localScale.x;
-			t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BowserFireSound);
+			_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BowserFireSound);
 		}
 
 		public override void TouchedByStarmanMario() {
@@ -108,31 +108,30 @@ namespace Core.NPC
 		}
 
 		public override void HitByMarioFireball() {
-			fireResistance--;
-			if (fireResistance <= 0) {
-				GameObject impostor = Instantiate (BowserImpostor, transform.position, Quaternion.identity);
-				impostor.GetComponent<Rigidbody2D> ().velocity = 
-					new Vector2 (impostorInitialVelocity.x * directionX, impostorInitialVelocity.y);
-				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BowserFallSound);
+			_fireResistance--;
+			if (_fireResistance > 0) return;
+			GameObject impostor = Instantiate (bowserImpostor, transform.position, Quaternion.identity);
+			impostor.GetComponent<Rigidbody2D> ().velocity = 
+				new Vector2 (impostorInitialVelocity.x * _directionX, impostorInitialVelocity.y);
+			_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BowserFallSound);
 
-				t_LevelManager.AddScore (defeatBonus);
-				Destroy (gameObject);
-			}
+			_levelManager.GetPlayerPickUpAbilities.AddScore (_defeatBonus);
+			Destroy (gameObject);
 		}
 
 		public override void StompedByMario() {
 		}
 
-		void OnCollisionEnter2D(Collision2D other) {
+		private void OnCollisionEnter2D(Collision2D other) {
 			Vector2 normal = other.contacts[0].normal;
 			Vector2 leftSide = new Vector2 (-1f, 0f);
 			Vector2 rightSide = new Vector2 (1f, 0f);
 			bool sideHit = normal == leftSide || normal == rightSide;
 
 			if (other.gameObject.tag == "Player") {
-				t_LevelManager.MarioPowerDown ();
-			} else if (sideHit && other.gameObject.tag != "Mario Fireball") { // switch walk direction
-				directionX = -directionX;
+				_levelManager.GetPlayerAbilities.MarioPowerDown ();
+			} else if (sideHit && !other.gameObject.CompareTag("Mario Fireball")) { // switch walk direction
+				_directionX = -_directionX;
 			}
 		}
 	}

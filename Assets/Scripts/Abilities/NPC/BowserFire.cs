@@ -5,16 +5,15 @@ using UnityEngine;
 namespace Abilities.NPC
 {
 	public class BowserFire : Enemy {
-		private LevelManager t_LevelManager;
-		private Rigidbody2D m_Rigidbody2D;
+		private LevelManager _levelManager;
+		private Rigidbody2D _rigidbody2D;
 
 		private float absSpeedX = 18;
 		public float directionX = -1; // 1 for right, -1 for left
 
-		// Use this for initialization
 		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			m_Rigidbody2D = FindObjectOfType<Rigidbody2D> ();
+			_levelManager = FindObjectOfType<LevelManager> ();
+			_rigidbody2D = FindObjectOfType<Rigidbody2D> ();
 			transform.localScale = new Vector3 (directionX, 1, 1); // orient sprite
 
 			starmanBonus = 0;
@@ -24,8 +23,8 @@ namespace Abilities.NPC
 			stompBonus = 0;
 		}
 
-		void Update() {
-			m_Rigidbody2D.velocity = new Vector2 (absSpeedX * directionX, m_Rigidbody2D.velocity.y);
+		private void Update() {
+			_rigidbody2D.velocity = new Vector2 (absSpeedX * directionX, _rigidbody2D.velocity.y);
 		}
 
 		public override void TouchedByStarmanMario() {
@@ -43,9 +42,9 @@ namespace Abilities.NPC
 		public override void StompedByMario() {
 		}
 
-		void OnTriggerEnter2D(Collider2D other) {
-			if (other.tag == "Player") {
-				t_LevelManager.MarioPowerDown ();
+		private void OnTriggerEnter2D(Collider2D other) {
+			if (other.CompareTag("Player")) {
+				_levelManager.GetPlayerAbilities.MarioPowerDown ();
 			}
 		}
 	}

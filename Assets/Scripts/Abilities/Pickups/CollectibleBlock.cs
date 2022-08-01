@@ -10,8 +10,8 @@ using UnityEngine;
 
 namespace Abilities.Pickups {
 	public class CollectibleBlock : MonoBehaviour {
-		private Animator m_Animator;
-		private LevelManager t_LevelManager;
+		private Animator _animator;
+		private LevelManager _levelManager;
 
 		public bool isPowerupBlock;
 		public GameObject objectToSpawn;
@@ -21,52 +21,51 @@ namespace Abilities.Pickups {
 		public Vector3 spawnPositionOffset;
 
 		private float WaitBetweenBounce = .25f;
-		private bool isActive;
-		private float time1, time2;
+		private bool _isActive;
+		private float _time1, _time2;
 
 		public List<GameObject> enemiesOnTop = new List<GameObject> ();
 
 		// Use this for initialization
-		void Start () {
-			m_Animator = GetComponent<Animator> ();
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			time1 = Time.time;
-			isActive = true;
+		private void Start () {
+			_animator = GetComponent<Animator> ();
+			_levelManager = FindObjectOfType<LevelManager> ();
+			_time1 = Time.time;
+			_isActive = true;
 		}
 
 		void OnTriggerEnter2D(Collider2D other) {
-			time2 = Time.time;
-			if (other.tag == "Player" && time2 - time1 >= WaitBetweenBounce) {
-				t_LevelManager.GetSoundManager.SoundSource.PlayOneShot (t_LevelManager.GetSoundManager.BumpSound);
+			_time2 = Time.time;
+			if (!other.CompareTag("Player") || !(_time2 - _time1 >= WaitBetweenBounce)) return;
+			_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BumpSound);
 
-				if (isActive) {
-					m_Animator.SetTrigger ("bounce");
+			if (_isActive) {
+				_animator.SetTrigger ("bounce");
 
-					// Hit any enemy on top
-					foreach (GameObject enemyObj in enemiesOnTop) {
-						t_LevelManager.BlockHitEnemy (enemyObj.GetComponent<Enemy> ());
-					}
-
-					if (timesToSpawn > 0) {
-						if (isPowerupBlock) { // spawn mushroom or fireflower depending on Mario's size
-							if (t_LevelManager.marioSize == 0) {
-								objectToSpawn = bigMushroom;
-							} else {
-								objectToSpawn = fireFlower;
-							}
-						}
-						Instantiate (objectToSpawn, transform.position + spawnPositionOffset, Quaternion.identity);
-						timesToSpawn--;
-
-						if (timesToSpawn == 0) {
-							m_Animator.SetTrigger ("deactivated");
-							isActive = false;
-						}			
-					}
+				// Hit any enemy on top
+				foreach (GameObject enemyObj in enemiesOnTop) {
+					_levelManager.GetPlayerAbilities.BlockHitEnemy (enemyObj.GetComponent<Enemy> ());
 				}
 
-				time1 = Time.time;
+				if (timesToSpawn > 0) {
+					if (isPowerupBlock) { // spawn mushroom or fireflower depending on Mario's size
+						if (_levelManager.GetGameStateManager.PlayerSize == 0) {
+							objectToSpawn = bigMushroom;
+						} else {
+							objectToSpawn = fireFlower;
+						}
+					}
+					Instantiate (objectToSpawn, transform.position + spawnPositionOffset, Quaternion.identity);
+					timesToSpawn--;
+
+					if (timesToSpawn == 0) {
+						_animator.SetTrigger ("deactivated");
+						_isActive = false;
+					}			
+				}
 			}
+
+			_time1 = Time.time;
 		}
 
 

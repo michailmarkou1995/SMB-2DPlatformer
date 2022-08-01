@@ -11,12 +11,12 @@ namespace Core.Managers
         {
             //if (gameStateManager == null) throw new NullReferenceException();
             LevelManager levelManager = Object.FindObjectOfType<LevelManager>();
-            gameStateManager.PlayerSize = levelManager.marioSize;
-            gameStateManager.Lives = levelManager.lives;
-            gameStateManager.Coins = levelManager.coins;
-            gameStateManager.Scores = levelManager.scores;
-            gameStateManager.TimeLeft = levelManager.timeLeft;
-            gameStateManager.HurryUp = levelManager.hurryUp;
+            gameStateManager.PlayerSize = levelManager.GetGameStateManager.PlayerSize;
+            gameStateManager.Lives = levelManager.GetGameStateManager.Lives;
+            gameStateManager.Coins = levelManager.GetHUD.Coins;
+            gameStateManager.Scores = levelManager.GetHUD.Scores;
+            gameStateManager.TimeLeft = levelManager.GetHUD.TimeLeft;
+            gameStateManager.HurryUp = levelManager.GetGameStateManager.HurryUp;
         }
     }
 }

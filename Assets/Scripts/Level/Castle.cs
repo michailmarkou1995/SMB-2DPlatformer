@@ -1,4 +1,6 @@
-﻿using Core.Managers;
+﻿using System;
+using Core.Managers;
+using Interfaces.Level;
 using UnityEngine;
 
 namespace Level
@@ -12,7 +14,6 @@ namespace Level
 		private const float FlagVelocityY = 0.025f;
 		public string sceneName;
 
-		// Use this for initialization
 		private void Start () {
 			_levelManager = FindObjectOfType<LevelManager> ();
 			_flag = transform.Find ("Flag");
@@ -27,7 +28,7 @@ namespace Level
 				position = new Vector2 (position.x, position.y + FlagVelocityY);
 				_flag.position = position;
 			} else {
-				_levelManager.LoadNewLevel (sceneName, _levelManager.GetSoundManager.LevelCompleteMusic.length);
+				_levelManager.GetLoadLevelSceneHandler.LoadLevel(sceneName, _levelManager.GetSoundManager.LevelCompleteMusic.length);
 			}
 		}
 
@@ -35,7 +36,7 @@ namespace Level
 		{
 			if (!other.gameObject.CompareTag("Player")) return;
 			_moveFlag = true;
-			_levelManager.MarioCompleteLevel ();
+			_levelManager.GetLevelServices.MarioCompleteLevel ();
 		}
 	}
 }

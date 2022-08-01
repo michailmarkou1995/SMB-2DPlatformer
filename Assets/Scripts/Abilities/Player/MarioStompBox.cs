@@ -5,11 +5,11 @@ using UnityEngine;
 namespace Abilities.Player
 {
 	public class MarioStompBox : MonoBehaviour {
-		private LevelManager tLevelManager;
+		private LevelManager _levelManager;
 
 		// Use this for initialization
 		private void Start () {
-			tLevelManager = FindObjectOfType<LevelManager> ();
+			_levelManager = FindObjectOfType<LevelManager> ();
 		}
 
 		private void OnTriggerEnter2D(Collider2D other) {
@@ -17,7 +17,7 @@ namespace Abilities.Player
 			    other.gameObject.CompareTag("Enemy/Bowser")) return;
 			Debug.Log (this.name + " OnTriggerEnter2D: recognizes " + other.gameObject.name);
 			Enemy enemy = other.gameObject.GetComponent<Enemy> ();
-			tLevelManager.MarioStompEnemy (enemy);
+			_levelManager.GetPlayerAbilities.MarioStompEnemy (enemy);
 			Debug.Log (this.name + " OnTriggerEnter2D: finishes calling stomp method on " + other.gameObject.name);
 		}
 	}

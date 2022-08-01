@@ -3,25 +3,22 @@ using UnityEngine;
 
 namespace Level
 {
-	public class KillPlane : MonoBehaviour {
-		private LevelManager t_LevelManager;
+    public class KillPlane : MonoBehaviour
+    {
+        private LevelManager _levelManager;
 
-		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-		}
-	
-		// Update is called once per frame
-		void Update () {
-		
-		}
+        private void Start()
+        {
+            _levelManager = FindObjectOfType<LevelManager>();
+        }
 
-		void OnTriggerEnter2D(Collider2D other) {
-			if (other.gameObject.tag == "Player") {
-				t_LevelManager.MarioRespawn ();
-			} else {
-				Destroy (other.gameObject);
-			}
-		}
-	}
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.CompareTag("Player")) {
+                _levelManager.GetPlayerAbilities.MarioRespawn();
+            } else {
+                Destroy(other.gameObject);
+            }
+        }
+    }
 }

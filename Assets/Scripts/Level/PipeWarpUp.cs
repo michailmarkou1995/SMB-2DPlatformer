@@ -1,58 +1,60 @@
-﻿using Core.Managers;
+﻿using System;
+using Core.Managers;
 using Core.Player;
+using Interfaces.Core.Managers;
 using UnityEngine;
 
 namespace Level
 {
-    public class PipeWarpUp : MonoBehaviour {
-        private PlayerController mario;
-        private Transform stop;
+    public class PipeWarpUp : MonoBehaviour
+    {
+        private PlayerController _mario;
+        private Transform _stop;
 
-        private float platformVelocityY = .05f;
+        private const float PlatformVelocityY = .05f;
         public bool isTakingMarioUp;
 
-        private LevelManager t_LevelManager;
+        private ILevelManager _levelManager;
 
-        public bool resetSpawnPoint = false;
+        public bool resetSpawnPoint;
 
-        void Start() {
-            mario = FindObjectOfType<PlayerController>();
-            stop = transform.parent.transform.Find("Platform Stop");
-            GameStateManager _gameStateManager = FindObjectOfType<GameStateManager>();
-            t_LevelManager = FindObjectOfType<LevelManager>();
+        private void Start()
+        {
+            _mario = FindObjectOfType<PlayerController>();
+            _stop = transform.parent.transform.Find("Platform Stop");
+            _levelManager = FindObjectOfType<LevelManager>();
 
             Debug.Log(this.name + " Start: " + transform.parent.gameObject.name
-                      + " spawnFromPoint=" + _gameStateManager.SpawnFromPoint.ToString()
-                      + " with idx=" + _gameStateManager.SpawnPipeIdx.ToString());
+                      + " spawnFromPoint=" + _levelManager.GetGameStateManager.SpawnFromPoint.ToString()
+                      + " with idx=" + _levelManager.GetGameStateManager.SpawnPipeIdx.ToString());
 
-            if (!_gameStateManager.SpawnFromPoint &&
-                _gameStateManager.SpawnPipeIdx == transform.parent.GetSiblingIndex()) {
+            if (!_levelManager.GetGameStateManager.SpawnFromPoint &&
+                _levelManager.GetGameStateManager.SpawnPipeIdx == transform.parent.GetSiblingIndex()) {
                 isTakingMarioUp = true;
-                mario.FreezeUserInput();
-                t_LevelManager.timerPaused = true;
+                _mario.FreezeUserInput();
+                _levelManager.GetGameStateManager.TimerPaused = true;
                 Debug.Log(this.name + " Start: " + transform.parent.gameObject.name + " taking Mario up");
             } else {
                 isTakingMarioUp = false;
-                transform.position = stop.position;
+                transform.position = _stop.position;
                 Debug.Log(this.name + " Start: " + transform.parent.gameObject.name + " not taking Mario up");
             }
         }
 
-        void FixedUpdate() {
-            if (isTakingMarioUp) {
-                if (transform.position.y < stop.position.y) {
-                    transform.position = new Vector2(transform.position.x, transform.position.y + platformVelocityY);
-                } else if (t_LevelManager.timerPaused) {
-                    GameStateManager _gameStateManager = FindObjectOfType<GameStateManager>();
-                    _gameStateManager.SpawnFromPoint = true;
-                    if (resetSpawnPoint) {
-                        _gameStateManager.ResetSpawnPosition();
-                    }
-
-                    mario.UnfreezeUserInput();
-                    t_LevelManager.timerPaused = false;
-                    isTakingMarioUp = false;
+        private void FixedUpdate()
+        {
+            if (!isTakingMarioUp) return;
+            if (transform.position.y < _stop.position.y) {
+                transform.position = new Vector2(transform.position.x, transform.position.y + PlatformVelocityY);
+            } else if (_levelManager.GetGameStateManager.TimerPaused) {
+                _levelManager.GetGameStateManager.SpawnFromPoint = true;
+                if (resetSpawnPoint) {
+                    _levelManager.GetGameStateManager.ResetSpawnPosition();
                 }
+
+                _mario.UnfreezeUserInput();
+                _levelManager.GetGameStateManager.TimerPaused = false;
+                isTakingMarioUp = false;
             }
         }
     }

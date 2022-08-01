@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Interfaces.Level;
+using UnityEngine;
 
 namespace Interfaces.Core.Managers
 {
@@ -21,5 +22,6 @@ namespace Interfaces.Core.Managers
         public AudioClip PowerupSound { get; set; }
         public AudioClip PowerupAppearSound { get; set; }
         public AudioClip WarningSound { get; set; }
+        public ISoundLevelHandle GetSoundLevelHandle { get; }
     }
 }

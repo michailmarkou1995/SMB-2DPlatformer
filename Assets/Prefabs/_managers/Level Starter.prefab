@@ -41,9 +41,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4200383187230866}
   - component: {fileID: 114750208195470174}
-  - component: {fileID: 9213773268289219142}
+  - component: {fileID: 8664226275268435725}
+  - component: {fileID: 6261290678525385038}
+  - component: {fileID: 2612591450176041130}
+  - component: {fileID: 4672400234462731894}
+  - component: {fileID: 6533670772227153969}
   m_Layer: 0
-  m_Name: Level Manager
+  m_Name: LevelManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,28 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73fb07ac7d5f744a48fe6c56ff43ae1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hurryUp: 0
-  marioSize: 0
-  lives: 0
-  coins: 0
-  scores: 0
-  timeLeft: 0
-  isInvinciblePowerdown: 0
-  isInvincibleStarman: 0
-  scoreText: {fileID: 114097602158662608}
-  coinText: {fileID: 114108165712623676}
-  timeText: {fileID: 114793167711461314}
-  floatingTextEffect: {fileID: 1196479104050882, guid: 1ad1e9f06ef1b47b0ba83ef5484e63cf, type: 3}
-  coinBonus: 200
-  powerupBonus: 1000
-  starmanBonus: 1000
-  oneupBonus: 0
-  breakBlockBonus: 50
-  stompBounceVelocity: {x: 0, y: 15}
-  gamePaused: 0
-  timerPaused: 0
-  musicPaused: 0
---- !u!114 &9213773268289219142
+--- !u!114 &8664226275268435725
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,36 +90,65 @@ MonoBehaviour:
   m_GameObject: {fileID: 1004064948157000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f47bb3869c463547a55f8a109a25243, type: 3}
+  m_Script: {fileID: 11500000, guid: a4c34187099f4992aa4100a92a21daa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicSource: {fileID: 82793086007151078}
-  soundSource: {fileID: 82989831986403836}
-  effectsSource: {fileID: 807602078252860291}
-  pauseSoundSource: {fileID: 82006143512131390}
-  levelMusic: {fileID: 8300000, guid: a396fb5db437f453d89c54963e7b9719, type: 3}
-  levelMusicHurry: {fileID: 8300000, guid: 980db8ff7fdfd4de9b676bef749ea0a7, type: 3}
-  starmanMusic: {fileID: 8300000, guid: fe80c79237cc34e99babbc6d54016d93, type: 3}
-  starmanMusicHurry: {fileID: 8300000, guid: f1d4bda1392ad4f6cb3bb8e494af8eb5, type: 3}
-  levelCompleteMusic: {fileID: 8300000, guid: 632e293310a2b4c088dd51fdeaa9d8b8, type: 3}
-  castleCompleteMusic: {fileID: 8300000, guid: 6dbea1eceaa2e48b6aa7c92fac4fbafe, type: 3}
-  oneUpSound: {fileID: 8300000, guid: cdc43de50f4574c75afcc7e74975b29a, type: 3}
-  bowserFallSound: {fileID: 8300000, guid: 04c05e6a635a94c57ba4f3a3f3aaa89f, type: 3}
-  bowserFireSound: {fileID: 8300000, guid: de02ec0c771a0476cb3609ebf94653a8, type: 3}
-  breakBlockSound: {fileID: 8300000, guid: c738f1c61166b40e19d4d970e7b9c9df, type: 3}
-  bumpSound: {fileID: 8300000, guid: 6f487163c53194893952b1f457060b86, type: 3}
-  coinSound: {fileID: 8300000, guid: d885ffc842af744d89f7d595ffcc176a, type: 3}
-  deadSound: {fileID: 8300000, guid: 90ceef20da9a84d9891da3179ede4177, type: 3}
-  fireballSound: {fileID: 8300000, guid: 7016dd03d29e64aa18bc6f1ae5bd8bec, type: 3}
-  flagpoleSound: {fileID: 8300000, guid: 45ea427b60eb04afe8cc4c33f225da7a, type: 3}
-  jumpSmallSound: {fileID: 8300000, guid: bc5ca5e0703c54692a186434e1149ccd, type: 3}
-  jumpSuperSound: {fileID: 8300000, guid: 7988561719a0c40049ae5a3c2870d1e7, type: 3}
-  kickSound: {fileID: 8300000, guid: 96f7a44168f114e6ba76d5c1bef36f86, type: 3}
-  pipePowerdownSound: {fileID: 8300000, guid: b520e6b32619c490a934225b9b162dc2, type: 3}
-  powerupSound: {fileID: 8300000, guid: 26301d2e86e99420599e315297a825df, type: 3}
-  powerupAppearSound: {fileID: 8300000, guid: 97a450c65284a4a3094ba5c2221a492b, type: 3}
-  stompSound: {fileID: 8300000, guid: d84415726495b4d46b5a557ed2a97cfa, type: 3}
-  warningSound: {fileID: 8300000, guid: c0ea6c25686884e1a9547efdebf43492, type: 3}
+--- !u!114 &6261290678525385038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004064948157000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ade286070354de3b9d0016e59d3514c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 114097602158662608}
+  coinText: {fileID: 114108165712623676}
+  timeText: {fileID: 114793167711461314}
+  floatingTextEffect: {fileID: 1196479104050882, guid: 1ad1e9f06ef1b47b0ba83ef5484e63cf, type: 3}
+--- !u!114 &2612591450176041130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004064948157000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f7b0b9f0004af8ac05a3f1a1615857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4672400234462731894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004064948157000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aec0917187d4d6da4e3b666d4c9f5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stompBounceVelocity: {x: 0, y: 15}
+  isPoweringDown: 0
+  isInvinciblePowerdown: 0
+  isInvincibleStarman: 0
+--- !u!114 &6533670772227153969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004064948157000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec26d0a421514f7494efe4820aef7735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1006136692691096
 GameObject:
   m_ObjectHideFlags: 0
@@ -2462,6 +2474,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1667618895872265512}
+  - component: {fileID: 1336133381744637994}
+  - component: {fileID: 6470472101489442007}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: SoundManager
@@ -2488,6 +2502,57 @@ Transform:
   m_Father: {fileID: 4200383187230866}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1336133381744637994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350106262282576655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f47bb3869c463547a55f8a109a25243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSource: {fileID: 82793086007151078}
+  soundSource: {fileID: 82989831986403836}
+  effectsSource: {fileID: 807602078252860291}
+  pauseSoundSource: {fileID: 82006143512131390}
+  levelMusic: {fileID: 8300000, guid: a396fb5db437f453d89c54963e7b9719, type: 3}
+  levelMusicHurry: {fileID: 8300000, guid: 980db8ff7fdfd4de9b676bef749ea0a7, type: 3}
+  starmanMusic: {fileID: 8300000, guid: fe80c79237cc34e99babbc6d54016d93, type: 3}
+  starmanMusicHurry: {fileID: 8300000, guid: f1d4bda1392ad4f6cb3bb8e494af8eb5, type: 3}
+  levelCompleteMusic: {fileID: 8300000, guid: 632e293310a2b4c088dd51fdeaa9d8b8, type: 3}
+  castleCompleteMusic: {fileID: 8300000, guid: 6dbea1eceaa2e48b6aa7c92fac4fbafe, type: 3}
+  oneUpSound: {fileID: 8300000, guid: cdc43de50f4574c75afcc7e74975b29a, type: 3}
+  bowserFallSound: {fileID: 8300000, guid: 04c05e6a635a94c57ba4f3a3f3aaa89f, type: 3}
+  bowserFireSound: {fileID: 8300000, guid: de02ec0c771a0476cb3609ebf94653a8, type: 3}
+  breakBlockSound: {fileID: 8300000, guid: c738f1c61166b40e19d4d970e7b9c9df, type: 3}
+  bumpSound: {fileID: 8300000, guid: 6f487163c53194893952b1f457060b86, type: 3}
+  coinSound: {fileID: 8300000, guid: d885ffc842af744d89f7d595ffcc176a, type: 3}
+  deadSound: {fileID: 8300000, guid: 90ceef20da9a84d9891da3179ede4177, type: 3}
+  fireballSound: {fileID: 8300000, guid: 7016dd03d29e64aa18bc6f1ae5bd8bec, type: 3}
+  flagpoleSound: {fileID: 8300000, guid: 45ea427b60eb04afe8cc4c33f225da7a, type: 3}
+  jumpSmallSound: {fileID: 8300000, guid: bc5ca5e0703c54692a186434e1149ccd, type: 3}
+  jumpSuperSound: {fileID: 8300000, guid: 7988561719a0c40049ae5a3c2870d1e7, type: 3}
+  kickSound: {fileID: 8300000, guid: 96f7a44168f114e6ba76d5c1bef36f86, type: 3}
+  pipePowerdownSound: {fileID: 8300000, guid: b520e6b32619c490a934225b9b162dc2, type: 3}
+  powerupSound: {fileID: 8300000, guid: 26301d2e86e99420599e315297a825df, type: 3}
+  powerupAppearSound: {fileID: 8300000, guid: 97a450c65284a4a3094ba5c2221a492b, type: 3}
+  stompSound: {fileID: 8300000, guid: d84415726495b4d46b5a557ed2a97cfa, type: 3}
+  warningSound: {fileID: 8300000, guid: c0ea6c25686884e1a9547efdebf43492, type: 3}
+--- !u!114 &6470472101489442007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350106262282576655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08dd87c3e2f4e6085d0ed5d145c09cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2281765797751069528
 GameObject:
   m_ObjectHideFlags: 0

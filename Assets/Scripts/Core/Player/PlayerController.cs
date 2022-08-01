@@ -43,7 +43,7 @@ namespace Core.Player
             IsFalling = MRigidbody2D.velocity.y < 0 && !base.IsGrounded;
             IsChangingDirection = CurrentSpeedX > 0 && FaceDirectionX * MoveDirectionX < 0;
 
-            if (!InputFreezed || LevelManager.gamePaused) return;
+            if (!InputFreezed || LevelManager.GetGameStateManager.GamePaused) return;
             if (_isDying) {
                 _deadUpTimer -= Time.unscaledDeltaTime;
                 if (_deadUpTimer > 0) {
@@ -81,15 +81,15 @@ namespace Core.Player
                 // TODO: koopa shell static does no damage
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
 
-                if (!LevelManager.IsInvincible()) {
+                if (!LevelManager.GetPlayerAbilities.IsInvincible()) {
                     if (!other.gameObject.GetComponent<KoopaShell>() ||
                         other.gameObject.GetComponent<KoopaShell>()
                             .isRolling || // non-rolling shell should do no damage
                         !bottomHit || (!enemy.isBeingStomped)) {
-                        LevelManager.MarioPowerDown();
+                        LevelManager.GetPlayerAbilities.MarioPowerDown();
                     }
-                } else if (LevelManager.isInvincibleStarman) {
-                    LevelManager.MarioStarmanTouchEnemy(enemy);
+                } else if (LevelManager.GetPlayerAbilities.IsInvincibleStarman) {
+                    LevelManager.GetPlayerAbilities.MarioStarmanTouchEnemy(enemy);
                 }
             } else if (other.gameObject.CompareTag("Goal") && IsClimbingFlagPole && bottomHit) {
                 IsClimbingFlagPole = false;
@@ -106,15 +106,15 @@ namespace Core.Player
             // TODO: koopa shell static does no damage
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
 
-            if (!LevelManager.IsInvincible()) {
+            if (!LevelManager.GetPlayerAbilities.IsInvincible()) {
                 if (!collision.gameObject.GetComponent<KoopaShell>() ||
                     collision.gameObject.GetComponent<KoopaShell>()
                         .isRolling || // non-rolling shell should do no damage
                     !bottomHit || (!enemy.isBeingStomped)) {
-                    LevelManager.MarioPowerDown();
+                    LevelManager.GetPlayerAbilities.MarioPowerDown();
                 }
-            } else if (LevelManager.isInvincibleStarman) {
-                LevelManager.MarioStarmanTouchEnemy(enemy);
+            } else if (LevelManager.GetPlayerAbilities.IsInvincibleStarman) {
+                LevelManager.GetPlayerAbilities.MarioStarmanTouchEnemy(enemy);
             }
         }
     }
