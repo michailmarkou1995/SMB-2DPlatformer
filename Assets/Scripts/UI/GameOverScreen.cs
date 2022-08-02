@@ -18,7 +18,7 @@ namespace UI
         [SerializeField] private Text coinTextHUD;
         [SerializeField] private Text messageText;
         [SerializeField] private AudioSource gameOverMusicSource;
-        
+
         private IGameStateManagerEssentials _gameStateManager;
         private ILoadLevel _levelToLoad;
 
@@ -66,7 +66,7 @@ namespace UI
             gameOverMusicSource.Play();
 
             // Start the game over music wait ... then Load the Next Level e.g., main menu
-            _levelToLoad.LoadLevel(loadLevelName: "Main Menu",gameOverMusicSource.clip.length);
+            _levelToLoad.LoadLevel(loadLevelName: "Main Menu", gameOverMusicSource.clip.length);
 
             Debug.Log(name + " Start: current scene is " + SceneManager.GetActiveScene().name);
         }

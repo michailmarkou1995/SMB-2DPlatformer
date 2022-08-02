@@ -1,5 +1,4 @@
-﻿using System;
-using Interfaces.Core.Managers;
+﻿using Interfaces.Core.Managers;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,12 +10,12 @@ namespace Core.Managers
         {
             //if (gameStateManager == null) throw new NullReferenceException();
             LevelManager levelManager = Object.FindObjectOfType<LevelManager>();
-            gameStateManager.PlayerSize = levelManager.GetGameStateManager.PlayerSize;
-            gameStateManager.Lives = levelManager.GetGameStateManager.Lives;
+            gameStateManager.PlayerSize = levelManager.GetGameStateData.PlayerSize;
+            gameStateManager.Lives = levelManager.GetGameStateData.Lives;
             gameStateManager.Coins = levelManager.GetHUD.Coins;
             gameStateManager.Scores = levelManager.GetHUD.Scores;
-            gameStateManager.TimeLeft = levelManager.GetHUD.TimeLeft;
-            gameStateManager.HurryUp = levelManager.GetGameStateManager.HurryUp;
+            gameStateManager.TimeLeft = levelManager.GetGameStateData.TimeLeft;
+            gameStateManager.HurryUp = levelManager.GetGameStateData.HurryUp;
         }
     }
 }

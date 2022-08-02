@@ -32,7 +32,7 @@ namespace Level
                 _levelManager.GetGameStateManager.SpawnPipeIdx == transform.parent.GetSiblingIndex()) {
                 isTakingMarioUp = true;
                 _mario.FreezeUserInput();
-                _levelManager.GetGameStateManager.TimerPaused = true;
+                _levelManager.GetGameStateData.TimerPaused = true;
                 Debug.Log(this.name + " Start: " + transform.parent.gameObject.name + " taking Mario up");
             } else {
                 isTakingMarioUp = false;
@@ -46,14 +46,14 @@ namespace Level
             if (!isTakingMarioUp) return;
             if (transform.position.y < _stop.position.y) {
                 transform.position = new Vector2(transform.position.x, transform.position.y + PlatformVelocityY);
-            } else if (_levelManager.GetGameStateManager.TimerPaused) {
+            } else if (_levelManager.GetGameStateData.TimerPaused) {
                 _levelManager.GetGameStateManager.SpawnFromPoint = true;
                 if (resetSpawnPoint) {
                     _levelManager.GetGameStateManager.ResetSpawnPosition();
                 }
 
                 _mario.UnfreezeUserInput();
-                _levelManager.GetGameStateManager.TimerPaused = false;
+                _levelManager.GetGameStateData.TimerPaused = false;
                 isTakingMarioUp = false;
             }
         }

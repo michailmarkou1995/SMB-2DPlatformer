@@ -61,7 +61,7 @@ namespace Abilities.Player
         public void MarioInvincibleStarman()
         {
             StartCoroutine(MarioInvincibleStarmanCo());
-            _levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateManager.StarmanBonus,
+            _levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateData.StarmanBonus,
                 _levelManager.GetPlayerController.transform.position);
         }
 
@@ -70,7 +70,7 @@ namespace Abilities.Player
             IsInvincibleStarman = true;
             PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsInvincibleStarmanAnim, true);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario After Starman");
-            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateManager.HurryUp
+            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateData.HurryUp
                 ? _levelManager.GetSoundManager.StarmanMusicHurry
                 : _levelManager.GetSoundManager.StarmanMusic);
 
@@ -78,7 +78,7 @@ namespace Abilities.Player
             IsInvincibleStarman = false;
             PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsInvincibleStarmanAnim, false);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario");
-            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateManager.HurryUp
+            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateData.HurryUp
                 ? _levelManager.GetSoundManager.LevelMusicHurry
                 : _levelManager.GetSoundManager.LevelMusic);
         }
@@ -103,11 +103,11 @@ namespace Abilities.Player
         {
             _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager
                 .PowerupSound); // should play sound regardless of size
-            if (_levelManager.GetGameStateManager.PlayerSize < 2) {
+            if (_levelManager.GetGameStateData.PlayerSize < 2) {
                 StartCoroutine(MarioPowerUpCo());
             }
 
-            _levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateManager.PowerupBonus,
+            _levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateData.PowerupBonus,
                 _levelManager.GetPlayerController.transform.position);
         }
 
@@ -118,12 +118,12 @@ namespace Abilities.Player
             PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             yield return new WaitForSecondsRealtime(TransformDuration);
-            yield return new WaitWhile(() => _levelManager.GetGameStateManager.GamePaused);
+            yield return new WaitWhile(() => _levelManager.GetGameStateData.GamePaused);
 
             Time.timeScale = 1;
             PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.Normal;
 
-            _levelManager.GetGameStateManager.PlayerSize++;
+            _levelManager.GetGameStateData.PlayerSize++;
             _levelManager.GetPlayerController.UpdateSize();
             PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsPoweringUpAnim, false);
         }
@@ -134,7 +134,7 @@ namespace Abilities.Player
                 Debug.Log(this.name + " MarioPowerDown: called and executed");
                 IsPoweringDown = true;
 
-                if (_levelManager.GetGameStateManager.PlayerSize > 0) {
+                if (_levelManager.GetGameStateData.PlayerSize > 0) {
                     StartCoroutine(MarioPowerDownCo());
                     _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager
                         .PipePowerdownSound);
@@ -155,13 +155,13 @@ namespace Abilities.Player
             PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             yield return new WaitForSecondsRealtime(TransformDuration);
-            yield return new WaitWhile(() => _levelManager.GetGameStateManager.GamePaused);
+            yield return new WaitWhile(() => _levelManager.GetGameStateData.GamePaused);
 
             Time.timeScale = 1;
             PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.Normal;
             MarioInvinciblePowerdown();
 
-            _levelManager.GetGameStateManager.PlayerSize = 0;
+            _levelManager.GetGameStateData.PlayerSize = 0;
             _levelManager.GetPlayerController.UpdateSize();
             PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsPoweringDownAnim, false);
             IsPoweringDown = false;
@@ -172,12 +172,12 @@ namespace Abilities.Player
             if (_levelManager.GetPlayerAbilities.IsRespawning) return;
             _levelManager.GetPlayerAbilities.IsRespawning = true;
 
-            _levelManager.GetGameStateManager.PlayerSize = 0;
-            _levelManager.GetGameStateManager.Lives--;
+            _levelManager.GetGameStateData.PlayerSize = 0;
+            _levelManager.GetGameStateData.Lives--;
 
             _levelManager.GetSoundManager.SoundSource.Stop();
             _levelManager.GetSoundManager.MusicSource.Stop();
-            _levelManager.GetGameStateManager.MusicPaused = true;
+            _levelManager.GetGameStateData.MusicPaused = true;
             _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.DeadSound);
 
             Time.timeScale = 0f;
@@ -187,9 +187,9 @@ namespace Abilities.Player
                 Debug.Log(this.name + " MarioRespawn: called due to timeup");
             }
 
-            Debug.Log(this.name + " MarioRespawn: lives left=" + _levelManager.GetGameStateManager.Lives.ToString());
+            Debug.Log(this.name + " MarioRespawn: lives left=" + _levelManager.GetGameStateData.Lives.ToString());
 
-            if (_levelManager.GetGameStateManager.Lives > 0) {
+            if (_levelManager.GetGameStateData.Lives > 0) {
                 _levelManager.GetLoadLevelSceneHandler.ReloadCurrentLevel(
                     _levelManager.GetSoundManager.DeadSound.length, timeUp);
             } else {

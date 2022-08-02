@@ -25,7 +25,7 @@ namespace Level
             if (!other.CompareTag("Player")) return;
             _playerController.AutomaticWalk(_playerController.LevelEntryWalkSpeedX);
             _reachedPortal = true;
-            _levelManager.GetGameStateManager.TimerPaused = true;
+            _levelManager.GetGameStateData.TimerPaused = true;
             Debug.Log(this.name + " OnTriggerEnter2D: " + transform.parent.gameObject.name
                       + " recognizes player, should automatic walk");
         }

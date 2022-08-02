@@ -230,7 +230,7 @@ namespace Core.Player
         {
             GetComponent<Animator>().SetInteger(PlayerSizeAnimator,
                 FindObjectOfType<global::Core.Managers.LevelManager>()
-                    .GetGameStateManager.PlayerSize);
+                    .GetGameStateData.PlayerSize);
         }
 
         /// <summary>

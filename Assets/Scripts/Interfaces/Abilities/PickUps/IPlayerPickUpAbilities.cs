@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Interfaces.Abilities.Pickups
+namespace Interfaces.Abilities.PickUps
 {
     public interface IPlayerPickUpAbilities
     {

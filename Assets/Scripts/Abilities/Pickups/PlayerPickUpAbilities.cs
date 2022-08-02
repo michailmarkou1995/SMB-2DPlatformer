@@ -1,4 +1,4 @@
-﻿using Interfaces.Abilities.Pickups;
+﻿using Interfaces.Abilities.PickUps;
 using Interfaces.Core.Managers;
 using UnityEngine;
 
@@ -15,13 +15,13 @@ namespace Abilities.Pickups
 
         public void AddLife()
         {
-            _levelManager.GetGameStateManager.Lives++;
+            _levelManager.GetGameStateData.Lives++;
             _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.OneUpSound);
         }
 
         public void AddLife(Vector3 spawnPos)
         {
-            _levelManager.GetGameStateManager.Lives++;
+            _levelManager.GetGameStateData.Lives++;
             _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.OneUpSound);
             _levelManager.GetHUD.CreateFloatingText("1UP", spawnPos);
         }
@@ -36,7 +36,7 @@ namespace Abilities.Pickups
             }
 
             _levelManager.GetHUD.SetHudCoin();
-            AddScore(_levelManager.GetGameStateManager.CoinBonus);
+            AddScore(_levelManager.GetGameStateData.CoinBonus);
         }
 
         public void AddCoin(Vector3 spawnPos)
@@ -49,7 +49,7 @@ namespace Abilities.Pickups
             }
 
             _levelManager.GetHUD.SetHudCoin();
-            AddScore(_levelManager.GetGameStateManager.CoinBonus, spawnPos);
+            AddScore(_levelManager.GetGameStateData.CoinBonus, spawnPos);
         }
 
         public void AddScore(int bonus)

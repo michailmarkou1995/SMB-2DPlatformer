@@ -48,7 +48,7 @@ namespace Level
 
         public void MarioCompleteCastle()
         {
-            _levelManager.GetGameStateManager.TimerPaused = true;
+            _levelManager.GetGameStateData.TimerPaused = true;
             _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetSoundManager.CastleCompleteMusic);
             _levelManager.GetSoundManager.MusicSource.loop = false;
             _levelManager.GetPlayerController.AutomaticWalk(_levelManager.GetPlayerController.CastleWalkSpeedX);
@@ -56,14 +56,14 @@ namespace Level
 
         public void MarioCompleteLevel()
         {
-            _levelManager.GetGameStateManager.TimerPaused = true;
+            _levelManager.GetGameStateData.TimerPaused = true;
             _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetSoundManager.LevelCompleteMusic);
             _levelManager.GetSoundManager.MusicSource.loop = false;
         }
 
         public void MarioReachFlagPole()
         {
-            _levelManager.GetGameStateManager.TimerPaused = true;
+            _levelManager.GetGameStateData.TimerPaused = true;
             _levelManager.GetSoundManager.GetSoundLevelHandle.PauseMusicPlaySound(_levelManager.GetSoundManager.FlagpoleSound, false);
             _levelManager.GetPlayerController.ClimbFlagPole();
         }

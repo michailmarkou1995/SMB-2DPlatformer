@@ -13,8 +13,6 @@ namespace Level
 
         private void Awake()
         {
-            // _levelManager = GetComponent<LevelManager>();
-            // _soundManager = GetComponent<SoundManager>();
             _levelManager = FindObjectOfType<LevelManager>();
             _soundManager = GetComponent<SoundManager>();
         }
@@ -28,11 +26,11 @@ namespace Level
         {
             Debug.Log(this.name + " ChangeMusicCo: starts changing music to " + clip.name);
             _soundManager.MusicSource.clip = clip;
-            yield return new WaitWhile(() => _levelManager.GetGameStateManager.GamePaused);
+            yield return new WaitWhile(() => _levelManager.GetGameStateData.GamePaused);
             yield return new WaitForSecondsRealtime(delay);
             // yield return new WaitWhile(() => false || false);
             yield return new WaitWhile(() =>
-                _levelManager.GetGameStateManager.GamePaused || _levelManager.GetGameStateManager.MusicPaused);
+                _levelManager.GetGameStateData.GamePaused || _levelManager.GetGameStateData.MusicPaused);
             if (!_levelManager.GetPlayerAbilities.IsRespawning) {
                 _soundManager.MusicSource.Play();
             }
@@ -55,7 +53,7 @@ namespace Level
             Debug.Log(this.name + " Pause musicPlaySoundCo: starts pausing music " + musicClipName + " to play sound " +
                       clip.name);
 
-            _levelManager.GetGameStateManager.MusicPaused = true;
+            _levelManager.GetGameStateData.MusicPaused = true;
             _soundManager.MusicSource.Pause();
             _soundManager.SoundSource.PlayOneShot(clip);
             yield return new WaitForSeconds(clip.length);
@@ -70,15 +68,15 @@ namespace Level
                 Debug.Log(this.name + " PausemusicPlaySoundCo: resume playing music " + musicClipName);
             }
 
-            _levelManager.GetGameStateManager.MusicPaused = false;
+            _levelManager.GetGameStateData.MusicPaused = false;
 
             Debug.Log(this.name + " PausemusicPlaySoundCo: done pausing music to play sound " + clip.name);
         }
 
         public void TimerHUDMusic()
         {
-            if (_levelManager.GetHUD.TimeLeftInt >= 100 || _levelManager.GetGameStateManager.HurryUp) return;
-            _levelManager.GetGameStateManager.HurryUp = true;
+            if (_levelManager.GetHUD.TimeLeftIntHUD >= 100 || _levelManager.GetGameStateData.HurryUp) return;
+            _levelManager.GetGameStateData.HurryUp = true;
             _soundManager.GetSoundLevelHandle.PauseMusicPlaySound(_levelManager.GetSoundManager.WarningSound, true);
             _soundManager.GetSoundLevelHandle.ChangeMusic(
                 _levelManager.GetPlayerAbilities.IsInvincibleStarman

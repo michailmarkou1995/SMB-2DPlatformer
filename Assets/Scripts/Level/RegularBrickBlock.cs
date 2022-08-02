@@ -43,12 +43,12 @@ namespace Level
 				}
 
 				// Bounce or break depending on Mario's size
-				if (_levelManager.GetGameStateManager.PlayerSize == 0) {
+				if (_levelManager.GetGameStateData.PlayerSize == 0) {
 					m_Animator.SetTrigger ("bounce");
 					_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BumpSound);
 				} else {
 					BreakIntoPieces ();
-					_levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateManager.BreakBlockBonus);
+					_levelManager.GetPlayerPickUpAbilities.AddScore(_levelManager.GetGameStateData.BreakBlockBonus);
 					_levelManager.GetSoundManager.SoundSource.PlayOneShot (_levelManager.GetSoundManager.BreakBlockSound);
 				}
 				time1 = Time.time;

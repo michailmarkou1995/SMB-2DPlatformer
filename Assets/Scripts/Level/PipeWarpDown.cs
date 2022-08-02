@@ -25,8 +25,8 @@ namespace Level
 		{
 			if (!_isMoving) return;
 			if (transform.position.y > _stop.position.y) {
-				if (!_levelManager.GetGameStateManager.TimerPaused) {
-					_levelManager.GetGameStateManager.TimerPaused = true;
+				if (!_levelManager.GetGameStateData.TimerPaused) {
+					_levelManager.GetGameStateData.TimerPaused = true;
 				}
 
 				Transform transformCached = transform;

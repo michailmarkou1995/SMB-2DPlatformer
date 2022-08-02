@@ -10,9 +10,5 @@
         public void ConfigNewLevel();
         public void ConfigReplayedLevel();
         public void GetSaveGameState();
-        public void PauseUnPauseState();
-        public void TimerHUD();
-        public void GamePauseCheck();
-        public void TimeUpCounter();
     }
 }

@@ -1,17 +1,16 @@
-﻿using UnityEngine;
+﻿using Interfaces.Core.Managers;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Interfaces.UI
 {
-    public interface IHUD
+    public interface IHUD : ITimeLeftHUD
     {
         public Text ScoreText { get; }
         public Text CoinText { get; }
         public Text TimeText { get; }
         public int Coins { get; set; }
         public int Scores { get; set; }
-        public float TimeLeft { get; set; }
-        public int TimeLeftInt { get; set; }
         public void SetHUD();
         public void SetHudCoin();
         public void SetHudScore();

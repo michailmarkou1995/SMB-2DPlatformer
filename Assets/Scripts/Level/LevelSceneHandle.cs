@@ -11,18 +11,15 @@ namespace Level
         private const float LoadSceneDelayTime = 1f;
 
         private ILevelManager _levelManager;
-        // private IGameStateManager _gameStateManager;
-
+        
         private void Awake()
         {
             _levelManager = GetComponent<ILevelManager>();
-            // _gameStateManager = GetComponent<IGameStateManager>();
-            // _gameStateManager = FindObjectOfType<GameStateManager>();
         }
 
         public void LoadSceneDelay(string sceneName, float delay = LoadSceneDelayTime)
         {
-            _levelManager.GetGameStateManager.TimerPaused = true;
+            _levelManager.GetGameStateData.TimerPaused = true;
             StartCoroutine(LoadSceneDelayCo(sceneName, delay));
         }
 
@@ -32,7 +29,7 @@ namespace Level
 
             float waited = 0;
             while (waited < delay) {
-                if (!_levelManager.GetGameStateManager.GamePaused) {
+                if (!_levelManager.GetGameStateData.GamePaused) {
                     // should not count delay while game paused
                     waited += Time.unscaledDeltaTime;
                 }
@@ -40,7 +37,7 @@ namespace Level
                 yield return null;
             }
 
-            yield return new WaitWhile(() => _levelManager.GetGameStateManager.GamePaused);
+            yield return new WaitWhile(() => _levelManager.GetGameStateData.GamePaused);
 
             Debug.Log(this.name + " LoadSceneDelayCo: done loading " + sceneName);
 

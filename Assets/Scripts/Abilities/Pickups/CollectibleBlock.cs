@@ -49,7 +49,7 @@ namespace Abilities.Pickups {
 
 				if (timesToSpawn > 0) {
 					if (isPowerupBlock) { // spawn mushroom or fireflower depending on Mario's size
-						if (_levelManager.GetGameStateManager.PlayerSize == 0) {
+						if (_levelManager.GetGameStateData.PlayerSize == 0) {
 							objectToSpawn = bigMushroom;
 						} else {
 							objectToSpawn = fireFlower;

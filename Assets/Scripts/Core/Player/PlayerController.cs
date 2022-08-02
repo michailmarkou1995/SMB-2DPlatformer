@@ -43,7 +43,7 @@ namespace Core.Player
             IsFalling = MRigidbody2D.velocity.y < 0 && !base.IsGrounded;
             IsChangingDirection = CurrentSpeedX > 0 && FaceDirectionX * MoveDirectionX < 0;
 
-            if (!InputFreezed || LevelManager.GetGameStateManager.GamePaused) return;
+            if (!InputFreezed || LevelManager.GetGameStateData.GamePaused) return;
             if (_isDying) {
                 _deadUpTimer -= Time.unscaledDeltaTime;
                 if (_deadUpTimer > 0) {
