@@ -12,6 +12,9 @@ TagManager:
   - Mario Fireball
   - Enemy/Bowser
   - Pipe
+  - SoundManager
+  - LevelManager
+  - GameStateManager
   layers:
   - Default
   - TransparentFX

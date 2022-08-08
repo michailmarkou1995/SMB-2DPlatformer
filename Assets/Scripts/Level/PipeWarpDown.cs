@@ -1,12 +1,12 @@
 ﻿using Core.Managers;
-using Core.Player;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Level
 {
 	public class PipeWarpDown : MonoBehaviour {
 		private LevelManager _levelManager;
-		private PlayerController _mario;
+		private IPlayerController _player;
 		private Transform _stop;
 		private bool _isMoving;
 
@@ -14,10 +14,9 @@ namespace Level
 		public string sceneName;
 		public bool leadToSameLevel = true;
 
-		// Use this for initialization
 		private void Start () {
-			_levelManager = FindObjectOfType<LevelManager> ();
-			_mario = FindObjectOfType<PlayerController> ();
+			_levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+			_player = GameObject.FindGameObjectWithTag("Player").GetComponent<IPlayerController>();
 			_stop = transform.parent.transform.Find ("Platform Stop");
 		}
 
@@ -45,8 +44,8 @@ namespace Level
 		private bool _marioEntered;
 
 		private void OnTriggerStay2D(Collider2D other) {
-			if (!other.CompareTag("Player") || !_mario.IsCrouching || _marioEntered) return;
-			_mario.AutomaticCrouch ();
+			if (!other.CompareTag("Player") || !_player.GetCrouch.IsCrouching || _marioEntered) return;
+			_player.GetCrouch.AutomaticCrouch ();
 			_isMoving = true;
 			_marioEntered = true;
 			_levelManager.GetSoundManager.MusicSource.Stop ();

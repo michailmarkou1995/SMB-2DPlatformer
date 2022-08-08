@@ -79,7 +79,7 @@ namespace Core.Managers
 
         private ISaveGameState _saveGameStateOnMemory;
 
-        [CanBeNull] private ILevelManager _levelManager;
+        [CanBeNull] private Interfaces.Core.Managers.ILevelManager _levelManager;
 
         private void Awake()
         {

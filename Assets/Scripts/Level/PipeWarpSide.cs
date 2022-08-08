@@ -1,13 +1,13 @@
 ﻿using Core.Managers;
-using Core.Player;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Level
 {
     public class PipeWarpSide : MonoBehaviour
     {
-        private LevelManager _levelManager;
-        private PlayerController _playerController;
+        private Interfaces.Core.Managers.ILevelManager _levelManager;
+        private IPlayerController _playerController;
         private bool _reachedPortal;
 
         public string sceneName;
@@ -16,14 +16,14 @@ namespace Level
 
         private void Start()
         {
-            _levelManager = FindObjectOfType<LevelManager>();
-            _playerController = FindObjectOfType<PlayerController>();
+            _levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+            _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<IPlayerController>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.CompareTag("Player")) return;
-            _playerController.AutomaticWalk(_playerController.LevelEntryWalkSpeedX);
+            _playerController.GetMovement.AutomaticWalk(_playerController.GetMovement.LevelEntryWalkSpeedX);
             _reachedPortal = true;
             _levelManager.GetGameStateData.TimerPaused = true;
             Debug.Log(this.name + " OnTriggerEnter2D: " + transform.parent.gameObject.name

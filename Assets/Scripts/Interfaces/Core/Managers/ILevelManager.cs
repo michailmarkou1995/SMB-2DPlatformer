@@ -1,7 +1,6 @@
-﻿using Core.Managers;
-using Core.Player;
-using Interfaces.Abilities.PickUps;
+﻿using Interfaces.Abilities.PickUps;
 using Interfaces.Abilities.Player;
+using Interfaces.Core.Player;
 using Interfaces.Level;
 using Interfaces.UI;
 
@@ -20,7 +19,7 @@ namespace Interfaces.Core.Managers
         public IHUD GetHUD { get; }
         public IPlayerPickUpAbilities GetPlayerPickUpAbilities { get; }
         public IPlayerAbilities GetPlayerAbilities { get; }
-        public PlayerController GetPlayerController { get; }
+        public IPlayerController GetPlayerController { get; }
         public ILevelServices GetLevelServices { get; }
         public IGameStateData GetGameStateData { get; }
         public ISetTimerHUD GetSetTimerHUD { get; }

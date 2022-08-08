@@ -12,8 +12,7 @@ namespace Abilities.Pickups
         private Rigidbody2D m_Rigidbody2D;
         public Vector2 initialVelocity;
 
-        // Use this for initialization
-        void Start()
+        private void Start()
         {
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
             m_Rigidbody2D.velocity = initialVelocity;

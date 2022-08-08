@@ -1,7 +1,7 @@
 ﻿using Abilities.NPC;
 using Core.Managers;
-using Core.Player;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Core.NPC
 {
@@ -16,7 +16,7 @@ namespace Core.NPC
 
 		private void Start () {
 			_levelManager = FindObjectOfType<LevelManager> ();
-			mario = FindObjectOfType<PlayerController> ().gameObject;
+			mario = FindObjectOfType<IPlayerController> ().gameObject;
 			_circleCollider2D = GetComponent<CircleCollider2D> ();
 			_patrolScript = GetComponent<PatrolVertical> ();
 			_visible = false;

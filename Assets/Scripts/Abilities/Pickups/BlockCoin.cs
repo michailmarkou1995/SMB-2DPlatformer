@@ -6,7 +6,7 @@ namespace Abilities.Pickups
 {
     public class BlockCoin : MonoBehaviour
     {
-        private ILevelManager _levelManager;
+        private Interfaces.Core.Managers.ILevelManager _levelManager;
 
         private void Start()
         {

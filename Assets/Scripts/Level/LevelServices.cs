@@ -4,6 +4,7 @@ using Interfaces.Core.Managers;
 using Interfaces.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using ILevelManager = Interfaces.Core.Managers.ILevelManager;
 
 namespace Level
 {
@@ -19,7 +20,8 @@ namespace Level
         public Vector3 FindSpawnPosition()
         {
             Vector3 spawnPosition;
-            GameStateManager gameStateManager = FindObjectOfType<GameStateManager>();
+            GameStateManager gameStateManager =
+                GameObject.FindGameObjectWithTag("GameStateManager").GetComponent<GameStateManager>();
             Debug.Log(this.name + " FindSpawnPosition: GSM spawnFromPoint=" +
                       gameStateManager.SpawnFromPoint.ToString()
                       + " spawnPipeIdx= " + gameStateManager.SpawnPipeIdx.ToString()
@@ -49,23 +51,27 @@ namespace Level
         public void MarioCompleteCastle()
         {
             _levelManager.GetGameStateData.TimerPaused = true;
-            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetSoundManager.CastleCompleteMusic);
+            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(
+                _levelManager.GetSoundManager.CastleCompleteMusic);
             _levelManager.GetSoundManager.MusicSource.loop = false;
-            _levelManager.GetPlayerController.AutomaticWalk(_levelManager.GetPlayerController.CastleWalkSpeedX);
+            _levelManager.GetPlayerController.GetMovement.AutomaticWalk(
+                _levelManager.GetPlayerController.GetMovement.CastleWalkSpeedX);
         }
 
         public void MarioCompleteLevel()
         {
             _levelManager.GetGameStateData.TimerPaused = true;
-            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetSoundManager.LevelCompleteMusic);
+            _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetSoundManager
+                .LevelCompleteMusic);
             _levelManager.GetSoundManager.MusicSource.loop = false;
         }
 
         public void MarioReachFlagPole()
         {
             _levelManager.GetGameStateData.TimerPaused = true;
-            _levelManager.GetSoundManager.GetSoundLevelHandle.PauseMusicPlaySound(_levelManager.GetSoundManager.FlagpoleSound, false);
-            _levelManager.GetPlayerController.ClimbFlagPole();
+            _levelManager.GetSoundManager.GetSoundLevelHandle.PauseMusicPlaySound(
+                _levelManager.GetSoundManager.FlagpoleSound, false);
+            _levelManager.GetPlayerController.GetMovement.ClimbFlagPole();
         }
     }
 }

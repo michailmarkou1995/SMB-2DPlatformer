@@ -6,7 +6,7 @@ namespace Core.Managers
 {
     public class PauseUnPauseGame : MonoBehaviour, IPauseUnPauseGame
     {
-        private ILevelManager _levelManager;
+        private Interfaces.Core.Managers.ILevelManager _levelManager;
 
         private void Awake()
         {
@@ -15,7 +15,7 @@ namespace Core.Managers
 
         public void PauseUnPauseState()
         {
-            _levelManager = FindObjectOfType<LevelManager>();
+            _levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
             StartCoroutine(!_levelManager.GetGameStateData.GamePaused ? PauseGameCo() : UnpauseGameCo());
         }
 

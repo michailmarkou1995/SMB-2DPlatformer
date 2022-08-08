@@ -1,7 +1,9 @@
 ﻿using Core.Managers;
 using Core.Player;
+using Core.Player.old;
 using Interfaces.UI;
 using UnityEngine;
+using IPlayerController = Core.Player.old.PlayerController;
 
 namespace UI
 {
@@ -16,6 +18,7 @@ namespace UI
         public bool canMove;
         public bool canMoveBackward;
         private float _cameraWidth;
+        private Camera _camera;
 
         private Transform _leftEdge;
         private Transform _rightEdge;
@@ -23,15 +26,16 @@ namespace UI
 
         public void GetCameraPrerequisites(MainCamera mainCamera)
         {
-            PlayerController playerController = FindObjectOfType<PlayerController>();
+            IPlayerController playerController = FindObjectOfType<IPlayerController>();
             target = playerController.gameObject;
-
+            _camera = Camera.main;
+            
             GameObject boundary = GameObject.Find("Level Boundary");
             _leftEdge = boundary.transform.Find("Left Boundary").transform;
             _rightEdge = boundary.transform.Find("Right Boundary").transform;
             float aspectRatio = GetComponent<MainCameraAspectRatio>().targetAspects.x /
                                 GetComponent<MainCameraAspectRatio>().targetAspects.y;
-            if (Camera.main != null) _cameraWidth = Camera.main.orthographicSize * aspectRatio;
+            if (_camera != null) _cameraWidth = _camera.orthographicSize * aspectRatio;
         }
 
         public void InitializeCameraPosition(MainCamera mainCamera)
@@ -72,14 +76,19 @@ namespace UI
                     if (canMoveBackward || target.transform.position.x + followAhead >= transform.position.x) {
                         _targetPosition = new Vector3(_targetPosition.x + followAhead, _targetPosition.y,
                             _targetPosition.z);
-                        transform.position =
-                            Vector3.Lerp(transform.position, _targetPosition, smoothing * Time.deltaTime);
+                        transform.position = Vector3.Lerp(
+                            transform.position,
+                            _targetPosition,
+                            smoothing * Time.deltaTime);
                     }
                 } else if (target.transform.localScale.x < 0f && canMoveBackward && !passedLeftEdge
                            && _rightEdge.position.x - _targetPosition.x >= _cameraWidth - followAhead) {
                     _targetPosition = new Vector3(_targetPosition.x - followAhead, _targetPosition.y,
                         _targetPosition.z);
-                    transform.position = Vector3.Lerp(transform.position, _targetPosition, smoothing * Time.deltaTime);
+                    transform.position = Vector3.Lerp(
+                        transform.position,
+                        _targetPosition,
+                        smoothing * Time.deltaTime);
                 }
             }
         }

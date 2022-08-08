@@ -1,28 +1,26 @@
-﻿using System;
-using Core.Managers;
-using Core.Player;
-using Interfaces.Core.Managers;
+﻿using Core.Managers;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Level
 {
     public class PipeWarpUp : MonoBehaviour
     {
-        private PlayerController _mario;
+        private IPlayerController _player;
         private Transform _stop;
 
         private const float PlatformVelocityY = .05f;
         public bool isTakingMarioUp;
 
-        private ILevelManager _levelManager;
+        private Interfaces.Core.Managers.ILevelManager _levelManager;
 
         public bool resetSpawnPoint;
 
         private void Start()
         {
-            _mario = FindObjectOfType<PlayerController>();
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<IPlayerController>();
             _stop = transform.parent.transform.Find("Platform Stop");
-            _levelManager = FindObjectOfType<LevelManager>();
+            _levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
 
             Debug.Log(this.name + " Start: " + transform.parent.gameObject.name
                       + " spawnFromPoint=" + _levelManager.GetGameStateManager.SpawnFromPoint.ToString()
@@ -31,7 +29,7 @@ namespace Level
             if (!_levelManager.GetGameStateManager.SpawnFromPoint &&
                 _levelManager.GetGameStateManager.SpawnPipeIdx == transform.parent.GetSiblingIndex()) {
                 isTakingMarioUp = true;
-                _mario.FreezeUserInput();
+                _player.GetMovementFreeze.FreezeUserInput();
                 _levelManager.GetGameStateData.TimerPaused = true;
                 Debug.Log(this.name + " Start: " + transform.parent.gameObject.name + " taking Mario up");
             } else {
@@ -52,7 +50,7 @@ namespace Level
                     _levelManager.GetGameStateManager.ResetSpawnPosition();
                 }
 
-                _mario.UnfreezeUserInput();
+                _player.GetMovementFreeze.UnfreezeUserInput();
                 _levelManager.GetGameStateData.TimerPaused = false;
                 isTakingMarioUp = false;
             }

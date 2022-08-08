@@ -1,23 +1,22 @@
 ﻿using Core.Managers;
 using Core.NPC;
-using Core.Player;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Level
 {
 	public class Firebar : Enemy {
 		public Transform pivot;
 		public float rotateSpeed = 75;
-		private LevelManager t_LevelManager;
-		private GameObject mario;
+		private LevelManager _levelManager;
+		private GameObject player;
 		public bool canMove;
 		private bool canMoveAutomatic = true;
 		private float minDistanceToMove = 14f;
 
-		// Use this for initialization
-		void Start () {
-			t_LevelManager = FindObjectOfType<LevelManager> ();
-			mario = FindObjectOfType<PlayerController> ().gameObject;
+		private void Start () {
+			_levelManager = FindObjectOfType<LevelManager> ();
+			player = FindObjectOfType<IPlayerController> ().gameObject;
 
 			starmanBonus = 0;
 			rollingShellBonus = 0;
@@ -26,9 +25,8 @@ namespace Level
 			stompBonus = 0;
 		}
 
-
-		void Update() {
-			if (!canMove & Mathf.Abs (mario.transform.position.x - transform.position.x) <= minDistanceToMove && canMoveAutomatic) {
+		private void Update() {
+			if (!canMove & Mathf.Abs (player.transform.position.x - transform.position.x) <= minDistanceToMove && canMoveAutomatic) {
 				canMove = true;
 			} else if (canMove) {
 				transform.RotateAround(pivot.position, Vector3.forward, rotateSpeed * Time.deltaTime);
@@ -50,9 +48,9 @@ namespace Level
 		public override void StompedByMario() {
 		}
 
-		void OnTriggerEnter2D(Collider2D other) {
-			if (other.tag == "Player") {
-				t_LevelManager.GetPlayerAbilities.MarioPowerDown ();
+		private void OnTriggerEnter2D(Collider2D other) {
+			if (other.CompareTag("Player")) {
+				_levelManager.GetPlayerAbilities.MarioPowerDown ();
 			}
 		}
 

@@ -1,12 +1,12 @@
-﻿using Core.Player;
-using UnityEngine;
+﻿using UnityEngine;
+using PlayerController = Core.Player.PlayerController;
 
 /* Move continuously, flipping direction if hit on the side by non-Player. Optionally
  * bounce up if hit ground while moving.
  * Applicable to: 1UP Mushroom, Big Mushroom, Starman, Goomba, Koopa
  */
 
-namespace Abilities.Player
+namespace Abilities
 {
     public class MoveAndFlip : MonoBehaviour
     {
@@ -17,19 +17,19 @@ namespace Abilities.Player
         public float directionX = 1;
         public Vector2 speed = new(3, 0);
         private Rigidbody2D _rigidbody2D;
-        private GameObject _mario;
+        private GameObject _player;
 
         private void Start()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
-            _mario = FindObjectOfType<PlayerController>().gameObject;
+            _player = FindObjectOfType<PlayerController>().gameObject;
             OrientSprite();
         }
 
 
         private void Update()
         {
-            if (!canMove & Mathf.Abs(_mario.transform.position.x - transform.position.x) <= MinDistanceToMove &&
+            if (!canMove & Mathf.Abs(_player.transform.position.x - transform.position.x) <= MinDistanceToMove &&
                 canMoveAutomatic) {
                 canMove = true;
             }

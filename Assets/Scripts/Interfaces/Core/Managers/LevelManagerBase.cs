@@ -2,8 +2,5 @@
 
 namespace Interfaces.Core.Managers
 {
-    public abstract class LevelManagerBase : MonoBehaviour
-    {
-
-    }
+    public abstract class LevelManagerBase : MonoBehaviour { }
 }

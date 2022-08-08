@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using Abilities.NPC;
 using Core.Managers;
-using Core.Player;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Core.NPC
 {
@@ -38,7 +38,7 @@ namespace Core.NPC
 		// Use this for initialization
 		private void Start () {
 			_levelManager = FindObjectOfType<LevelManager> ();
-			_mario = FindObjectOfType<PlayerController> ().gameObject;
+			_mario = FindObjectOfType<IPlayerController> ().gameObject;
 			_rigidbody2D = GetComponent<Rigidbody2D> ();
 			_timer = 0;
 			canMove = false;
@@ -128,7 +128,7 @@ namespace Core.NPC
 			Vector2 rightSide = new Vector2 (1f, 0f);
 			bool sideHit = normal == leftSide || normal == rightSide;
 
-			if (other.gameObject.tag == "Player") {
+			if (other.gameObject.CompareTag("Player")) {
 				_levelManager.GetPlayerAbilities.MarioPowerDown ();
 			} else if (sideHit && !other.gameObject.CompareTag("Mario Fireball")) { // switch walk direction
 				_directionX = -_directionX;

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using Core.Managers;
-using Core.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Core.NPC
 {
@@ -10,29 +10,26 @@ namespace Core.NPC
 		public GameObject ThankYouMario;
 		public GameObject ButOurPrincess;
 
-		private PlayerController playerController;
-		private LevelManager t_LevelManager;
-
-
-		// Use this for initialization
-		void Start () {
-			playerController = FindObjectOfType<PlayerController> ();
-			t_LevelManager = FindObjectOfType<LevelManager> ();
+		private IPlayerController _playerController;
+		private LevelManager _levelManager;
+		
+		private void Start () {
+			_playerController = FindObjectOfType<IPlayerController> ();
+			_levelManager = FindObjectOfType<LevelManager> ();
+		}
+		
+		private void OnCollisionEnter2D(Collision2D other)
+		{
+			if (!other.gameObject.CompareTag("Player")) return;
+			_playerController.GetMovementFreeze.FreezeUserInput ();
+			StartCoroutine (DisplayMessageCo ());
 		}
 
-
-		void OnCollisionEnter2D(Collision2D other) {
-			if (other.gameObject.tag == "Player") {
-				playerController.FreezeUserInput ();
-				StartCoroutine (DisplayMessageCo ());
-			}
-		}
-
-		IEnumerator DisplayMessageCo() {
+		private IEnumerator DisplayMessageCo() {
 			ThankYouMario.SetActive (true);
 			yield return new WaitForSecondsRealtime (.75f);
 			ButOurPrincess.SetActive (true);
-			yield return new WaitForSecondsRealtime (t_LevelManager.GetSoundManager.CastleCompleteMusic.length);
+			yield return new WaitForSecondsRealtime (_levelManager.GetSoundManager.CastleCompleteMusic.length);
 			SceneManager.LoadScene ("Main Menu");
 		}
 	}

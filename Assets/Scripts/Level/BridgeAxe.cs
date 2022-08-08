@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using Core.Managers;
 using Core.NPC;
-using Core.Player;
-using Interfaces.Core.Managers;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Level
 {
 	public class BridgeAxe : MonoBehaviour {
-		private ILevelManager _levelManager;
-		private PlayerController _playerController;
+		private Interfaces.Core.Managers.ILevelManager _levelManager;
+		private IPlayerController _playerController;
 		private Bowser _bowser;
 		private List<GameObject> _bridgePieces = new List<GameObject> ();
 
@@ -19,8 +18,8 @@ namespace Level
 		private bool _gotAxe;
 
 		private void Start () {
-			_levelManager = FindObjectOfType<LevelManager> ();
-			_playerController = FindObjectOfType<PlayerController> ();
+			_levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+			_playerController = FindObjectOfType<IPlayerController> ();
 			_bowser = FindObjectOfType<Bowser> ();
 
 			foreach (Transform child in transform.parent.Find("Bridge Pieces")) {
@@ -33,7 +32,7 @@ namespace Level
 		{
 			if (!other.CompareTag("Player") || _gotAxe) return;
 			_gotAxe = true;
-			_playerController.FreezeUserInput ();
+			_playerController.GetMovementFreeze.FreezeUserInput ();
 			_levelManager.GetGameStateData.TimerPaused = true;
 
 			if (_bowser) {  // bowser not yet defeated

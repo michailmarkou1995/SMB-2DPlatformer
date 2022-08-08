@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Abilities.Pickups;
 using Core.NPC;
 using Core.Player;
 using Interfaces.Abilities.Player;
@@ -68,7 +67,7 @@ namespace Abilities.Player
         private IEnumerator MarioInvincibleStarmanCo()
         {
             IsInvincibleStarman = true;
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsInvincibleStarmanAnim, true);
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvincibleStarmanAnim, true);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario After Starman");
             _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateData.HurryUp
                 ? _levelManager.GetSoundManager.StarmanMusicHurry
@@ -76,7 +75,7 @@ namespace Abilities.Player
 
             yield return new WaitForSeconds(MarioInvincibleStarmanDuration);
             IsInvincibleStarman = false;
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsInvincibleStarmanAnim, false);
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvincibleStarmanAnim, false);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario");
             _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateData.HurryUp
                 ? _levelManager.GetSoundManager.LevelMusicHurry
@@ -91,11 +90,12 @@ namespace Abilities.Player
         private IEnumerator MarioInvinciblePowerdownCo()
         {
             IsInvinciblePowerdown = true;
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsInvinciblePowerdownAnim, true);
+
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvinciblePowerdownAnim, true);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario After Powerdown");
             yield return new WaitForSeconds(MarioInvinciblePowerdownDuration);
             IsInvinciblePowerdown = false;
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsInvinciblePowerdownAnim, false);
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvinciblePowerdownAnim, false);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario");
         }
 
@@ -113,19 +113,19 @@ namespace Abilities.Player
 
         private IEnumerator MarioPowerUpCo()
         {
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsPoweringUpAnim, true);
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringUpAnim, true);
             Time.timeScale = 0f;
-            PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
+            PlayerAnimatorStatic.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             yield return new WaitForSecondsRealtime(TransformDuration);
             yield return new WaitWhile(() => _levelManager.GetGameStateData.GamePaused);
 
             Time.timeScale = 1;
-            PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.Normal;
+            PlayerAnimatorStatic.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.Normal;
 
             _levelManager.GetGameStateData.PlayerSize++;
-            _levelManager.GetPlayerController.UpdateSize();
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsPoweringUpAnim, false);
+            _levelManager.GetPlayerController.GetPlayerSize.UpdateSize();
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringUpAnim, false);
         }
 
         public void MarioPowerDown()
@@ -150,20 +150,20 @@ namespace Abilities.Player
 
         private IEnumerator MarioPowerDownCo()
         {
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsPoweringDownAnim, true);
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringDownAnim, true);
             Time.timeScale = 0f;
-            PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
+            PlayerAnimatorStatic.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             yield return new WaitForSecondsRealtime(TransformDuration);
             yield return new WaitWhile(() => _levelManager.GetGameStateData.GamePaused);
 
             Time.timeScale = 1;
-            PlayerAnimator.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.Normal;
+            PlayerAnimatorStatic.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.Normal;
             MarioInvinciblePowerdown();
 
             _levelManager.GetGameStateData.PlayerSize = 0;
-            _levelManager.GetPlayerController.UpdateSize();
-            PlayerAnimator.PlayerAnimatorComponent.SetBool(PlayerAnimator.IsPoweringDownAnim, false);
+            _levelManager.GetPlayerController.GetPlayerSize.UpdateSize();
+            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringDownAnim, false);
             IsPoweringDown = false;
         }
 
@@ -181,7 +181,7 @@ namespace Abilities.Player
             _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.DeadSound);
 
             Time.timeScale = 0f;
-            _levelManager.GetPlayerController.FreezeAndDie();
+            _levelManager.GetPlayerController.GetMovementFreeze.FreezeAndDie();
 
             if (timeUp) {
                 Debug.Log(this.name + " MarioRespawn: called due to timeup");

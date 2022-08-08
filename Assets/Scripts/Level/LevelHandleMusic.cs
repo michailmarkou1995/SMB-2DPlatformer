@@ -8,12 +8,12 @@ namespace Level
 {
     public class LevelHandleMusic : MonoBehaviour, ISoundLevelHandle
     {
-        private ILevelManager _levelManager;
+        private Interfaces.Core.Managers.ILevelManager _levelManager;
         private ISoundManagerExtras _soundManager;
 
         private void Awake()
         {
-            _levelManager = FindObjectOfType<LevelManager>();
+            _levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
             _soundManager = GetComponent<SoundManager>();
         }
 

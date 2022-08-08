@@ -1,4 +1,5 @@
-namespace Abilities.Pickups {
+namespace Abilities.Pickups
+{
     public interface ICollectible
     {
         public void Collect();

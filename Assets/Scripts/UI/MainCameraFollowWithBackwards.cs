@@ -1,7 +1,7 @@
 ﻿using Core.Managers;
-using Core.Player;
 using Interfaces.UI;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace UI
 {
@@ -12,9 +12,11 @@ namespace UI
     {
         public GameObject target;
         public float followAhead = 2.6f;
+        public AnimationCurve followCurve;
         public float smoothing = 5;
         public bool canMove;
         private float _cameraWidth;
+        private Camera _camera;
 
         private Transform _leftEdge;
         private Transform _rightEdge;
@@ -22,15 +24,16 @@ namespace UI
 
         public void GetCameraPrerequisites(MainCamera mainCamera)
         {
-            PlayerController playerController = FindObjectOfType<PlayerController>();
+            IPlayerController playerController = FindObjectOfType<IPlayerController>();
             target = playerController.gameObject;
+            _camera = Camera.main;
 
             GameObject boundary = GameObject.Find("Level Boundary");
             _leftEdge = boundary.transform.Find("Left Boundary").transform;
             _rightEdge = boundary.transform.Find("Right Boundary").transform;
             float aspectRatio = GetComponent<MainCameraAspectRatio>().targetAspects.x /
                                 GetComponent<MainCameraAspectRatio>().targetAspects.y;
-            if (Camera.main != null) _cameraWidth = Camera.main.orthographicSize * aspectRatio;
+            if (_camera != null) _cameraWidth = _camera.orthographicSize * aspectRatio;
         }
 
         public void InitializeCameraPosition(MainCamera mainCamera)
@@ -71,18 +74,25 @@ namespace UI
                 // level boundaries
                 case > 0f when !passedRightEdge &&
                                _targetPosition.x - _leftEdge.position.x >= _cameraWidth - followAhead:
-                    _targetPosition = new Vector3(_targetPosition.x + followAhead, _targetPosition.y,
+                    _targetPosition = new Vector3(
+                        _targetPosition.x + followAhead,
+                        _targetPosition.y,
                         _targetPosition.z);
-                    transform.position = Vector3.Lerp(transform.position,
-                        _targetPosition,
-                        smoothing * Time.deltaTime);
+                    transform.position = Vector3.Lerp(
+                        transform.position, 
+                        _targetPosition, 
+                        followCurve.Evaluate(smoothing * Time.deltaTime));
                     break;
                 case < 0f when !passedLeftEdge &&
                                _rightEdge.position.x - _targetPosition.x >= _cameraWidth - followAhead:
-                    _targetPosition = new Vector3(_targetPosition.x - followAhead, _targetPosition.y,
+                    _targetPosition = new Vector3(
+                        _targetPosition.x - followAhead, 
+                        _targetPosition.y,
                         _targetPosition.z);
-                    transform.position = Vector3.Lerp(transform.position, _targetPosition,
-                        smoothing * Time.deltaTime);
+                    transform.position = Vector3.Lerp(
+                        transform.position, 
+                        _targetPosition,
+                        followCurve.Evaluate(smoothing * Time.deltaTime));
                     break;
             }
         }

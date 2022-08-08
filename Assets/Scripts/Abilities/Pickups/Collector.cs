@@ -1,6 +1,7 @@
 using UnityEngine;
 
-namespace Abilities.Pickups {
+namespace Abilities.Pickups
+{
     public class Collector : MonoBehaviour
     {
         private void OnTriggerEnter2D(Collider2D collision)

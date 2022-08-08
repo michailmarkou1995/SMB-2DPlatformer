@@ -1864,6 +1864,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1067952513393140, guid: 6cc1215ce827544449add993abeac60a, type: 3}
     - target: {fileID: 114256751761485294, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114256751761485294, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}
       propertyPath: poleAnimator
       value: climbFlagPole
       objectReference: {fileID: 0}
@@ -1906,6 +1910,10 @@ PrefabInstance:
     - target: {fileID: 114256751761485294, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}
       propertyPath: isFallingNotFromJumpAnimator
       value: isFallingNotFromJump
+      objectReference: {fileID: 0}
+    - target: {fileID: 1929397281868044457, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 58965874253323938, guid: 2edb2b8e476654f0ea2807c7a8261a76, type: 3}

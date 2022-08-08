@@ -3,7 +3,7 @@ using Abilities.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Core.Player {
+namespace Core.Player.old {
     public partial class PlayerController
     {
         public bool isAllowedToChangeDirectionOnAir;

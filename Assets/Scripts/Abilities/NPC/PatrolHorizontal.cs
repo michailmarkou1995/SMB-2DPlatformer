@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using Core.Player;
 using UnityEngine;
+using PlayerController = Core.Player.PlayerController;
 
 /* Move horizontally and continuously between 2 stop points
  * Applicable to: Horizontal Moving Platform Struct
@@ -23,61 +23,59 @@ namespace Abilities.NPC {
 
 		public bool isAtLeftStop;
 		public bool isAtRightStop;
-		private bool waitLeftCoStarted;
-		private bool waitRightCoStarted;
+		private bool _waitLeftCoStarted;
+		private bool _waitRightCoStarted;
 
-		private float currentAbsSpeed;
+		private float _currentAbsSpeed;
 
-		private GameObject mario;
+		private GameObject player;
 
 
-		void Start() {
-			mario = FindObjectOfType<PlayerController> ().gameObject;
+		private void Start() {
+			player = FindObjectOfType<PlayerController> ().gameObject;
 			if (transform.position.x >= RightStop.position.x) {
 				directionX = -1;
 			} else if (transform.position.x <= LeftStop.position.x) {
 				directionX = 1;
 			}
-			currentAbsSpeed = absSpeed;
+			_currentAbsSpeed = absSpeed;
 		}
 
-
-		// Update is called once per frame
-		void Update () {
-			if (!canMove & Mathf.Abs (mario.transform.position.x - transform.position.x) <= minDistanceToMove && canMoveAutomatic) {
+		private void Update () {
+			if (!canMove & Mathf.Abs (player.transform.position.x - transform.position.x) <= minDistanceToMove && canMoveAutomatic) {
 				canMove = true;
 			}
 
 			else if (canMove && Time.timeScale != 0) {
 				if (!isAtLeftStop && !isAtRightStop) {
-					currentAbsSpeed *= speedModifier;
-					transform.position += new Vector3 (currentAbsSpeed * directionX, 0, 0);
+					_currentAbsSpeed *= speedModifier;
+					transform.position += new Vector3 (_currentAbsSpeed * directionX, 0, 0);
 					isAtLeftStop = transform.position.x <= LeftStop.position.x;
 					isAtRightStop = transform.position.x >= RightStop.position.x;
-				} else if (isAtLeftStop && !waitLeftCoStarted) {
+				} else if (isAtLeftStop && !_waitLeftCoStarted) {
 					StartCoroutine (WaitAtLeftStopCo ());
-					waitLeftCoStarted = true;
-				}  else if (isAtRightStop && !waitRightCoStarted) {
+					_waitLeftCoStarted = true;
+				}  else if (isAtRightStop && !_waitRightCoStarted) {
 					StartCoroutine (WaitAtRightStopCo ());
-					waitRightCoStarted = true;
+					_waitRightCoStarted = true;
 				}
 			}
 		}
 
-		IEnumerator WaitAtLeftStopCo() {
+		private IEnumerator WaitAtLeftStopCo() {
 			yield return new WaitForSeconds (waitAtLeftStop);
-			currentAbsSpeed = absSpeed;
+			_currentAbsSpeed = absSpeed;
 			directionX = 1;
 			isAtLeftStop = false;
-			waitLeftCoStarted = false;
+			_waitLeftCoStarted = false;
 		}
 
-		IEnumerator WaitAtRightStopCo() {
+		private IEnumerator WaitAtRightStopCo() {
 			yield return new WaitForSeconds (waitAtRightStop);
-			currentAbsSpeed = absSpeed;
+			_currentAbsSpeed = absSpeed;
 			directionX = -1;
 			isAtRightStop = false;
-			waitRightCoStarted = false;
+			_waitRightCoStarted = false;
 		}
 	}
 }

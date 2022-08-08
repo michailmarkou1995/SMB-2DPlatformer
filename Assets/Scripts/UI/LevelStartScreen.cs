@@ -89,7 +89,7 @@ namespace UI
             Time.timeScale = 1;
 
             // Get the game state manager
-            _gameStateManager = FindObjectOfType<GameStateManager>();
+            _gameStateManager = GameObject.FindGameObjectWithTag("GameStateManager").GetComponent<GameStateManager>();
             string worldName = _gameStateManager.SceneToLoad;
 
             // Set text

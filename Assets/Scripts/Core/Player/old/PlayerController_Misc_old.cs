@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Player
+namespace Core.Player.old
 {
     public partial class PlayerController
     {
@@ -47,21 +47,48 @@ namespace Core.Player
         /// <remarks>
         /// Uses either Raycast type BoxCast for all edges check or gameObject "Colliders", it's user's choice.
         /// </remarks>
-        private new bool IsGrounded()
+        private bool IsGroundedBoxCast()
         {
-            // const float extraHeightText = 1f;
-            // Bounds bounds = MBoxCollider2D.bounds;
-            // RaycastHit2D raycastHit2D = Physics2D.BoxCast(bounds.center,
-            //     bounds.size, 0f, Vector2.down, extraHeightText, GroundLayers);
+            const float extraHeightText = 1f;
+            Bounds bounds = MBoxCollider2D.bounds;
+            RaycastHit2D raycastHit2D = Physics2D.BoxCast(bounds.center,
+                bounds.size, 0f, Vector2.down, extraHeightText, GroundLayers);
 
-            // Color rayColor;
-            // rayColor = raycastHit2D.collider != null ? Color.green : Color.red;
-            // Debug.DrawRay(bounds.center, Vector2.down * (bounds.extents.y + extraHeightText), rayColor);
+            Color rayColor;
+            rayColor = raycastHit2D.collider != null ? Color.green : Color.red;
+            Debug.DrawRay(bounds.center, Vector2.down * (bounds.extents.y + extraHeightText), rayColor);
 
-            // return !(raycastHit2D.collider == null);
+            return !(raycastHit2D.collider == null);
+        }
 
+        private bool IsGroundedAlloc()
+        {
+            // TODO profile this
             return Physics2D.OverlapPoint(MGroundCheck1.position, GroundLayers) ||
                    Physics2D.OverlapPoint(MGroundCheck2.position, GroundLayers);
+        }
+
+        private bool IsGroundedNonAlloc()
+        {
+            Colliders1 = new Collider2D[1];
+            Colliders2 = new Collider2D[1];
+            int GroundLayers = (1 << LayerMask.NameToLayer("Ground")
+                                | 1 << LayerMask.NameToLayer("Block")
+                                | 1 << LayerMask.NameToLayer("Goal")
+                                | 1 << LayerMask.NameToLayer("Player Detector")
+                                | 1 << LayerMask.NameToLayer("Moving Platform"));
+
+            // var x = Physics2D.OverlapPoint(MGroundCheck1.position, GroundLayers);
+            // var col1 = Physics2D.OverlapPointNonAlloc(MGroundCheck1.position, _colliders1, GroundLayers);
+            // var col2 = Physics2D.OverlapPointNonAlloc(MGroundCheck2.position, _colliders2, GroundLayers);
+            // var x = Physics2D.OverlapPoint(MGroundCheck1.position, GroundLayers);
+            //return Convert.ToBoolean(col1) || Convert.ToBoolean(col2);
+
+            // TODO profile this
+            Physics2D.OverlapPointNonAlloc(MGroundCheck1.position, Colliders1, GroundLayers);
+            Physics2D.OverlapPointNonAlloc(MGroundCheck2.position, Colliders2, GroundLayers);
+
+            return Colliders1[0] || Colliders2[0];
         }
 
         /// <summary>

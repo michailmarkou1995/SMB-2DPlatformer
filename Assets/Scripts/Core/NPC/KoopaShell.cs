@@ -1,15 +1,14 @@
 ﻿using Core.Managers;
-using Core.Player;
-using Interfaces.Core.Managers;
 using UnityEngine;
+using IPlayerController = Core.Player.PlayerController;
 
 namespace Core.NPC
 {
 	public class KoopaShell : Enemy {
 		private Animator _animator;
 		private Rigidbody2D _rigidbody2D;
-		private ILevelManager _levelManager;
-		private PlayerController _playerController;
+		private Interfaces.Core.Managers.ILevelManager _levelManager;
+		private IPlayerController _playerController;
 
 		public GameObject Koopa;
 		public float rollSpeedX = 7;
@@ -22,7 +21,7 @@ namespace Core.NPC
 
 		private void Start () {
 			_levelManager = FindObjectOfType<LevelManager> ();
-			_playerController = FindObjectOfType<PlayerController> ();
+			_playerController = FindObjectOfType<IPlayerController> ();
 			_animator = GetComponent<Animator> ();
 			_rigidbody2D = GetComponent<Rigidbody2D> ();
 			_isReviving = false;

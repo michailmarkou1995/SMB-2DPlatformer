@@ -1,20 +1,92 @@
-using System;
+﻿using System;
+using Interfaces.Core.Managers;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Core.Player
+namespace Interfaces.Core.Player.old
 {
     //internal static class IsExternalInit { }
 
-    public abstract class PlayerBase : MonoBehaviour
+    public abstract class PlayerBase : MonoBehaviour, IPlayerController
     {
+        #region DefaultInterfaceOld
+
+        public ILevelManager GetLevelManager => throw new NotImplementedException();
+        public ICrouch GetCrouch => throw new NotImplementedException();
+        public IMove GetMovement => throw new NotImplementedException();
+        public IJump GetJump => throw new NotImplementedException();
+        public IDash GetDash => throw new NotImplementedException();
+        public IAttack GetAttack => throw new NotImplementedException();
+        public IGroundCheck GetGroundCheck => throw new NotImplementedException();
+        public IMovementFreeze GetMovementFreeze => throw new NotImplementedException();
+        public IPlayerAnimationParams GetAnimationParams => throw new NotImplementedException();
+        public IPlayerSize GetPlayerSize => throw new NotImplementedException();
+        public IDeath GetDeath => throw new NotImplementedException();
+
+        PlayerInputActions IPlayerController.PlayerControls { get; set; }
+
+        GameObject IPlayerController.MStompBox
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        Rigidbody2D IPlayerController.MRigidbody2D
+        {
+            get => this.MRigidbody2D;
+            set => this.MRigidbody2D = value;
+        }
+
+        CapsuleCollider2D IPlayerController.MCapsuleCollider2D
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        BoxCollider2D IPlayerController.MBoxCollider2D
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        Transform IPlayerController.MGroundCheck1
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        Transform IPlayerController.MGroundCheck2
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        Collider2D[] IPlayerController.Colliders1
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        Collider2D[] IPlayerController.Colliders2
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        #endregion
+
         protected global::Core.Managers.LevelManager LevelManager { get; private set; }
         protected Transform MGroundCheck1 { get; private set; }
         protected Transform MGroundCheck2 { get; private set; }
+
         protected CapsuleCollider2D MCapsuleCollider2D { get; private set; }
+        protected BoxCollider2D MBoxCollider2D { get; private set; }
         protected GameObject MStompBox { get; private set; }
         protected Animator MAnimator { get; private set; }
+
         protected Rigidbody2D MRigidbody2D { get; private set; }
+        protected Collider2D[] Colliders1 = new Collider2D[1];
+        protected Collider2D[] Colliders2 = new Collider2D[1];
 
         // Player Controls
         protected PlayerInputActions PlayerControls { get; set; }
@@ -26,6 +98,8 @@ namespace Core.Player
         [FormerlySerializedAs("FirePos")] public Transform firePos;
         protected bool IsClimbingFlagPole { get; set; }
         protected Vector2 ClimbFlagPoleVelocity { get; } = new(0, -10f);
+
+        #region PlayerAnimator
 
         // Exposed to Editor explicit backing fields of properties Form
         [Header("Animator Name Parameters")] [Tooltip("Default value: playerSize")] [SerializeField]
@@ -73,6 +147,8 @@ namespace Core.Player
         protected int IsFiringAnimator => Animator.StringToHash(isFiringAnimator);
 
         protected int IsSkiddingAnimator => Animator.StringToHash(isSkiddingAnimator);
+
+        #endregion
 
 
         // Events
@@ -147,6 +223,7 @@ namespace Core.Player
             MGroundCheck2 = transform.Find("Ground Check 2");
             MStompBox = transform.Find("Stomp Box").gameObject;
             MCapsuleCollider2D = GetComponent<CapsuleCollider2D>();
+            MBoxCollider2D = GetComponent<BoxCollider2D>();
             GetComponent<BoxCollider2D>();
             MAnimator = GetComponent<Animator>();
             MRigidbody2D = GetComponent<Rigidbody2D>();

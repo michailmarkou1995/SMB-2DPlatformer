@@ -9,7 +9,7 @@ namespace Level
 
         private void Start()
         {
-            _levelManager = FindObjectOfType<LevelManager>();
+            _levelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
