@@ -130,6 +130,7 @@ namespace Core.Player
 
         private void Update()
         {
+            //Debug.Log(_groundCheck.IsGrounded);
             _groundCheck.IsGrounded = _groundCheck.IsGround();
             _jump.IsFalling = MRigidbody2D.velocity.y < 0 && !_groundCheck.IsGrounded;
             _move.IsChangingDirection = _move.CurrentSpeedX > 0 && _move.FaceDirectionX * _move.MoveDirectionX < 0;
@@ -153,7 +154,7 @@ namespace Core.Player
         private void FixedUpdate()
         {
             _move.Movement();
-            _animationParams.AnimationParams();
+            _animationParams.MovementAnimationParams();
         }
 
         private void PerLevelInitialization()
@@ -174,15 +175,17 @@ namespace Core.Player
         {
             // ignore collisions with stomp box enabled .. stomping enemy should do no damage
             if (MStompBox.activeSelf && MStompBox.GetComponent<Collider2D>().isTrigger) return;
-            MCapsuleCollider2D.enabled = other.gameObject.CompareTag("Pipe");
+            //Debug.Log("Collision with " + other.gameObject.name);
+            // MCapsuleCollider2D.enabled = other.gameObject.CompareTag("Pipe");
+
             Vector2 normal = other.contacts[0].normal;
             Vector2 bottomSide = new(0f, 1f);
             bool bottomHit = normal == bottomSide;
-        
+
             if (other.gameObject.tag.Contains("Enemy")) {
                 // TODO: koopa shell static does no damage
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
-        
+
                 if (!_levelManager.GetPlayerAbilities.IsInvincible()) {
                     if (!other.gameObject.GetComponent<KoopaShell>() ||
                         other.gameObject.GetComponent<KoopaShell>()
@@ -198,7 +201,7 @@ namespace Core.Player
                 _jump.JumpOffPole();
             }
         }
-        
+
         private void OnCollisionStay2D(Collision2D collision)
         {
             if (!collision.gameObject.tag.Contains("Enemy")) return;
@@ -207,7 +210,7 @@ namespace Core.Player
             bool bottomHit = normal == bottomSide;
             // TODO: koopa shell static does no damage
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        
+
             if (!_levelManager.GetPlayerAbilities.IsInvincible()) {
                 if (!collision.gameObject.GetComponent<KoopaShell>() ||
                     collision.gameObject.GetComponent<KoopaShell>()

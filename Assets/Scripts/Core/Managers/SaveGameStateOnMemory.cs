@@ -1,6 +1,6 @@
-﻿using Interfaces.Core.Managers;
+﻿#nullable enable
+using Interfaces.Core.Managers;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Core.Managers
 {
@@ -9,7 +9,9 @@ namespace Core.Managers
         public void SaveGameState(IGameStateManager gameStateManager)
         {
             //if (gameStateManager == null) throw new NullReferenceException();
-            LevelManager levelManager = Object.FindObjectOfType<LevelManager>();
+            LevelManager? levelManager =
+                GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+            if (levelManager == null) return;
             gameStateManager.PlayerSize = levelManager.GetGameStateData.PlayerSize;
             gameStateManager.Lives = levelManager.GetGameStateData.Lives;
             gameStateManager.Coins = levelManager.GetHUD.Coins;

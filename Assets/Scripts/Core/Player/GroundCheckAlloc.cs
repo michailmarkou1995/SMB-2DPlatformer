@@ -1,9 +1,9 @@
-using Interfaces.Core.Player;
+﻿using Interfaces.Core.Player;
 using UnityEngine;
 
 namespace Core.Player
 {
-    public class GroundCheckNonAlloc : MonoBehaviour, IGroundCheck
+    public class GroundCheckAlloc : MonoBehaviour, IGroundCheck
     {
         //[FormerlySerializedAs("GroundLayers")] public LayerMask groundLayers;
         public int GroundLayers { get; set; }
@@ -29,14 +29,8 @@ namespace Core.Player
 
         public bool IsGround()
         {
-            _playerController.Colliders1 = new Collider2D[1];
-            _playerController.Colliders2 = new Collider2D[1];
-            Physics2D.OverlapPointNonAlloc(_playerController.MGroundCheck1.position,
-                _playerController.Colliders1, GroundLayers);
-            Physics2D.OverlapPointNonAlloc(_playerController.MGroundCheck2.position,
-                _playerController.Colliders2, GroundLayers);
-            
-            return _playerController.Colliders1[0] || _playerController.Colliders2[0];
+            return Physics2D.OverlapPoint(_playerController.MGroundCheck1.position, GroundLayers) ||
+                   Physics2D.OverlapPoint(_playerController.MGroundCheck2.position, GroundLayers);
         }
     }
 }

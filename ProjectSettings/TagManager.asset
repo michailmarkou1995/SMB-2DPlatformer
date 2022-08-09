@@ -15,6 +15,7 @@ TagManager:
   - SoundManager
   - LevelManager
   - GameStateManager
+  - Portal
   layers:
   - Default
   - TransparentFX

@@ -95,8 +95,10 @@ namespace Core.Managers
             if (FindObjectsOfType(GetType()).Length == 1) {
                 DontDestroyOnLoad(gameObject);
                 ConfigNewGame();
-            } else {
+            } else if (FindObjectsOfType(GetType()).Length > 1) {
                 Destroy(gameObject);
+            } else {
+                Debug.LogError("No GameStateManager found");
             }
         }
 

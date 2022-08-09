@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using PlayerController = Core.Player.PlayerController;
 
-/* Move continuously, flipping direction if hit on the side by non-Player. Optionally
- * bounce up if hit ground while moving.
- * Applicable to: 1UP Mushroom, Big Mushroom, Starman, Goomba, Koopa
+/*
+ * 
  */
 
 namespace Abilities
 {
+    /// <summary>
+    /// Move continuously, flipping direction if hit on the side by non-Player. Optionally
+    /// bounce up if hit ground while moving.
+    /// Applicable to: 1UP Mushroom, Big Mushroom, Starman, Goomba, Koopa
+    /// </summary>
     public class MoveAndFlip : MonoBehaviour
     {
         public bool canMove;
@@ -26,7 +30,6 @@ namespace Abilities
             OrientSprite();
         }
 
-
         private void Update()
         {
             if (!canMove & Mathf.Abs(_player.transform.position.x - transform.position.x) <= MinDistanceToMove &&
@@ -35,11 +38,12 @@ namespace Abilities
             }
         }
 
-//	void OnBecameVisible() {
-//		if (canMoveAutomatic) {
-//			canMove = true;
-//		}
-//	}
+        // void OnBecameVisible()
+        // {
+        //     if (canMoveAutomatic) {
+        //         canMove = true;
+        //     }
+        // }
 
         // Assuming default sprites face right
         private void OrientSprite()
@@ -64,9 +68,9 @@ namespace Abilities
         private void OnCollisionEnter2D(Collision2D other)
         {
             Vector2 normal = other.contacts[0].normal;
-            Vector2 leftSide = new Vector2(-1f, 0f);
-            Vector2 rightSide = new Vector2(1f, 0f);
-            Vector2 bottomSide = new Vector2(0f, 1f);
+            Vector2 leftSide = new(-1f, 0f);
+            Vector2 rightSide = new(1f, 0f);
+            Vector2 bottomSide = new(0f, 1f);
             bool sideHit = normal == leftSide || normal == rightSide;
             bool bottomHit = normal == bottomSide;
 

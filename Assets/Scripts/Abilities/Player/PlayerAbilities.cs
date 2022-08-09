@@ -67,7 +67,8 @@ namespace Abilities.Player
         private IEnumerator MarioInvincibleStarmanCo()
         {
             IsInvincibleStarman = true;
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvincibleStarmanAnim, true);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsInvincibleStarmanAnim, true);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario After Starman");
             _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateData.HurryUp
                 ? _levelManager.GetSoundManager.StarmanMusicHurry
@@ -75,7 +76,8 @@ namespace Abilities.Player
 
             yield return new WaitForSeconds(MarioInvincibleStarmanDuration);
             IsInvincibleStarman = false;
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvincibleStarmanAnim, false);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsInvincibleStarmanAnim, false);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario");
             _levelManager.GetSoundManager.GetSoundLevelHandle.ChangeMusic(_levelManager.GetGameStateData.HurryUp
                 ? _levelManager.GetSoundManager.LevelMusicHurry
@@ -91,11 +93,13 @@ namespace Abilities.Player
         {
             IsInvinciblePowerdown = true;
 
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvinciblePowerdownAnim, true);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsInvinciblePowerdownAnim, true);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario After Powerdown");
             yield return new WaitForSeconds(MarioInvinciblePowerdownDuration);
             IsInvinciblePowerdown = false;
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsInvinciblePowerdownAnim, false);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsInvinciblePowerdownAnim, false);
             _levelManager.GetPlayerController.gameObject.layer = LayerMask.NameToLayer("Mario");
         }
 
@@ -113,7 +117,8 @@ namespace Abilities.Player
 
         private IEnumerator MarioPowerUpCo()
         {
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringUpAnim, true);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsPoweringUpAnim, true);
             Time.timeScale = 0f;
             PlayerAnimatorStatic.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
 
@@ -125,8 +130,8 @@ namespace Abilities.Player
 
             _levelManager.GetGameStateData.PlayerSize++;
             _levelManager.GetPlayerController.GetPlayerSize.UpdateSize();
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringUpAnim, false);
-        }
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsPoweringUpAnim, false);        }
 
         public void MarioPowerDown()
         {
@@ -150,7 +155,8 @@ namespace Abilities.Player
 
         private IEnumerator MarioPowerDownCo()
         {
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringDownAnim, true);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsPoweringDownAnim, true);
             Time.timeScale = 0f;
             PlayerAnimatorStatic.PlayerAnimatorComponent.updateMode = AnimatorUpdateMode.UnscaledTime;
 
@@ -163,7 +169,8 @@ namespace Abilities.Player
 
             _levelManager.GetGameStateData.PlayerSize = 0;
             _levelManager.GetPlayerController.GetPlayerSize.UpdateSize();
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsPoweringDownAnim, false);
+            _levelManager.GetPlayerController.GetAnimationParams.AnimPowerUp(
+                PlayerAnimatorStatic.IsPoweringDownAnim, false);
             IsPoweringDown = false;
         }
 

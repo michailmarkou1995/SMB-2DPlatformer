@@ -1,4 +1,5 @@
-﻿using Core.Managers;
+﻿using System.Collections;
+using Core.Managers;
 using UnityEngine;
 using IPlayerController = Core.Player.PlayerController;
 
@@ -23,11 +24,20 @@ namespace Level
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.CompareTag("Player")) return;
+            StartCoroutine(TouchedGround());
             _playerController.GetMovement.AutomaticWalk(_playerController.GetMovement.LevelEntryWalkSpeedX);
             _reachedPortal = true;
             _levelManager.GetGameStateData.TimerPaused = true;
             Debug.Log(this.name + " OnTriggerEnter2D: " + transform.parent.gameObject.name
                       + " recognizes player, should automatic walk");
+        }
+
+        //Fixed Stuck Pipe because AutomaticWalk Kicks in while on "grounded is true"
+        private IEnumerator TouchedGround()
+        {
+            _playerController.GetMovementFreeze.FreezeUserInput();
+            yield return new WaitForSeconds(1f);
+            _playerController.GetMovementFreeze.UnfreezeUserInput();
         }
 
         private void OnCollisionEnter2D(Collision2D other)

@@ -3,12 +3,12 @@
 namespace Core.NPC
 {
     public class Goomba : Enemy {
-        private Animator m_Animator;
-        private float stompedDuration = 0.5f;
+        private Animator _animator;
+        private const float stompedDuration = 0.5f;
+        private static readonly int Stomped = Animator.StringToHash("stomped");
 
-        // Use this for initialization
-        void Start() {
-            m_Animator = GetComponent<Animator>();
+        private void Start() {
+            _animator = GetComponent<Animator>();
 
             starmanBonus = 100;
             rollingShellBonus = 500;
@@ -21,7 +21,7 @@ namespace Core.NPC
             isBeingStomped = true;
             StopInteraction();
             Debug.Log(this.name + " StompedByMario: stopped interaction");
-            m_Animator.SetTrigger("stomped");
+            _animator.SetTrigger(Stomped);
             Destroy(gameObject, stompedDuration);
             isBeingStomped = false;
         }
