@@ -1,5 +1,5 @@
 # 2DPlatformer aka unitytest
-Uknown title of a 2D platformer. The project will be updated via automation scripts per milestone on GitHub.
+Uknown title of a 2D platformer Super Mario clone. The project will be updated via automation scripts per milestone on GitHub.
 
 Further details == uknown
 
