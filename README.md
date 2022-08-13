@@ -1,4 +1,4 @@
-# unitytest
+# 2DPlatformer aka unitytest
 Uknown title of a 2D platformer. The project will be updated via automation scripts per milestone on GitHub.
 
 Further details == uknown
