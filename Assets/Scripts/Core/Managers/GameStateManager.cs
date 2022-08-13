@@ -1,4 +1,5 @@
-﻿using Interfaces.Core.Managers;
+﻿using System;
+using Interfaces.Core.Managers;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -83,13 +84,16 @@ namespace Core.Managers
 
         private void Awake()
         {
-            RetainGameStateManagerPerLoad();
+            base.Awake();
+            ConfigNewGame();
+            //RetainGameStateManagerPerLoad();
             _saveGameStateOnMemory = GetComponent<ISaveGameState>();
         }
 
         /// <summary>
         /// DontDestroyOnLoad is used to keep the GameStateManager alive between scenes.
         /// </summary>
+        [Obsolete("Not used anymore use base.Awake instead.", true)]
         public void RetainGameStateManagerPerLoad()
         {
             if (FindObjectsOfType(GetType()).Length == 1) {

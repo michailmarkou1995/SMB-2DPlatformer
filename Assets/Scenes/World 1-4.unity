@@ -9652,8 +9652,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179b8f69565344d1290b7f99321dab5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftStop: {fileID: 616262325}
-  RightStop: {fileID: 1177111432}
+  leftStop: {fileID: 616262325}
+  rightStop: {fileID: 1177111432}
   absSpeed: 0.025
   speedModifier: 1.005
   directionX: 1

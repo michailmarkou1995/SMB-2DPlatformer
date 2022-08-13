@@ -163,8 +163,6 @@ MonoBehaviour:
   firePos: {fileID: 4356092048512686}
   bowserImpostor: {fileID: 1087471968303868, guid: 34ffba594a73c44f7a012b870c1a1088, type: 3}
   bowserFire: {fileID: 1360121809440988, guid: 8fb4ec26de4754c80995e0ad6aeb509c, type: 3}
-  canMove: 1
-  active: 0
 --- !u!50 &50561114239588112
 Rigidbody2D:
   serializedVersion: 4

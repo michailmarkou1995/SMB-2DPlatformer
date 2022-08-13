@@ -1,107 +1,181 @@
 ﻿using System.Collections;
 using Abilities.NPC;
 using Core.Managers;
+using Interfaces.Core;
+using Interfaces.Core.NPC;
 using UnityEngine;
 using IPlayerController = Core.Player.PlayerController;
 
 namespace Core.NPC
 {
-    public class Bowser : Enemy
+    public class Bowser : BowserBase, IBowser
     {
-        private LevelManager _levelManager;
-        private GameObject _mario;
-        private Rigidbody2D _rigidbody2D;
+        #region GettersAndSetters
 
-        public Transform firePos;
-        public GameObject bowserImpostor;
-        public GameObject bowserFire;
-        public bool canMove;
-        public bool active;
+        public Bowser BowserSelf
+        {
+            get => this;
+        }
 
-        private Vector2 impostorInitialVelocity = new(3, 3);
-        private float minDistanceToMove = 55; // start moving if mario is within this distance
+        public LevelManager LevelManager
+        {
+            get => base.LevelManager;
+            set => base.LevelManager = value;
+        }
 
-        private int _fireResistance = 5;
-        private float waitBetweenJump = 3;
-        private float shootFireDelay = .1f; // how long after jump should Bowser release fireball
+        public GameObject Mario
+        {
+            get => Player;
+            set => Player = value;
+        }
 
-        private float absSpeedX = 1.5f;
-        private float _directionX = 1;
-        private float minJumpSpeedY = 3;
-        private float maxJumpSpeedY = 7;
+        public Rigidbody2D Rigidbody2D
+        {
+            get => GetComponent<Rigidbody2D>();
+            set => Rb2D = value;
+        }
 
-        private float _timer;
-        private float _jumpSpeedY;
+        public Transform FirePos
+        {
+            get => firePos;
+            set => firePos = value;
+        }
 
-        private int _defeatBonus;
-        private bool _isFalling;
+        public GameObject BowserImpostor
+        {
+            get => bowserImpostor;
+            set => bowserImpostor = value;
+        }
+
+        public GameObject BowserFire
+        {
+            get => bowserFire;
+            set => bowserFire = value;
+        }
+
+        public bool CanMove
+        {
+            get => base.CanMove;
+            set => base.CanMove = value;
+        }
+
+        public bool Active
+        {
+            get => base.Active;
+            set => base.Active = value;
+        }
+
+        public Vector2 ImpostorInitialVelocity
+        {
+            get => base.ImpostorInitialVelocity;
+            set => base.ImpostorInitialVelocity = value;
+        }
+
+        public float MinDistanceToMove
+        {
+            get => base.MinDistanceToMove;
+            set => base.MinDistanceToMove = value;
+        }
+
+        public int FireResistance
+        {
+            get => base.FireResistance;
+            set => base.FireResistance = value;
+        }
+
+        public float WaitBetweenJump
+        {
+            get => base.WaitBetweenJump;
+            set => base.WaitBetweenJump = value;
+        }
+
+        public float ShootFireDelay
+        {
+            get => base.ShootFireDelay;
+            set => base.ShootFireDelay = value;
+        }
+
+        public float AbsSpeedX
+        {
+            get => base.AbsSpeedX;
+            set => base.AbsSpeedX = value;
+        }
+
+        public float DirectionX
+        {
+            get => base.DirectionX;
+            set => base.DirectionX = value;
+        }
+
+        public float MinJumpSpeedY
+        {
+            get => base.MinJumpSpeedY;
+            set => base.MinJumpSpeedY = value;
+        }
+
+        public float MaxJumpSpeedY
+        {
+            get => base.MaxJumpSpeedY;
+            set => base.MaxJumpSpeedY = value;
+        }
+
+        public float Timer
+        {
+            get => base.Timer;
+            set => base.Timer = value;
+        }
+
+        public float JumpSpeedY
+        {
+            get => base.JumpSpeedY;
+            set => base.JumpSpeedY = value;
+        }
+
+        public int DefeatBonus
+        {
+            get => base.DefeatBonus;
+            set => base.DefeatBonus = value;
+        }
+
+        public bool IsFalling
+        {
+            get => base.IsFalling;
+            set => base.IsFalling = value;
+        }
         
+
+        #endregion
         private void Start()
         {
-            _levelManager = FindObjectOfType<LevelManager>();
-            _mario = FindObjectOfType<IPlayerController>().gameObject;
-            _rigidbody2D = GetComponent<Rigidbody2D>();
-            _timer = 0;
-            canMove = false;
-            active = true;
+            LevelManager = GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>();
+            Mario = FindObjectOfType<IPlayerController>().gameObject;
+            Rigidbody2D = GetComponent<Rigidbody2D>();
+            Timer = 0;
+            CanMove = false;
+            Active = true;
 
             starmanBonus = 0;
             rollingShellBonus = 0;
             hitByBlockBonus = 0;
             fireballBonus = 0;
             stompBonus = 0;
-            _defeatBonus = 5000;
+            DefeatBonus = 5000;
         }
-
-        // Update is called once per frame
+        
         private void Update()
         {
-            if (active) {
-                if (!canMove && Mathf.Abs(_mario.gameObject.transform.position.x - transform.position.x) <=
-                    minDistanceToMove) {
-                    canMove = true;
-                }
-
-                if (!canMove) return;
-                _rigidbody2D.velocity = new Vector2(_directionX * absSpeedX, _rigidbody2D.velocity.y);
-                _timer -= Time.deltaTime;
-
-                if (!(_timer <= 0)) return;
-                // Turn to face Mario
-                if (_mario.transform.position.x < transform.position.x) {
-                    // mario to the left
-                    transform.localScale = new Vector3(-1, 1, 1);
-                } else if (_mario.transform.position.x > transform.position.x) {
-                    transform.localScale = new Vector3(1, 1, 1);
-                }
-
-                // Switch walk direction
-                _directionX = -_directionX;
-
-                // Jump a random height
-                _jumpSpeedY = Random.Range(minJumpSpeedY, maxJumpSpeedY);
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _jumpSpeedY);
-
-                // Shoot fireball after some delay
-                StartCoroutine(ShootFireCo(shootFireDelay));
-
-                _timer = waitBetweenJump;
-            } else if (_rigidbody2D.velocity.y < 0 && !_isFalling) {
-                // fall as bridge collapses
-                _isFalling = true;
-                _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.BowserFallSound);
-            }
+            BowserSetup();
         }
+
+        public override void TouchedByStarmanMario() { }
 
         private IEnumerator ShootFireCo(float delay)
         {
             yield return new WaitForSeconds(delay);
-            GameObject fire = Instantiate(bowserFire, firePos.position, Quaternion.identity);
+            GameObject fire = Instantiate(BowserFire, firePos.position, Quaternion.identity);
             fire.GetComponent<BowserFire>().directionX = transform.localScale.x;
-            _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.BowserFireSound);
+            LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.GetSoundManager.BowserFireSound);
         }
-
-        public override void TouchedByStarmanMario() { }
 
         public override void TouchedByRollingShell() { }
 
@@ -109,14 +183,14 @@ namespace Core.NPC
 
         public override void HitByMarioFireball()
         {
-            _fireResistance--;
-            if (_fireResistance > 0) return;
-            GameObject impostor = Instantiate(bowserImpostor, transform.position, Quaternion.identity);
+            FireResistance--;
+            if (FireResistance > 0) return;
+            GameObject impostor = Instantiate(BowserImpostor, transform.position, Quaternion.identity);
             impostor.GetComponent<Rigidbody2D>().velocity =
-                new Vector2(impostorInitialVelocity.x * _directionX, impostorInitialVelocity.y);
-            _levelManager.GetSoundManager.SoundSource.PlayOneShot(_levelManager.GetSoundManager.BowserFallSound);
+                new Vector2(ImpostorInitialVelocity.x * DirectionX, ImpostorInitialVelocity.y);
+            LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.GetSoundManager.BowserFallSound);
 
-            _levelManager.GetPlayerPickUpAbilities.AddScore(_defeatBonus);
+            LevelManager.GetPlayerPickUpAbilities.AddScore(DefeatBonus);
             Destroy(gameObject);
         }
 
@@ -129,11 +203,55 @@ namespace Core.NPC
             Vector2 rightSide = new Vector2(1f, 0f);
             bool sideHit = normal == leftSide || normal == rightSide;
 
-            if (other.gameObject.CompareTag("Player")) {
-                _levelManager.GetPlayerAbilities.MarioPowerDown();
-            } else if (sideHit && !other.gameObject.CompareTag("Mario Fireball")) {
-                // switch walk direction
-                _directionX = -_directionX;
+            if (!other.gameObject.CompareTag("Player")) return;
+            LevelManager.GetPlayerAbilities.MarioPowerDown();
+            DirectionX = -DirectionX;
+        }
+
+        //From IBowser Interface
+        public void ShootFire(float delay = 0)
+        {
+            StartCoroutine(ShootFireCo(delay));
+        }
+
+        public void BowserSetup()
+        {
+            if (Active) {
+                if (!CanMove && Mathf.Abs(Mario.gameObject.transform.position.x - transform.position.x) <=
+                    MinDistanceToMove) {
+                    CanMove = true;
+                }
+
+                if (CanMove) {
+                    Rigidbody2D.velocity = new Vector2(DirectionX * AbsSpeedX, Rigidbody2D.velocity.y);
+                    Timer -= Time.deltaTime;
+
+                    if (Timer <= 0) {
+                        // Turn to face Mario
+                        if (Mario.transform.position.x < transform.position.x) {
+                            // mario to the left
+                            transform.localScale = new Vector3(-1, 1, 1);
+                        } else if (Mario.transform.position.x > transform.position.x) {
+                            transform.localScale = new Vector3(1, 1, 1);
+                        }
+
+                        // Switch walk direction
+                        DirectionX = -DirectionX;
+
+                        // Jump a random height
+                        JumpSpeedY = Random.Range(MinJumpSpeedY, MaxJumpSpeedY);
+                        Rigidbody2D.velocity = new Vector2(Rigidbody2D.velocity.x, JumpSpeedY);
+
+                        // Shoot fireball after some delay
+                        ShootFire(ShootFireDelay);
+
+                        Timer = WaitBetweenJump;
+                    }
+                }
+            } else if (Rigidbody2D.velocity.y < 0 && !IsFalling) {
+                // fall as bridge collapses
+                IsFalling = true;
+                LevelManager.GetSoundManager.SoundSource.PlayOneShot(LevelManager.GetSoundManager.BowserFallSound);
             }
         }
     }

@@ -47,6 +47,7 @@ namespace Core.Managers
 
         private void Awake()
         {
+            base.Awake();
             _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<IPlayerController>() as PlayerController;
             _soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
             _loadLevelSceneHandler = GetComponent<ILoadLevelSceneHandle>();
