@@ -5,6 +5,6 @@ Further details == uknown
 
 Visual GitHub Project Board: https://github.com/users/michailmarkou1995/projects/6/views/1
 
-Test Web-GL play in-browser : https://michailmarkou1995.github.io/2DPlatformer/
+Test Web-GL play in-browser : https://michailmarkou1995.github.io/SMB-2DPlatformer/
 
 [![GameCI Template 🎮](https://github.com/michailmarkou1995/unitytest/actions/workflows/main.yml/badge.svg)](https://github.com/michailmarkou1995/unitytest/actions/workflows/main.yml) [![pages-build-deployment](https://github.com/michailmarkou1995/unitytest/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/michailmarkou1995/unitytest/actions/workflows/pages/pages-build-deployment)
