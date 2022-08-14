@@ -70,17 +70,17 @@ namespace Core.Player
                 if (IsChangingDirection) {
                     if (CurrentSpeedX > IMove.SkidTurnaroundSpeedX) {
                         MoveDirectionX = -FaceDirectionX;
-                        PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsSkiddingAnimator,
-                            true);
+                        _playerController.GetAnimationParams.IsAnimPowerUp(
+                            PlayerAnimatorStatic.IsSkiddingAnimator, true);
                         CurrentSpeedX = DecreaseWithinBound(CurrentSpeedX, IMove.SkidDecelerationX, 0);
                     } else {
                         MoveDirectionX = FaceDirectionX;
-                        PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsSkiddingAnimator,
-                            false);
+                        _playerController.GetAnimationParams.IsAnimPowerUp(
+                            PlayerAnimatorStatic.IsSkiddingAnimator, false);
                     }
                 } else {
-                    PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.IsSkiddingAnimator,
-                        false);
+                    _playerController.GetAnimationParams.IsAnimPowerUp(
+                        PlayerAnimatorStatic.IsSkiddingAnimator, false);
                 }
 
                 /******** Horizontal movement on air */
@@ -128,13 +128,8 @@ namespace Core.Player
             // Disable Stomp Box if not falling down
             _playerController.MStompBox.SetActive(_playerController.GetJump.IsFalling);
 
-            /******** Switch sprite horizontal orientation 1, -1 */
-            Transform transformCached = transform;
-            transformCached.localScale = FaceDirectionX switch {
-                > 0 => Vector2.one,
-                < 0 => new Vector2(-1, 1),
-                _ => transformCached.localScale
-            };
+            IMove.OrientSprite(FaceDirectionX, transform);
+
 
             /******** Horizontal movement force*/
             _playerController.MRigidbody2D.velocity =
@@ -187,7 +182,7 @@ namespace Core.Player
         {
             _playerController.GetMovementFreeze.FreezeUserInput();
             IsClimbingFlagPole = true;
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.PoleAnimator, true);
+            _playerController.GetAnimationParams.IsAnimPowerUp(PlayerAnimatorStatic.PoleAnimator, true);
             _playerController.MRigidbody2D.bodyType = RigidbodyType2D.Kinematic;
         }
 

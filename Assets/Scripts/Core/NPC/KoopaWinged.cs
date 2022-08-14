@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Abilities;
+using Abilities.NPC;
 using Abilities.Player;
 using UnityEngine;
 

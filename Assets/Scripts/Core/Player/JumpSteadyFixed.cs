@@ -107,7 +107,7 @@ namespace Core.Player
             Vector3 position = transformCached.position;
             position = new Vector2(position.x + .5f, position.y);
             transformCached.position = position;
-            PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(PlayerAnimatorStatic.PoleAnimator, false);
+            _playerController.GetAnimationParams.IsAnimPowerUp(PlayerAnimatorStatic.PoleAnimator, false);
             _playerController.GetMovement.AutomaticWalk(_playerController.GetMovement.CastleWalkSpeedX);
             _playerController.MRigidbody2D.bodyType = RigidbodyType2D.Dynamic;
         }

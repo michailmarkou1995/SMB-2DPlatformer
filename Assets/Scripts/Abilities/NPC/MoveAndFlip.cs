@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Interfaces.Core.Player;
+using UnityEngine;
 using PlayerController = Core.Player.PlayerController;
 
 /*
  * 
  */
 
-namespace Abilities
+namespace Abilities.NPC
 {
     /// <summary>
     /// Move continuously, flipping direction if hit on the side by non-Player. Optionally
@@ -27,7 +28,7 @@ namespace Abilities
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _player = FindObjectOfType<PlayerController>().gameObject;
-            OrientSprite();
+            IMove.OrientSprite(directionX, transform);
         }
 
         private void Update()
@@ -44,19 +45,6 @@ namespace Abilities
         //         canMove = true;
         //     }
         // }
-
-        // Assuming default sprites face right
-        private void OrientSprite()
-        {
-            switch (directionX) {
-                case > 0:
-                    transform.localScale = new Vector3(1, 1, 1);
-                    break;
-                case < 0:
-                    transform.localScale = new Vector3(-1, 1, 1);
-                    break;
-            }
-        }
 
         private void FixedUpdate()
         {
@@ -77,7 +65,7 @@ namespace Abilities
             // reverse direction
             if (!other.gameObject.CompareTag("Player") && sideHit) {
                 directionX = -directionX;
-                OrientSprite();
+                IMove.OrientSprite(directionX, transform);
             } else if (other.gameObject.tag.Contains("Platform") && bottomHit && canMove) {
                 _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, speed.y);
             }

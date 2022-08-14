@@ -130,7 +130,9 @@ namespace Core.Player
 
         private void Update()
         {
-            //Debug.Log(_groundCheck.IsGrounded);
+            // Debug.Log("isGrounded: " + _groundCheck.IsGrounded
+            //                          + " isJumping: " + _jump.IsJumping
+            //                          + " isFalling: " + _jump.IsFalling);
             _groundCheck.IsGrounded = _groundCheck.IsGround();
             _jump.IsFalling = MRigidbody2D.velocity.y < 0 && !_groundCheck.IsGrounded;
             _move.IsChangingDirection = _move.CurrentSpeedX > 0 && _move.FaceDirectionX * _move.MoveDirectionX < 0;

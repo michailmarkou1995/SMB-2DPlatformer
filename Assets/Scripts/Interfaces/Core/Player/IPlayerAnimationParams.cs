@@ -4,7 +4,7 @@
     {
         public void MovementAnimationParams();
 
-        public void AnimPowerUp(int animName, bool isPowerUp);
+        public void IsAnimPowerUp(int animName, bool isPowerUp);
         // public void InvinciblePowerdown_ON();
         // public void InvinciblePowerdown_OFF();
         // public void InvincibleStarman_ON();

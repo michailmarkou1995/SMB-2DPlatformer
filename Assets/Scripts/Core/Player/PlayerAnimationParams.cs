@@ -25,7 +25,7 @@ namespace Core.Player
                 PlayerAnimatorStatic.AbsSpeedAnimator, Mathf.Abs(_playerController.GetMovement.CurrentSpeedX));
         }
 
-        public void AnimPowerUp(int animName, bool isPowerUp)
+        public void IsAnimPowerUp(int animName, bool isPowerUp)
         {
             PlayerAnimatorStatic.PlayerAnimatorComponent.SetBool(animName, isPowerUp);
         }

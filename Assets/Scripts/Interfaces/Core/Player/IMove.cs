@@ -26,6 +26,28 @@ namespace Interfaces.Core.Player
         public bool IsClimbingFlagPole { get; set; }
         public Vector2 ClimbFlagPoleVelocity { get; }
         public void Movement();
+
+        public static void OrientSprite(float direction, Transform transform)
+        {
+            // Assuming default sprites face right
+            /******** Switch sprite horizontal orientation 1, -1 */
+            switch (direction) {
+                case > 0:
+                    transform.localScale = Vector2.one;
+                    break;
+                case < 0:
+                    transform.localScale = new Vector2(-1, 1);
+                    break;
+            }
+
+            // Transform transformCached = transform;
+            // transformCached.localScale = FaceDirectionX switch {
+            //     > 0 => Vector2.one,
+            //     < 0 => new Vector2(-1, 1),
+            //     _ => transformCached.localScale
+            // };
+        }
+
         public void ResetMovementParams();
         public void ClimbFlagPole();
         public void AutomaticWalk(float walkVelocityX);
