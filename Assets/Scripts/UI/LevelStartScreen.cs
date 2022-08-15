@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Core.Managers;
+using Interfaces.Core.Managers;
 using Interfaces.Level;
 using Interfaces.UI;
 using UnityEngine;
@@ -70,7 +71,7 @@ namespace UI
         #endregion
 
         // Object Compositions - Dependencies
-        private GameStateManager _gameStateManager;
+        private IGameStateManager _gameStateManager;
         private ILoadLevel _loadNextLevel;
 
         private void Awake()

@@ -26,7 +26,6 @@ namespace Core.Player
 
         #region RequiredComponents
 
-        private ILevelManager _levelManager;
         public ILevelManager GetLevelManager => _levelManager;
         public IMove GetMovement => _move;
         public ICrouch GetCrouch => _crouch;
@@ -46,6 +45,7 @@ namespace Core.Player
 
         #endregion
 
+        private ILevelManager _levelManager;
         private IMove _move;
         private IDash _dash;
         private IJump _jump;

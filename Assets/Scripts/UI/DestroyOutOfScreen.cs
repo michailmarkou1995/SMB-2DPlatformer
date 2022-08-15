@@ -1,4 +1,5 @@
-﻿using Interfaces.Core;
+﻿using Core.Player;
+using Interfaces.Core;
 using UnityEngine;
 
 namespace UI
