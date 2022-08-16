@@ -3,6 +3,8 @@ Uknown title of a 2D platformer Super Mario clone. The project will be updated v
 
 Further details == uknown
 
+``Unity Version 2021.3.5f1 LTS``
+
 Visual GitHub Project Board: https://github.com/users/michailmarkou1995/projects/6/views/1
 
 Test Web-GL play in-browser : https://michailmarkou1995.github.io/SMB-2DPlatformer/
