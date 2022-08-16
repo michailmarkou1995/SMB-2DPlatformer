@@ -1,4 +1,4 @@
-# 2DPlatformer aka unitytest
+# Super Mario BROS - SMB Clone, 2DPlatformer aka unitytest
 Uknown title of a 2D platformer Super Mario clone. The project will be updated via automation scripts per milestone on GitHub.
 
 Further details == uknown
