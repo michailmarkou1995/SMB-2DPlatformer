@@ -69,7 +69,7 @@ namespace Core.Managers
             get => timeLeft;
             set => timeLeft = value;
         }
-        
+
         public bool HurryUp
         {
             get => hurryUp;
@@ -84,6 +84,11 @@ namespace Core.Managers
 
         private void Awake()
         {
+#if UNITY_EDITOR
+            Debug.unityLogger.logEnabled = true;
+#else
+            Debug.unityLogger.logEnabled = false;
+#endif
             base.Awake();
             ConfigNewGame();
             //RetainGameStateManagerPerLoad();

@@ -587,9 +587,9 @@ GameObject:
   - component: {fileID: 101433656311806689}
   - component: {fileID: 3887422870259570889}
   - component: {fileID: 1970061785800512717}
-  - component: {fileID: 6889605376435430935}
   - component: {fileID: 1418335611138020088}
   - component: {fileID: 4406508218598817705}
+  - component: {fileID: 8712324976765771302}
   m_Layer: 8
   m_Name: Mario
   m_TagString: Player
@@ -864,21 +864,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <IsDying>k__BackingField: 0
---- !u!114 &6889605376435430935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1116515221023456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ec865bcd0e34f4e8996175a31cf4121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 136317440
 --- !u!114 &1418335611138020088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,6 +886,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 418d5471f6774d3fac39a29815fb8234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8712324976765771302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1116515221023456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c11aec72cad14cddb14b47390953eddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1213198798568588
