@@ -3,7 +3,7 @@ Uknown title of a 2D platformer Super Mario clone. The project will be updated v
 
 Further details == uknown
 
-<ins>Project in Debug release mode</ins>
+<ins>Project in Debug "release" mode</ins> so no optimized code e.g., inline method calls by IDE etc.
 
 ``Unity Version 2021.3.5f1 LTS``
 
