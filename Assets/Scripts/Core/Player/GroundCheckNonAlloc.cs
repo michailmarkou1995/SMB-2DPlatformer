@@ -29,8 +29,8 @@ namespace Core.Player
 
         public bool IsGround()
         {
-            _playerController.Colliders1 = new Collider2D[1];
-            _playerController.Colliders2 = new Collider2D[1];
+            _playerController.Colliders1 = new Collider2D[1]; // bad code remove
+            _playerController.Colliders2 = new Collider2D[1]; // GC defeats purpose of nonAlloc
             Physics2D.OverlapPointNonAlloc(_playerController.MGroundCheck1.position,
                 _playerController.Colliders1, GroundLayers);
             Physics2D.OverlapPointNonAlloc(_playerController.MGroundCheck2.position,
